@@ -9,15 +9,13 @@
         <meta name="author" content="Aggelos Pipilikas">
         <meta charset="UTF-8">
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.js"></script>
-        <script type="text/javascript" src="resources/scripts/mainScript.js"></script>
-        <script type="text/javascript" src="resources/scripts/effectsScript.js"></script>
-        <script type="text/javascript" src="resources/scripts/menuScript.js"></script>
-        <link rel="stylesheet" href="resources/styles/fontStyles.css">
+        <script type="module" src="resources/scripts/registerScript.js"></script>
+        <link rel="stylesheet" href="resources/styles/generalStyles.css">
         <link rel="stylesheet" href="resources/styles/registerStyles.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
-    <body class="no-scrolling">
+    <body>
         <header>
             <div id="header-container">
                 <h1>Eurovision Voting App</h1>
@@ -25,23 +23,32 @@
         </header>
 
         <main id="connect-page">
-            <form method="POST" id="registration-form" novalidate>
-                <fieldset id="registration-fs">
-                    <legend>Sign in</legend>
-    
-                    <div class="input-text" id="firstname-input-text">
-                        <label for="username-txt">Username<abbr title="Υποχρεωτικό πεδίο">(*)</abbr></label>
-                        <input type="text" id="username-txt" name="username" autocomplete="on" required>
-                        <span class="alert-box"></span>
-                    </div>
+            <fieldset id="registration-fs">
+                <legend>Register</legend>
+                
+                <p>Connect as a judge</p>
 
-                </fieldset>
-    
-                <div class="buttons-area" id="registration-form-buttons">
-                    <input type="submit" id="connect-btn" name="connect">
-                    <input type="reset" id="reset-btn" name="reset">
+                <div id="judges-list-container">
+                    
+                    <input type="radio" id="choosing-price-model1" name="choose-judge" value="Aggelos">
+                    <label for="choosing-price-model1">Aggelos</label>
+                    
+                    <input type="radio" id="choosing-price-model2" name="choose-judge" value="Alexandra">
+                    <label for="choosing-price-model2">Aggelos2</label>        
+                    
+                    <input type="radio" id="choosing-price-model3" name="choose-judge" value="Alexandra">
+                    <label for="choosing-price-model3">Aggelos3</label>
+                    
+                    <input type="radio" id="choosing-price-model4" name="choose-judge" value="Alexandra">
+                    <label for="choosing-price-model4">Aggelos4</label>
+                    
+                    <input type="radio" id="choosing-price-model5" name="choose-judge" value="Alexandra">
+                    <label for="choosing-price-model5">Aggelos5</label>
+                    
                 </div>
-            </form>
+
+                <button type="button" id="connect-btn">Connect</button>
+            </fieldset>
         </main>
         
         <footer>

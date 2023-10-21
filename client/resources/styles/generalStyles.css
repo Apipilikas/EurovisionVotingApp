@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'Onest';
+    font-weight: 100;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 200;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 300;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 400;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 500;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 600;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 700;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 800;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 900;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+:root {
+    --main-color: #0043ff;
+    --secondary-color: #fff800;
+    --third-color: #ff0087;
+    --forth-color: #02025e;
+}
+
+body {
+    background-color: var(--main-color);
+    font-family: 'Onest', sans-serif;
+    margin: 0em;
+    display: grid;
+    height: 100%;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "header"
+                         "main"
+                         "footer";
+}
+
+html {
+    height: 100%;
+}
+
+header {
+    grid-area: header;
+}
+
+main {
+    grid-area: main;
+}
+
+footer {
+    grid-area: footer;
+}
