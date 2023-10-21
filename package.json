@@ -2,7 +2,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "handlebars": "^4.7.8",
+    "lodash": "^4.17.21",
     "mongodb": "^6.1.0",
+    "requirejs": "^2.3.6",
     "socket.io": "^4.7.2"
   }
 }
