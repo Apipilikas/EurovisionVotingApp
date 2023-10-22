@@ -1,33 +1,13 @@
-const url = "http://localhost:8080/";
+const serverURL = {
+    p8080: "http://localhost:8080/",
+    p3000: "http://localhost:3000/"
+};
+
+const clientURL = "http://127.0.0.1:5500/";
 
 const Method = {
     GET: "GET",
     POST: "POST"
-}
-
-function getGETRequestInit() {
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-
-    let requestInit = {
-        method: Method.GET,
-        headers: headers
-    };
-
-    return requestInit;
-}
-
-function getPOSTRequestInit(data) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let requestInit = {
-        method: Method.POST,
-        headers: headers,
-        body: JSON.stringify(data)
-    };
-
-    return requestInit;
 }
 
 function getRequestInit(method, data = null) {
@@ -48,7 +28,7 @@ function getRequestInit(method, data = null) {
 function getAllJudges() {
     let requestInit = getRequestInit(Method.GET);
 
-    return fetch(url + "judges/all", requestInit)
+    return fetch(serverURL.p8080 + "judges/all", requestInit)
     .then(response => {
         if (response.status == 200) {
             return response.json();
@@ -60,6 +40,7 @@ function getAllJudges() {
 }
 
 export {
-    url,
+    serverURL,
+    clientURL,
     getAllJudges
 }

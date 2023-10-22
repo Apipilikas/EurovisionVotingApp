@@ -6,7 +6,7 @@
   justify-content: center;
 }
 
-.country-container {
+.voting-country-container {
   display: flex;
   align-items: center;
   position: absolute;
@@ -17,7 +17,7 @@
   will-change: transform, opacity;
 }
 
-.country-container > summary {
+.voting-country-container > summary {
   height: 40px;
   background-color: var(--main-color);
   position: relative;
@@ -26,27 +26,27 @@
   font-size: 2em;
 }
 
-.country-container > summary::-webkit-details-marker { 
+.voting-country-container > summary::-webkit-details-marker { 
   display: none; 
 }
 
-.country-container > summary div {
+.voting-country-container > summary div {
   display: flex;
   justify-content: center;
 }
 
-.country-container > summary p {
+.voting-country-container > summary p {
   margin: 0em;
   padding: 0em 0.5em;
   font-weight: 600;
 }
 
-.country-container > summary .my-vote {
+.voting-country-container > summary .my-vote {
   color: var(--secondary-color);
   background-color: var(--third-color);
 }
 
-.country-container .country-content {
+.voting-country-container .voting-country-content {
   height: auto;
   width: auto;
   color: var(--secondary-color);
@@ -82,7 +82,7 @@ label {
   transition-duration: 0.5s;
 }
 
-.country-content > button {
+.voting-country-content > button {
   font-size: 20px;
   padding: 0em;
   margin: 0.5em auto;
@@ -105,13 +105,13 @@ label {
   flex-direction: column;
 }
 
-.country-container:nth-child(1) {
+.voting-country-container:nth-child(1) {
   -webkit-animation: none;
   animation: none;
   visibility: hidden;
 }
 
-.country-container:nth-child(2) {
+.voting-country-container:nth-child(2) {
   transform: translateY(-150%) scale(0.7);
   opacity: 0.4;
   visibility: visible;
@@ -120,12 +120,12 @@ label {
           
 }
 
-.country-container:nth-child(3) {
+.voting-country-container:nth-child(3) {
   animation: carousel-animate-center 3s linear;
   animation-fill-mode: forwards;
 }
 
-.country-container:nth-child(4) {
+.voting-country-container:nth-child(4) {
   transform: translateY(150%) scale(0.7);
   opacity: 0.4;
   visibility: visible;
@@ -134,7 +134,7 @@ label {
           
 }
 
-.country-container:nth-child(5) {
+.voting-country-container:nth-child(5) {
   visibility: hidden;
   -webkit-animation: carousel-animate-new 3s linear;
   animation: carousel-animate-new 3s linear;

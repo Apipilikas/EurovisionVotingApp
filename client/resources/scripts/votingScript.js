@@ -1,4 +1,8 @@
-import { templates } from "./utils/handlebarsUtils.js";
+import {  } from "./utils/handlebarsUtils.js";
+import { serverURL } from "./utils/requestUtils.js";
+import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
+
+const socket = io(serverURL.p3000);
 
 window.onload = init;
 
@@ -15,6 +19,10 @@ function init() {
 
     connectBtn.addEventListener("click", connectBtnListener);
 }
+
+socket.on("hi", (arg) => {
+    console.log(arg)
+})
 
 function connectBtnListener(e) {
     
