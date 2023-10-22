@@ -1,9 +1,8 @@
 // to get arguments from url => index.html?userID=test&userName=name
 // const params = new URLSearchParams(document.location.search);
 
-import { getAllJudges } from "./utils/requestUtils.js";
-import { templates } from "./utils/handlebarsUtils.js";
-import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
+import { clientURL, getAllJudges } from "./utils/requestUtils.js";
+import { registerTemplates, templates } from "./utils/handlebarsUtils.js";
 
 
 
@@ -36,7 +35,7 @@ function init() {
 }
 
 function updateContainer(container, context) {
-    let judgesContent = templates.judges(context);
+    let judgesContent = registerTemplates.judges(context);
     container.innerHTML = judgesContent;
 }
 
@@ -45,6 +44,6 @@ function connectBtnListener(e) {
 
     if (checkedRadioInput != null) {
         let judgeName = checkedRadioInput.value;
-        window.location.replace("http://127.0.0.1:5500/client/voting.html?judgeName=" + judgeName);
+        window.location.replace(clientURL + "client/voting.html?judgeName=" + judgeName);
     }
 }

@@ -60,7 +60,7 @@
 }
 
 body {
-    background-color: var(--main-color);
+    background-color: wheat;
     font-family: 'Onest', sans-serif;
     margin: 0em;
     display: grid;
