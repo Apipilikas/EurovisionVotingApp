@@ -2,7 +2,7 @@
 // const params = new URLSearchParams(document.location.search);
 
 import { clientURL, getAllJudges } from "./utils/requestUtils.js";
-import { registerTemplates, templates } from "./utils/handlebarsUtils.js";
+import { registerTemplates } from "./utils/handlebarsUtils.js";
 
 
 

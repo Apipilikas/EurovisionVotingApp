@@ -1,3 +1,5 @@
+/* #region details-containers */
+
 details {
     margin: 1em auto;
     width: 80%;
@@ -17,7 +19,11 @@ summary {
     display: none; 
 }
 
-#create-country-content {
+/* #endregion */
+
+/* #region create-country-grid-areas */
+
+#create-country-form {
     display: grid;
     border: 3px solid black;
     border-top: 0px;
@@ -28,6 +34,53 @@ summary {
                          "song    song    song    artist  artist      artist"
                          "btn     btn     btn     btn     btn         btn";
 }
+
+#code-container {
+    grid-area: code;
+}
+
+#name-container {
+    grid-area: name;
+}
+
+#qualified-container {
+    grid-area: qualified;
+}
+
+#runningorder-container {
+    grid-area: runningorder;
+}
+
+#flagcolor1-container {
+    grid-area: fc1;
+}
+
+#flagcolor2-container {
+    grid-area: fc2;
+}
+
+#flagcolor3-container {
+    grid-area: fc3;
+}
+
+#song-container {
+    grid-area: song;
+}
+
+#artist-container {
+    grid-area: artist;
+}
+
+#form-button-container {
+    grid-area: btn;
+    display: flex;
+    width: 75%;
+    margin: 1em auto;
+}
+
+/* #endregion */
+
+/* #region input-containers */
 
 .text-input-container > label, .number-input-container > label, 
 .color-picker-input-container > label {
@@ -97,49 +150,6 @@ input[type="checkbox"] {
 input[type=checkbox]:checked {
     color: #fff;
     background: var(--third-color);
-  }
-
-#code-container {
-    grid-area: code;
-}
-
-#name-container {
-    grid-area: name;
-}
-
-#qualified-container {
-    grid-area: qualified;
-}
-
-#runningorder-container {
-    grid-area: runningorder;
-}
-
-#flagcolor1-container {
-    grid-area: fc1;
-}
-
-#flagcolor2-container {
-    grid-area: fc2;
-}
-
-#flagcolor3-container {
-    grid-area: fc3;
-}
-
-#song-container {
-    grid-area: song;
-}
-
-#artist-container {
-    grid-area: artist;
-}
-
-#form-button-container {
-    grid-area: btn;
-    display: flex;
-    width: 75%;
-    margin: 1em auto;
 }
 
 #form-button-container > input {
@@ -152,3 +162,5 @@ input[type=checkbox]:checked {
     height: 100%;
     margin: auto;
 }
+
+/* #endregion */
