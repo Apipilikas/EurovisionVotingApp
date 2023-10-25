@@ -36,11 +36,23 @@ function getAllJudges() {
         else {
             return null;
         }
-    })
+    });
+}
+
+function postCountry(data) {
+    let requestInit = getRequestInit(Method.POST, data);
+
+    return fetch(serverURL.p8080 + "country", requestInit)
+    .then(response => {
+        if (response.status == 201) {
+            console.log("Sucess!");
+        }
+    });
 }
 
 export {
     serverURL,
     clientURL,
-    getAllJudges
+    getAllJudges,
+    postCountry
 }
