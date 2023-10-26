@@ -7,10 +7,12 @@ const clientURL = "http://127.0.0.1:5500/";
 
 const Method = {
     GET: "GET",
-    POST: "POST"
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE"
 }
 
-function getRequestInit(method, data = null) {
+function sendRequest(method, urlEnding, data = null) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -22,13 +24,14 @@ function getRequestInit(method, data = null) {
         body: jsonData
     };
 
-    return requestInit;
+    let url = serverURL.p8080 + urlEnding;
+
+    return fetch(url, requestInit);
 }
 
 function getAllJudges() {
-    let requestInit = getRequestInit(Method.GET);
 
-    return fetch(serverURL.p8080 + "judges/all", requestInit)
+    return sendRequest(Method.GET, "judges/all")
     .then(response => {
         if (response.status == 200) {
             return response.json();
@@ -39,13 +42,12 @@ function getAllJudges() {
     });
 }
 
-function postCountry(data) {
-    let requestInit = getRequestInit(Method.POST, data);
+function createCountry(data) {
 
-    return fetch(serverURL.p8080 + "country", requestInit)
+    return sendRequest(Method.POST, "country", data)
     .then(response => {
         if (response.status == 201) {
-            console.log("Sucess!");
+            console.log("Success!");
         }
     });
 }
@@ -54,5 +56,5 @@ export {
     serverURL,
     clientURL,
     getAllJudges,
-    postCountry
+    createCountry
 }

@@ -1,4 +1,4 @@
-import { postCountry } from "../utils/requestUtils.js";
+import { createCountry } from "../utils/requestUtils.js";
 
 window.onload = init;
 
@@ -36,7 +36,7 @@ function createCountryFormListener(e) {
         song: songValue
     }
 
-    postCountry(country);
+    createCountry(country);
 }
 
 function updateColorPickerTextInputs(colorPickerContainers) {
