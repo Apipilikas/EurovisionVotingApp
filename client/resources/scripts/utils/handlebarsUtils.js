@@ -50,4 +50,72 @@ votingTemplates.countryContent = Handlebars.compile(`
 <button>VOTE</button>
 `);
 
-export {registerTemplates};
+adminTemplates.countries = {};
+
+adminTemplates.countries.formInputsArea = `
+<div class="text-input-container" id="code-container">
+    <label for="code-txt">Code</label>
+    <input type="text" id="code-txt" name="code-txt">
+</div>
+
+<div class="text-input-container" id="name-container">
+    <label for="name-txt">Name</label>
+    <input type="text" id="name-txt" name="name-txt">
+</div>
+
+<div class="checkbox-input-container" id="qualified-container">
+    <label for="qualified-cbx">Qualified</label>
+    <input type="checkbox" id="qualified-cbx" name="qualified-cbx">
+</div>
+
+<div class="number-input-container" id="runningorder-container">
+    <label for="runningorder-nmbr">Running order</label>
+    <input type="number" id="runningorder-nmbr" name="runningorder-nmbr">
+</div>
+
+<div class="color-picker-input-container" id="flagcolor1-container">
+    <label for="flagcolor1-txt">Flag color 1</label>
+    <div class="color-picker-container">
+        <input type="text" id="flagcolor1-txt" name="flagcolor1-txt">
+        <input type="color" id="flagcolor1-cp" name="flagcolor1-cp">
+    </div>
+</div>
+
+<div class="color-picker-input-container" id="flagcolor2-container">
+    <label for="flagcolor2-txt">Flag color 2</label>
+    <div class="color-picker-container">
+        <input type="text" id="flagcolor2-txt" name="flagcolor2-txt">
+        <input type="color" id="flagcolor2-cp" name="flagcolor2-cp">
+    </div>
+</div>
+
+<div class="color-picker-input-container" id="flagcolor3-container">
+    <label for="flagcolor3-txt">Flag color 3</label>
+    <div class="color-picker-container">
+        <input type="text" id="flagcolor3-txt" name="flagcolor3-txt">
+        <input type="color" id="flagcolor3-cp" name="flagcolor3-cp">
+    </div>
+</div>
+
+<div class="text-input-container" id="song-container">
+    <label for="song-txt">Song</label>
+    <input type="text" id="song-txt" name="song-txt">
+</div>
+
+<div class="text-input-container" id="artist-container">
+    <label for="artist-txt">Artist</label>
+    <input type="text" id="artist-txt" name="artist-txt">
+</div>
+`;
+
+adminTemplates.countries.countryContainer = Handlebars.compile(`
+{{#each countries}}
+<div class="country-container" id="{{this.code}}">
+<h1>{{this.name}}</h1>
+<h2>{{this.runningOrder}}</h2>
+<h3>{{this.song}} | {{this.artist}}</h3>
+</div>
+{{/each}}
+`);
+
+export {registerTemplates, adminTemplates};

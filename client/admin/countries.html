@@ -31,65 +31,15 @@
         </header>
 
         <main id="admin-countries-page">
-            <details id="create-country-container" open>
+            <details id="create-country-container">
                 <summary>Create a new country</summary>
                 <div id="create-country-content">
                     <form id="create-country-form">
-                        <div class="text-input-container" id="code-container">
-                            <label for="code-txt">Code</label>
-                            <input type="text" id="code-txt" name="code-txt">
+                        <div class="inputs-area">
+
                         </div>
     
-                        <div class="text-input-container" id="name-container">
-                            <label for="name-txt">Name</label>
-                            <input type="text" id="name-txt" name="name-txt">
-                        </div>
-    
-                        <div class="checkbox-input-container" id="qualified-container">
-                            <label for="qualified-cbx">Qualified</label>
-                            <input type="checkbox" id="qualified-cbx" name="qualified-cbx">
-                        </div>
-    
-                        <div class="number-input-container" id="runningorder-container">
-                            <label for="runningorder-nmbr">Running order</label>
-                            <input type="number" id="runningorder-nmbr" name="runningorder-nmbr">
-                        </div>
-    
-                        <div class="color-picker-input-container" id="flagcolor1-container">
-                            <label for="flagcolor1-txt">Flag color 1</label>
-                            <div class="color-picker-container">
-                                <input type="text" id="flagcolor1-txt" name="flagcolor1-txt">
-                                <input type="color" id="flagcolor1-cp" name="flagcolor1-cp">
-                            </div>
-                        </div>
-    
-                        <div class="color-picker-input-container" id="flagcolor2-container">
-                            <label for="flagcolor2-txt">Flag color 2</label>
-                            <div class="color-picker-container">
-                                <input type="text" id="flagcolor2-txt" name="flagcolor2-txt">
-                                <input type="color" id="flagcolor2-cp" name="flagcolor2-cp">
-                            </div>
-                        </div>
-    
-                        <div class="color-picker-input-container" id="flagcolor3-container">
-                            <label for="flagcolor3-txt">Flag color 3</label>
-                            <div class="color-picker-container">
-                                <input type="text" id="flagcolor3-txt" name="flagcolor3-txt">
-                                <input type="color" id="flagcolor3-cp" name="flagcolor3-cp">
-                            </div>
-                        </div>
-    
-                        <div class="text-input-container" id="song-container">
-                            <label for="song-txt">Song</label>
-                            <input type="text" id="song-txt" name="song-txt">
-                        </div>
-    
-                        <div class="text-input-container" id="artist-container">
-                            <label for="artist-txt">Artist</label>
-                            <input type="text" id="artist-txt" name="artist-txt">
-                        </div>
-    
-                        <div class="button-container" id="form-button-container">                        
+                        <div class="buttons-area" id="form-button-container">                        
                             <input type="submit" id="submit-btn" value="CREATE">
                             <input type="reset" id="reset-btn" value="CLEAR">
                         </div>
@@ -97,9 +47,18 @@
                 </div>
             </details>
 
-            <details id="modify-country-container">
-                <summary>TEST 1</summary>
-                <div id="modify-country-content"></div>
+            <details id="modify-countries-container">
+                <summary>Modify a country</summary>
+                <div id="modify-countries-content">
+                    <div id="modify-countries-list-container"></div>
+                    <form id="modify-country-form">
+                        <div class="inputs-area"></div>
+                        <div class="buttons-area">
+                            <input type="button" id="modify-btn" value="MODIFY">
+                            <input type="button" id="delete-btn" value="DELETE">
+                        </div>
+                    </form>
+                </div>
             </details>
         </main>
         

@@ -16,26 +16,26 @@ function init() {
     let judgeName = params.get("judgeName");
 
     connectBtn.addEventListener("click", connectBtnListener);
-    let context = {
+    let content = {
         "judges": null
     }
     
     // Find better way to handle this
     if (judgeName != null) {
-        context.judges = [{name: judgeName}];
-        updateContainer(judgesContainer, context)
+        content.judges = [{name: judgeName}];
+        updateContainer(judgesContainer, content)
     }
     else {
         getAllJudges()
         .then(result => {
-            context.judges = result;
-            updateContainer(judgesContainer, context)
+            content.judges = result;
+            updateContainer(judgesContainer, content)
         })
     }
 }
 
-function updateContainer(container, context) {
-    let judgesContent = registerTemplates.judges(context);
+function updateContainer(container, content) {
+    let judgesContent = registerTemplates.judges(content);
     container.innerHTML = judgesContent;
 }
 
