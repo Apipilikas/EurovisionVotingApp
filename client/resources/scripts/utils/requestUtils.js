@@ -52,9 +52,23 @@ function createCountry(data) {
     });
 }
 
+function getAllCountries() {
+    
+    return sendRequest(Method.GET, "countries/all")
+    .then(response => {
+        if (response.status == 200) {
+            return response.json();
+        }
+        else {
+            return null;
+        }
+    });
+}
+
 export {
     serverURL,
     clientURL,
     getAllJudges,
-    createCountry
+    createCountry,
+    getAllCountries
 }
