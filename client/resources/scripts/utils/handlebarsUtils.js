@@ -55,12 +55,12 @@ adminTemplates.countries = {};
 adminTemplates.countries.formInputsArea = `
 <div class="text-input-container" id="code-container">
     <label for="code-txt">Code</label>
-    <input type="text" id="code-txt" name="code-txt">
+    <input type="text" id="code-txt" name="code-txt" required>
 </div>
 
 <div class="text-input-container" id="name-container">
     <label for="name-txt">Name</label>
-    <input type="text" id="name-txt" name="name-txt">
+    <input type="text" id="name-txt" name="name-txt" required>
 </div>
 
 <div class="checkbox-input-container" id="qualified-container">
@@ -70,7 +70,7 @@ adminTemplates.countries.formInputsArea = `
 
 <div class="number-input-container" id="runningorder-container">
     <label for="runningorder-nmbr">Running order</label>
-    <input type="number" id="runningorder-nmbr" name="runningorder-nmbr">
+    <input type="number" id="runningorder-nmbr" name="runningorder-nmbr" required>
 </div>
 
 <div class="color-picker-input-container" id="flagcolor1-container">
@@ -99,12 +99,12 @@ adminTemplates.countries.formInputsArea = `
 
 <div class="text-input-container" id="song-container">
     <label for="song-txt">Song</label>
-    <input type="text" id="song-txt" name="song-txt">
+    <input type="text" id="song-txt" name="song-txt" required>
 </div>
 
 <div class="text-input-container" id="artist-container">
     <label for="artist-txt">Artist</label>
-    <input type="text" id="artist-txt" name="artist-txt">
+    <input type="text" id="artist-txt" name="artist-txt" required>
 </div>
 `;
 
@@ -114,6 +114,29 @@ adminTemplates.countries.countryContainer = Handlebars.compile(`
 <h1>{{this.name}}</h1>
 <h2>{{this.runningOrder}}</h2>
 <h3>{{this.song}} | {{this.artist}}</h3>
+</div>
+{{/each}}
+`);
+
+adminTemplates.judges = {};
+
+adminTemplates.judges.formInputsArea = `
+<div class="text-input-container" id="name-container">
+    <label for="name-txt">Name</label>
+    <input type="text" id="name-txt" name="name-txt" required>
+</div>
+
+<div class="text-input-container" id="origincountry-container">
+    <label for="origincountry-txt">Origin Country</label>
+    <input type="text" id="origincountry-txt" name="origincountry-txt" required>
+</div>
+`;
+
+adminTemplates.judges.judgeContainer = Handlebars.compile(`
+{{#each judges}}
+<div class="judge-container" id="{{this.name}}">
+<h1>{{this.name}}</h1>
+<h2>{{this.judgesOrigin}}</h2>
 </div>
 {{/each}}
 `);

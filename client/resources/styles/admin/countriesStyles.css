@@ -1,26 +1,3 @@
-/* #region details-containers */
-
-details {
-    margin: 1em auto;
-    width: 80%;
-}
-
-summary {
-    height: 40px;
-    padding: 0.5em;
-    background-color: var(--third-color);
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    font-size: 2em;
-}
-
-#voting-country-container > summary::-webkit-details-marker { 
-    display: none; 
-}
-
-/* #endregion */
-
 /* #region form-grid-areas */
 
 .inputs-area {
@@ -30,16 +7,7 @@ summary {
     grid-template-rows: repeat(3, 1fr);
     grid-template-areas: "code    code    name    name    qualified   runningorder"
                          "fc1     fc1     fc2     fc2     fc3         fc3"
-                         "song    song    song    artist  artist      artist"
-                         "btn     btn     btn     btn     btn         btn";
-}
-
-/* #endregion */
-
-/* #region modify-countries-content */
-
-#modify-countries-content {
-    display: flex;
+                         "song    song    song    artist  artist      artist";
 }
 
 /* #endregion */
@@ -82,20 +50,6 @@ summary {
     grid-area: artist;
 }
 
-#form-button-container {
-    grid-area: btn;
-    display: flex;
-    width: 75%;
-    margin: 1em auto;
-}
-
-/* #endregion */
-
-/* #region modify-countries-list-container */
-#modify-countries-list-container {
-    flex-basis: 50%;
-    overflow-y: scroll;
-}
 /* #endregion */
 
 /* #region country-container */

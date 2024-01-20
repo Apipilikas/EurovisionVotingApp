@@ -12,6 +12,17 @@ function fillDetailInputsAreaListener(currentDetail, otherDetail, inputsArea, ca
     }
 }
 
+function areRequiredInputsFilled(inputsArea) {
+    const inputs = inputsArea.querySelectorAll("input");
+
+    for (var input in inputs) {
+        if (input.hasAttribute("required")) return false;
+    }
+
+    return true;
+}
+
 export {
     fillDetailInputsAreaListener,
+    areRequiredInputsFilled
 }

@@ -29,6 +29,8 @@ function sendRequest(method, urlEnding, data = null) {
     return fetch(url, requestInit);
 }
 
+// #region Judge requests
+
 function getAllJudges() {
 
     return sendRequest(Method.GET, "judges/all")
@@ -42,15 +44,27 @@ function getAllJudges() {
     });
 }
 
-function createCountry(data) {
+function createJudge(data) {
 
-    return sendRequest(Method.POST, "country", data)
-    .then(response => {
-        if (response.status == 201) {
-            console.log("Success!");
-        }
-    });
+    return sendRequest(Method.POST, "judge", data)
+    .then(response => { return (response.status == 201) });
 }
+
+function updateJudge(code, data) {
+
+    return sendRequest(Method.PUT, "judge/" + code, data)
+    .then(response => { return (response.status == 200) });
+}
+
+function deleteJudge(code) {
+
+    return sendRequest(Method.DELETE, "judge/" + code)
+    .then(response => { return (response.status == 204) });
+}
+
+// #endregion
+
+// #region Country requests
 
 function getAllCountries() {
     
@@ -65,10 +79,35 @@ function getAllCountries() {
     });
 }
 
+function createCountry(data) {
+
+    return sendRequest(Method.POST, "country", data)
+    .then(response => { return (response.status == 201) });
+}
+
+function updateCountry(code, data) {
+
+    return sendRequest(Method.PUT, "country/" + code, data)
+    .then(response => { return (response.status == 200) });
+}
+
+function deleteCountry(code) {
+
+    return sendRequest(Method.DELETE, "country/" + code)
+    .then(response => { return (response.status == 204) });
+}
+
+// #endregion
+
 export {
     serverURL,
     clientURL,
     getAllJudges,
+    createJudge,
+    updateJudge,
+    deleteJudge,
+    getAllCountries,
     createCountry,
-    getAllCountries
+    updateCountry,
+    deleteCountry
 }

@@ -31,31 +31,35 @@
         </header>
 
         <main id="admin-countries-page">
-            <details id="create-country-container">
+            <details class="admin-details-container" id="create-country-container">
                 <summary>Create a new country</summary>
                 <div id="create-country-content">
                     <form id="create-country-form">
-                        <div class="inputs-area">
-
-                        </div>
+                        <div class="inputs-area"></div>
     
-                        <div class="buttons-area" id="form-button-container">                        
-                            <input type="submit" id="submit-btn" value="CREATE">
-                            <input type="reset" id="reset-btn" value="CLEAR">
+                        <div class="admin-buttons-area" id="form-button-container">                        
+                            <button class="result-button" type="submit" id="submit-btn">
+                                <span class="rb-content-container">SUBMIT</span><span class="rb-status-container"></span>
+                            </button>
+                            <button type="reset" id="reset-btn">CLEAR</button>
                         </div>
                     </form>
                 </div>
             </details>
 
-            <details id="modify-countries-container">
+            <details class="admin-details-container" id="modify-countries-container">
                 <summary>Modify a country</summary>
-                <div id="modify-countries-content">
-                    <div id="modify-countries-list-container"></div>
-                    <form id="modify-country-form">
+                <div class="admin-modify-content" id="modify-countries-content">
+                    <div class="admin-modify-list-container" id="modify-countries-list-container"></div>
+                    <form class="admin-modify-form" id="modify-country-form">
                         <div class="inputs-area"></div>
-                        <div class="buttons-area">
-                            <input type="button" id="modify-btn" value="MODIFY">
-                            <input type="button" id="delete-btn" value="DELETE">
+                        <div class="admin-buttons-area">
+                            <button class="result-button" id="modify-btn">
+                                <span class="rb-content-container">MODIFY</span><span class="rb-status-container"></span>
+                            </button>
+                            <button class="result-button" id="delete-btn">
+                                <span class="rb-content-container">DELETE</span><span class="rb-status-container"></span>
+                            </button>
                         </div>
                     </form>
                 </div>
