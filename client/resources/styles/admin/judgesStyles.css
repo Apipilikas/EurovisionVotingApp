@@ -1,0 +1,30 @@
+/* #region form-grid-areas */
+
+.inputs-area {
+    display: grid;
+    border-top: 0px;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-areas: "name"
+                         "origincountry";
+}
+
+/* #endregion */
+
+/* #region grid-areas */
+
+#name-container {
+    grid-area: name;
+}
+
+#origincountry-container {
+    grid-area: origincountry;
+}
+
+/* #endregion */
+
+/* #region judge-container */
+.judge-container > * {
+    pointer-events:none
+}
+/* #endregion */

@@ -59,6 +59,8 @@
     --forth-color: #02025e;
 }
 
+/* #region body, html, header, main, footer */
+
 body {
     background-color: wheat;
     font-family: 'Onest', sans-serif;
@@ -86,6 +88,8 @@ main {
 footer {
     grid-area: footer;
 }
+
+/* #endregion */
 
 /* #region input-containers */
 
@@ -159,15 +163,183 @@ input[type=checkbox]:checked {
     background: var(--third-color);
 }
 
-#form-button-container > input {
-    padding: 0.8em;
-    margin-top: 0.5em;
-    border: 3px solid black;
-    font-family: 'Onest', sans-serif;
-    /* transition-duration: 0.5s; */
-    width: 25%;
-    height: 100%;
-    margin: auto;
+/* #endregion */
+
+/* #region admin-details-containers */
+
+details.admin-details-container {
+    margin: 1em auto;
+    width: 80%;
 }
 
+.admin-details-container summary {
+    height: 40px;
+    padding: 0.5em;
+    background-color: var(--third-color);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    font-size: 2em;
+}
+
+.admin-details-container summary::-webkit-details-marker { 
+    display: none; 
+}
+
+/* #endregion */
+
+/* #region admin-modify-content */
+
+.admin-modify-content {
+    display: flex;
+}
+
+/* #endregion */
+
+/* #region admin-modify-list-containers */
+.admin-modify-list-container {
+    flex-basis: 50%;
+    overflow-y: scroll;
+}
+/* #endregion */
+
+/* #region admin-buttons-area */
+
+.admin-buttons-area {
+    display: flex;
+    
+    width: 75%;
+    margin: 0.5em auto;
+}
+
+.admin-buttons-area > button {
+    width: 75%;
+    height: 3em;
+    margin: 0em 1em;
+}
+
+/* #endregion */
+
+/* #region result-button */
+/* https://stackoverflow.com/questions/48694894/drawing-border-colors-during-a-css-transition */
+.result-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    padding: 20px 50px;
+    /* outline:none; */
+    border: none;
+    box-shadow: none;
+    --color: #f45e61;
+    background-image: 
+    linear-gradient(var(--color), var(--color)), 
+    linear-gradient(var(--color), var(--color)), 
+    linear-gradient(var(--color), var(--color)), 
+    linear-gradient(var(--color), var(--color));
+
+    background-position: 0 0, 0 0, 0 100%, 0 100%;
+    background-size: 3px 0%, 0% 3px, 0% 3px, 3px 0%;
+    background-color:transparent;
+    background-repeat:no-repeat;
+    /* transition:0.2s linear; */
+    /* animation: animate 1.4s linear infinite 0.2s; */
+    
+}
+
+.result-button:hover {
+
+    animation: animate-one 1.4s linear 0.2s;
+}
+
+.result-button-animation {
+    animation: animate 1.4s linear infinite 0.2s;
+}
+
+.result-button:before {
+    content:"";
+    position:absolute;
+    z-index:-1;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    border:3px solid #60daaa;
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0 100%, 0 0, 0 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%;
+    }
+    40% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 100%;
+    }
+    60% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 100%;
+        background-size: 3px 0%, 0% 3px, 100% 3px,3px 100%
+    }
+    70% {
+        background-position: 0 100%, 100% 0, 0% 100%, 100% 100%;
+        background-size: 3px 100%, 0% 3px, 100% 3px,3px 0%;
+    }
+    80% {
+        background-position: 0% 0%, 0% 0, 0% 100%, 100% 100%;
+        background-size: 3px 100%, 0% 3px, 0% 3px,3px 0%;
+    }
+    100% {
+        background-position: 0% 0%, 0 0, 0 100%, 100% 100%;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%  
+    }
+}
+
+@keyframes animate-one {
+    0% {
+        background-position: 0 100%, 0 0, 0 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%;
+    }
+    40% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 100%;
+    }
+    60% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 100%;
+        background-size: 3px 0%, 100% 3px, 100% 3px,3px 100%
+    }
+    70% {
+        background-position: 0 100%, 100% 0, 0% 100%, 100% 100%;
+        background-size: 3px 100%, 100% 3px, 100% 3px,3px 100%;
+    }
+    80% {
+        background-position: 0% 0%, 100% 0, 100% 100%, 100% 100%;
+        background-size: 3px 100%, 0% 3px, 0% 3px,3px 100%;
+    }
+    100% {
+        background-position: 0% 0%, 0 0, 100% 100%, 100% 100%;
+        background-size: 3px 100%, 100% 3px, 100% 3px,3px 100%  
+    }
+}
+
+.rb-status-container {
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    width: 0%;
+    height: 100%;
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    background: #fff;
+    z-index: -1;
+    transition: 0.5s;
+    align-items: center;
+}
+
+.rb-status-transition {
+    opacity: 100%;
+    width: 100%;
+    left: 0%;
+}
+  
 /* #endregion */

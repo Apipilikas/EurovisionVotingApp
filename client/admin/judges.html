@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Eurovision Voting App | ESC 2023</title>
+        <link rel="icon" href="">
+        <meta name="description" content="Eurovision Voting App">
+        <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest">
+        <meta name="author" content="Aggelos Pipilikas">
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.js"></script>
+        <script type="module" src="../resources/scripts/admin/judgesScript.js"></script>
+        <link rel="stylesheet" href="/client/resources/styles/generalStyles.css">
+        <link rel="stylesheet" href="/client/resources/styles/admin/judgesStyles.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body class="no-scrolling">
+        <header>
+            <div id="header-container">
+                <h1>Eurovision Voting App</h1>
+            </div>
+            <nav>
+                <ul id="header-navigation-bar">
+                    <li><a href="voting.html">Main</a></li>
+                    <li><a href="voting.html">Voting</a></li>
+                    <li><a href="voting.html">Countries</a></li>
+                    <li><a href="leaderboard.html">Judges</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main id="admin-judges-page">
+            <details class="admin-details-container" id="create-judge-container">
+                <summary>Create a new judge</summary>
+                <div id="create-judge-content">
+                    <form id="create-judge-form">
+                        <div class="inputs-area"></div>
+    
+                        <div class="admin-buttons-area" id="form-button-container">                        
+                            <button class="result-button" type="submit" id="submit-btn">
+                                <span class="rb-content-container">SUBMIT</span><span class="rb-status-container"></span>
+                            </button>
+                            <button type="reset" id="reset-btn">CLEAR</button>
+                        </div>
+                    </form>
+                </div>
+            </details>
+
+            <details class="admin-details-container" id="modify-judges-container">
+                <summary>Modify a judge</summary>
+                <div class="admin-modify-content" id="modify-judges-content">
+                    <div class="admin-modify-list-container" id="modify-judges-list-container"></div>
+                    <form class="admin-modify-form" id="modify-judges-form">
+                        <div class="inputs-area"></div>
+                        <div class="admin-buttons-area">
+                            <button class="result-button" id="modify-btn">
+                                <span class="rb-content-container">MODIFY</span><span class="rb-status-container"></span>
+                            </button>
+                            <button class="result-button" id="delete-btn">
+                                <span class="rb-content-container">DELETE</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </details>
+        </main>
+        
+        <footer>
+            <p>©Copyright 2023</p>
+            <p>Powered by Aggelos Pipilikas</p>
+        </footer>
+    </body>
+</html>

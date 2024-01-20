@@ -1,8 +1,9 @@
+import { ResultButton } from "../customElements/resultButton.js";
 import { fillDetailInputsAreaListener } from "../utils/documentUtils.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
-import { createCountry, getAllCountries } from "../utils/requestUtils.js";
+import { createCountry, deleteCountry, getAllCountries, updateCountry } from "../utils/requestUtils.js";
 
-var isCountriesLoaded = false;
+var areCountriesLoaded = false;
 var countries = [];
 const inputsArea = adminTemplates.countries.formInputsArea;
 
@@ -21,7 +22,7 @@ function init() {
     createCountryContainer.addEventListener("click", e => fillDetailInputsAreaListener(createCountryContainer,
                                                                                        modifyCountriesContainer,
                                                                                        inputsArea,
-                                                                                       updateColorPickerInputs()));
+                                                                                       initColorPickerInputs()));
 
     modifyCountriesContainer.addEventListener("click", e => fillDetailInputsAreaListener(modifyCountriesContainer,
                                                                                          createCountryContainer,
@@ -39,41 +40,31 @@ function init() {
 
 function createCountryFormListener(e) {
     e.preventDefault();
-    const codeValue = document.getElementById("code-txt").value;
-    const nameValue = document.getElementById("name-txt").value;
-    const qualifiedValue = document.getElementById("qualified-cbx").value;
-    const runningOrderValue = document.getElementById("runningorder-nmbr").value;
-    const flagColor1Value = document.getElementById("flagcolor1-txt").value;
-    const flagColor2Value = document.getElementById("flagcolor2-txt").value;
-    const flagColor3Value = document.getElementById("flagcolor3-txt").value;
-    const songValue = document.getElementById("song-txt").value;
-    const artistValue = document.getElementById("artist-txt").value;
+
+    let submitBtn = e.target.querySelector("#submit-btn");
+    let resultBtn = new ResultButton(submitBtn);
+
+    resultBtn.switchToLoadingState();
 
     // TODO: Add validation checks and required fields
-    let country = {
-        code: codeValue,
-        name: nameValue,
-        qualified: qualifiedValue,
-        runningOrder: runningOrderValue,
-        votes: 0,
-        totalVotes: 0,
-        flagColors: [flagColor1Value, flagColor2Value, flagColor3Value],
-        artist: artistValue,
-        song: songValue
-    }
+    let country = getCountryInputsValue();
 
     // TODO: Success / Failure message
-    createCountry(country);
+    createCountry(country)
+    .then(result => {
+        if (result) resultBtn.switchToSuccessState();
+        else resultBtn.switchToFailureState();
+    });
 }
 
 function loadCountries() {
-    updateColorPickerInputs();
+    initColorPickerInputs();
 
-    if (!isCountriesLoaded) {
+    if (!areCountriesLoaded) {
         getAllCountries()
         .then(result => {
             countries = result;
-            isCountriesLoaded = true;
+            areCountriesLoaded = true;
             
             var content = { countries: countries };
 
@@ -84,7 +75,7 @@ function loadCountries() {
     }
 }
 
-function updateColorPickerInputs() {
+function initColorPickerInputs() {
     const colorPickerContainers = document.querySelectorAll(".color-picker-container");
 
     for (var container of colorPickerContainers) {
@@ -103,7 +94,7 @@ function updateColorInput(inputClr, inputTxt) {
 function countryContainerListener(e) {
     var country = countries.find(({code}) => code == e.target.id);
 
-    // TODO: When clicked, highlight the container
+    // TODO: When clicked, highlight the selected container
 
     fillInputs(country)
 }
@@ -118,4 +109,63 @@ function fillInputs(country) {
     document.getElementById("flagcolor3-txt").value = country.flagColor3;
     document.getElementById("song-txt").value = country.song;
     document.getElementById("artist-txt").value = country.artist;
+}
+
+function getCountryInputsValue() {
+    const codeValue = document.getElementById("code-txt").value;
+    const nameValue = document.getElementById("name-txt").value;
+    const qualifiedValue = document.getElementById("qualified-cbx").value;
+    const runningOrderValue = document.getElementById("runningorder-nmbr").value;
+    const flagColor1Value = document.getElementById("flagcolor1-txt").value;
+    const flagColor2Value = document.getElementById("flagcolor2-txt").value;
+    const flagColor3Value = document.getElementById("flagcolor3-txt").value;
+    const songValue = document.getElementById("song-txt").value;
+    const artistValue = document.getElementById("artist-txt").value;
+
+    let country = {
+        code: codeValue,
+        name: nameValue,
+        qualified: qualifiedValue,
+        runningOrder: runningOrderValue,
+        votes: 0,
+        totalVotes: 0,
+        flagColors: [flagColor1Value, flagColor2Value, flagColor3Value],
+        artist: artistValue,
+        song: songValue
+    }
+
+    return country;
+}
+
+function modifyBtnListener(e) {
+    e.preventDefault();
+
+    let modifyBtn = e.target;
+    let resultBtn = new ResultButton(modifyBtn);
+    let selectedModifiedCountryCode = e.target.form.querySelector("#code-txt").value;
+    let modifiedCountry = getCountryInputsValue();
+
+    resultBtn.switchToLoadingState();
+
+    updateCountry(selectedModifiedCountryCode, modifiedCountry)
+    .then(result => {
+        if (result) resultBtn.switchToSuccessState();
+        else resultBtn.switchToFailureState();
+    });
+}
+
+function deleteBtnListener(e) {
+    e.preventDefault();
+
+    let deleteBtn = e.target;
+    let resultBtn = new ResultButton(deleteBtn);
+    let selectedModifiedCountryCode = e.target.form.querySelector("#code-txt").value;
+
+    resultBtn.switchToLoadingState();
+
+    deleteCountry(selectedModifiedCountryCode)
+    .then(result => {
+        if (result) resultBtn.switchToSuccessState();
+        else resultBtn.switchToFailureState();
+    });
 }
