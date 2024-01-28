@@ -96,11 +96,12 @@ label {
 
 /*  CAROUSEL STYLES  */
 
-#countries-carousel {
+#countries-carousel-container {
   position: relative;
   width: 100%;
   max-width: 500px;
   display: flex;
+  visibility: hidden;
   justify-content: center;
   flex-direction: column;
 }

@@ -66,6 +66,18 @@ function deleteJudge(code) {
 
 // #region Country requests
 
+function getRunningCountryNumber() {
+    return sendRequest(Method.GET, "country/runningCountry")
+    .then(response => {
+        if (response.status == 200) {
+            return response.json();
+        }
+        else {
+            return null;
+        }
+    });
+}
+
 function getAllCountries() {
     
     return sendRequest(Method.GET, "countries/all")
@@ -97,6 +109,13 @@ function deleteCountry(code) {
     .then(response => { return (response.status == 204) });
 }
 
+function voteCountry(countryCode, judgeCode, points) {
+    let judgeCodeParam = "votes." + judgeCode;
+    let data = { [judgeCodeParam] : points };
+
+    return updateCountry(countryCode, data);
+}
+
 // #endregion
 
 export {
@@ -106,8 +125,10 @@ export {
     createJudge,
     updateJudge,
     deleteJudge,
+    getRunningCountryNumber,
     getAllCountries,
     createCountry,
     updateCountry,
-    deleteCountry
+    deleteCountry,
+    voteCountry
 }

@@ -3,15 +3,19 @@
 .inputs-area {
     display: grid;
     border-top: 0px;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-template-areas: "name"
-                         "origincountry";
+    grid-template-areas: "code name"
+                         "origincountry origincountry";
 }
 
 /* #endregion */
 
 /* #region grid-areas */
+
+#code-cotaniner {
+    grid-template: code;
+}
 
 #name-container {
     grid-area: name;
