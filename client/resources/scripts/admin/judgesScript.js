@@ -88,15 +88,18 @@ function judgeContainerListener(e) {
 }
 
 function fillInputs(judge) {
+    document.getElementById("code-txt").value = judge.code;
     document.getElementById("name-txt").value = judge.name;
     document.getElementById("origincountry-txt").value = judge.originCountry;
 }
 
 function getJudgeInputsValue() {
+    const codeValue = document.getElementById("code-txt").value;
     const nameValue = document.getElementById("name-txt").value;
     const originCountryValue = document.getElementById("origincountry-txt").value;
 
     let judge = {
+        code: codeValue,
         name: nameValue,
         originCountry: originCountryValue
     }

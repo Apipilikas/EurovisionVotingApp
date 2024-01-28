@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Eurovision Voting App | ESC 2023</title>
+        <link rel="icon" href="">
+        <meta name="description" content="Eurovision Voting App">
+        <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest">
+        <meta name="author" content="Aggelos Pipilikas">
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.js"></script>
+        <script type="module" src="../resources/scripts/admin/votingScript.js"></script>
+        <link rel="stylesheet" href="/client/resources/styles/generalStyles.css">
+        <link rel="stylesheet" href="/client/resources/styles/admin/votingStyles.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body class="no-scrolling">
+        <header>
+            <div id="header-container">
+                <h1>Eurovision Voting App</h1>
+            </div>
+            <nav>
+                <ul id="header-navigation-bar">
+                    <li><a href="voting.html">Main</a></li>
+                    <li><a href="voting.html">Voting</a></li>
+                    <li><a href="voting.html">Countries</a></li>
+                    <li><a href="leaderboard.html">Judges</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="no-scrolling" id="admin-voting-page">
+            <div class="upper-container" id="running-order-display-dashboard">
+                <section class="" id="running-country-container">
+                    <h1>Current running country</h1>
+                    <h2>02 GREECE</h2>
+                    <h3>ARTIST</h3>
+                    <h4>SONG</h4>
+                </section>
+                <section class="" id="judges-voted-container">
+                    <h1>Judges voted</h1>
+                    <p><span id="judges-voted-txt">2</span> / <span id="total-judges-txt">5</span></p>
+                    <div id="online-judges-container">
+                        <p>ONLINE <span id="online-judges-txt"></span></p>
+                        <p>OFFLINE <span id="offline-judges-txt"></span></p>
+                    </div>
+                </section>
+                <section class="" id="total-voting-points-container">
+                    <h1>Total votes</h1>
+                    <h2>30</h2>
+                </section>
+            </div>
+
+            <div class="lower-container">
+                <div id="voting-countries-order-list-container">
+                    <details class="voting-country-container">
+                        <summary>
+                            <p class="running-order-txt">01</p>
+                            <img src="/client/resources/images/flags/gr.svg" width="55px">
+                            <p class="code-txt">GR</p>
+                            <p class="name-txt">GREECE</p>
+                            <p class="total-votes-txt">50</p>
+                            <label class="voting-toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </summary>
+                        <div class="voting-country-content">
+                            <table>
+                                <tr>
+                                    <th>Judges</th>
+                                    <th colspan="10">Points</th>
+                                </tr>
+                                <tr id="judge-{code}-row">
+                                    <th id="judge-{code}-header">Name</th>
+                                    <th><input type="radio" id="point1" name="chosen-vote" value="1"></th>
+                                    <th><input type="radio" id="point2" name="chosen-vote" value="2"></th>
+                                    <th><input type="radio" id="point3" name="chosen-vote" value="3"></th>
+                                    <th><input type="radio" id="point4" name="chosen-vote" value="4"></th>
+                                    <th><input type="radio" id="point5" name="chosen-vote" value="5"></th>
+                                    <th><input type="radio" id="point6" name="chosen-vote" value="6"></th>
+                                    <th><input type="radio" id="point7" name="chosen-vote" value="7"></th>
+                                    <th><input type="radio" id="point8" name="chosen-vote" value="8"></th>
+                                    <th><input type="radio" id="point10" name="chosen-vote" value="10"></th>
+                                    <th><input type="radio" id="point12" name="chosen-vote" value="12"></th>
+                                    <th><button id="judge-{code}-update-vote-btn">UPDATE</button></th>
+                                </tr>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+                <div class="button-areas">
+                    <button id="previous-country-btn">PREVIOUS COUNTRY</button>
+                    <button id="next-country-btn">NEXT COUNTRY</button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>©Copyright 2024</p>
+            <p>Powered by Aggelos Pipilikas</p>
+        </footer>
+    </body>
+</html>
