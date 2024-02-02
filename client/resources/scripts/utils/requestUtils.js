@@ -1,6 +1,7 @@
 const serverURL = {
     p8080: "http://localhost:8080/",
-    p3000: "http://localhost:3000/"
+    p3000: "http://localhost:3000/",
+    prefix : "api/v1/"
 };
 
 const clientURL = "http://127.0.0.1:5500/";
@@ -10,6 +11,13 @@ const Method = {
     POST: "POST",
     PUT: "PUT",
     DELETE: "DELETE"
+}
+
+class ClientResponse {
+    constructor(jsonData, success) {
+        this.success = success;
+        this.jsonText = jsonData;
+    }
 }
 
 function sendRequest(method, urlEnding, data = null) {
@@ -24,24 +32,23 @@ function sendRequest(method, urlEnding, data = null) {
         body: jsonData
     };
 
-    let url = serverURL.p8080 + urlEnding;
+    let url = serverURL.p8080 + serverURL.prefix + urlEnding;
 
     return fetch(url, requestInit);
 }
 
+function isStatusSuccessful(status) {
+    return status >= 200 && status < 300;
+}
+
 // #region Judge requests
 
-function getAllJudges() {
+async function getAllJudges() {
 
-    return sendRequest(Method.GET, "judges/all")
-    .then(response => {
-        if (response.status == 200) {
-            return response.json();
-        }
-        else {
-            return null;
-        }
-    });
+    const response = await sendRequest(Method.GET, "judges/all");
+    const data = await response.json();
+
+    return new ClientResponse(data, isStatusSuccessful(response.status));
 }
 
 function createJudge(data) {
