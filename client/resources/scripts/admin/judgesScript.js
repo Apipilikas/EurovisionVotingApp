@@ -65,14 +65,16 @@ function createJudgeFormListener(e) {
 function loadJudges() {
     if (!areJudgesLoaded) {
         getAllJudges()
-        .then(result => {
-            judges = result;
-            areJudgesLoaded = true;
-            
-            var content = { judges: judges };
+        .then(response => {
 
-            const modifyCountriesListContainer = document.getElementById("modify-judges-list-container");
-            modifyCountriesListContainer.innerHTML = adminTemplates.judges.judgeContainer(content);
+            if (response.success) {
+                console.log(response);
+                areJudgesLoaded = true;
+                
+                const modifyCountriesListContainer = document.getElementById("modify-judges-list-container");
+                modifyCountriesListContainer.innerHTML = adminTemplates.judges.judgeContainer(response.jsonText);
+            }
+
         })
 
     }
