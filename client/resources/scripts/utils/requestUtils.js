@@ -10,15 +10,20 @@ const Method = {
     GET: "GET",
     POST: "POST",
     PUT: "PUT",
+    PATCH: "PATCH",
     DELETE: "DELETE"
 }
 
 class ClientResponse {
     constructor(jsonData, status) {
-        this.success = status >= 200 && status < 300;
-        this.jsonText = jsonData;
+        this.success = IsStatusOK(status);
+        this.jsonData = jsonData;
         this.status = status;
     }
+}
+
+function IsStatusOK(status) {
+    return status == 200 || status == 201 || status == 204;
 }
 
 function sendRequest(method, urlEnding, data = null) {
@@ -41,31 +46,31 @@ function sendRequest(method, urlEnding, data = null) {
 // #region Judge requests
 
 async function getAllJudges() {
-    const response = await sendRequest(Method.GET, "judge/all");
-    const data = await response.json();
+    const response = await sendRequest(Method.GET, "judges/all");
+    const jsonData = await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function createJudge(data) {
-    const response = await sendRequest(Method.POST, "judge", data);
-    const data = await response.json();
+    const response = await sendRequest(Method.POST, "judges", data);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function updateJudge(code, data) {
-    const response = await sendRequest(Method.PUT, "judge/" + code, data);
-    const data = await response.json();
+    const response = await sendRequest(Method.PUT, "judges/" + code, data);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function deleteJudge(code) {
-    const response = await sendRequest(Method.DELETE, "judge/" + code);
-    const data = await response.json();
+    const response = await sendRequest(Method.DELETE, "judges/" + code);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 // #endregion
@@ -73,48 +78,47 @@ async function deleteJudge(code) {
 // #region Country requests
 
 async function getRunningCountryNumber() {
-    const response = await sendRequest(Method.GET, "country/runningCountry");
-    const data = await response.json();
+    const response = await sendRequest(Method.GET, "countries/runningCountry");
+    const jsonData = await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function getAllCountries() {
-    const response = await sendRequest(Method.GET, "country/all");
-    const data = await response.json();
+    const response = await sendRequest(Method.GET, "countries/all");
+    const jsonData = await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function createCountry(data) {
-    const response = await sendRequest(Method.POST, "country", data);
-    const data = await response.json();
+    const response = await sendRequest(Method.POST, "countries", data);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function updateCountry(code, data) {
-    const response = await sendRequest(Method.PUT, "country/" + code, data);
-    const data = await response.json();
+    const response = await sendRequest(Method.PUT, "countries/" + code, data);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function deleteCountry(code) {
-    const response = await sendRequest(Method.DELETE, "country/" + code);
-    const data = await response.json();
+    const response = await sendRequest(Method.DELETE, "countries/" + code);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 async function voteCountry(countryCode, judgeCode, points) {
-    let judgeCodeParam = "votes." + judgeCode;
-    let json = { [judgeCodeParam] : points };
+    let data = { points : points };
 
-    const response = await updateCountry(countryCode, json);
-    const data = await response.json();
+    const response = await sendRequest(Method.PATCH, "countries/vote/" + countryCode + "/" + judgeCode, data);
+    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
-    return new ClientResponse(data, response.status);
+    return new ClientResponse(jsonData, response.status);
 }
 
 // #endregion
