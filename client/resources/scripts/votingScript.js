@@ -11,13 +11,17 @@ window.onload = init;
 function init() {
     // Get all countries
     getAllCountries()
-    .then(result => {
-        getRunningCountryNumber()
-        .then(result2 => {
-            runningCountryNumber = result2.runningOrder;
+    .then(response => {
+        if (response.success) {
+            getRunningCountryNumber()
+            .then(response2 => {
+                if (response2.success) {
+                    runningCountryNumber = response2.jsonData.runningOrder;
 
-            setCountriesToCarousel(result, runningCountryNumber);
-        });
+                    setCountriesToCarousel(response.jsonData.countries, runningCountryNumber);
+                };
+            })
+        };
     });
     // Get current running country
 
@@ -122,13 +126,17 @@ socket.on("hi", (arg) => {
 })
 
 socket.on("nextCountry", (arg) => {
+    console.log(arg);
+
+    moveToNextCountry();
     // next country. To ensure:
     // {runningCountry : 01, isVotingOpen : false}
 
     // Find detail by ID and fill voting content.
 })
 
-socket.on("votingStatus", (arg) => {
+socket.on("points", (arg) => {
+    console.log(arg);
     // current country. To ensure:
     // {runningCountry : 01, isVotingOpen : true}
 

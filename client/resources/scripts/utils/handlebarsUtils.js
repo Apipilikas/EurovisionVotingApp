@@ -2,6 +2,7 @@ var registerTemplates = {};
 var votingTemplates = {};
 var adminTemplates = {};
 var leaderboardTemplates = {};
+var points = [1,2,3,4,5,6,7,8,10,12];
 
 Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
@@ -54,7 +55,7 @@ votingTemplates.votingContent = Handlebars.compile(`
 <button id="{{countryCode}}-vote-btn">VOTE</button>
 `);
 
-votingTemplates.votingContent.content = {points: [1,2,3,4,5,6,7,8,10,12], countryCode: null};
+votingTemplates.votingContent.content = {points: points, countryCode: null};
 
 adminTemplates.countries = {};
 
@@ -154,29 +155,47 @@ adminTemplates.judges.judgeContainer = Handlebars.compile(`
 
 adminTemplates.voting = {};
 
-adminTemplates.voting.votingCountryContent = Handlebars.compile(`
-<table>
-    <tr>
-        <th>Judges</th>
-        <th colspan="10">Points</th>
-    </tr>
-    {{#each judges}}
-    <tr id="judge-{{this.code}}-row">
-        <th id="judge-{{this.code}}-header">Name</th>
-        <th><input type="radio" id="point1" name="chosen-vote" value="1"></th>
-        <th><input type="radio" id="point2" name="chosen-vote" value="2"></th>
-        <th><input type="radio" id="point3" name="chosen-vote" value="3"></th>
-        <th><input type="radio" id="point4" name="chosen-vote" value="4"></th>
-        <th><input type="radio" id="point5" name="chosen-vote" value="5"></th>
-        <th><input type="radio" id="point6" name="chosen-vote" value="6"></th>
-        <th><input type="radio" id="point7" name="chosen-vote" value="7"></th>
-        <th><input type="radio" id="point8" name="chosen-vote" value="8"></th>
-        <th><input type="radio" id="point10" name="chosen-vote" value="10"></th>
-        <th><input type="radio" id="point12" name="chosen-vote" value="12"></th>
-        <th><button id="judge-{{this.code}}-update-vote-btn">UPDATE</button></th>
-    </tr>
-    {{/each}}
-</table>
-`)
+adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
+{{#each countries}}
+<details class="voting-country-container">
+    <summary>
+        <p class="running-order-txt">01</p>
+        <img src="/client/resources/images/flags/gr.svg" width="55px">
+        <p class="code-txt">{{this.code}}</p>
+        <p class="name-txt">{{this.name}}</p>
+        <p class="total-votes-txt">50</p>
+        <label class="voting-toggle-switch" id="{{this.code}}-voting-toggle" countrycode="{{this.code}}">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </summary>
+    <div class="voting-country-content">
+        <table class="voting-country-table" id="voting-{{this.code}}-table">
+        <tr>
+            <th>Judges</th>
+            <th colspan="10">Points</th>
+        </tr>
+        <tr>
+            <th></th>
+            {{#each ../points}}
+            <th>{{this}}</th>
+            {{/each}}
+        </tr>
+        {{#each ../judges}}
+        <tr id="{{../this.code}}-{{this.code}}-row">
+            <th id="judge-{{this.code}}-header">{{this.name}}</th>
+            {{#each ../../points}}
+            <th><input type="radio" id="{{../../this.code}}-{{../this.code}}-point{{this}}" name="{{../../this.code}}-{{../this.code}}-chosen-vote" value="{{this}}"></th>
+            {{/each}}
+            <th><button id="{{../this.code}}-judge-{{this.code}}-update-vote-btn">UPDATE</button></th>
+        </tr>
+        {{/each}}
+        </table>
+    </div>
+</details>
+{{/each}}
+`);
+
+adminTemplates.voting.votingCountryContainer.content = {points : points, countries : null, judges : null};
 
 export {votingTemplates, registerTemplates, adminTemplates};
