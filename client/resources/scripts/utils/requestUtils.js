@@ -84,6 +84,20 @@ async function getRunningCountryNumber() {
     return new ClientResponse(jsonData, response.status);
 }
 
+async function getVotingCountryStatuses() {
+    const response = await sendRequest(Method.GET, "countries/votingStatuses");
+    const jsonData = await response.json();
+
+    return new ClientResponse(jsonData, response.status);
+}
+
+async function getVotingCountryStatus(countryCode) {
+    const response = await sendRequest(Method.GET, "countries/votingStatuses/" + countryCode);
+    const jsonData = await response.json();
+
+    return new ClientResponse(jsonData, response.status);
+}
+
 async function getAllCountries() {
     const response = await sendRequest(Method.GET, "countries/all");
     const jsonData = await response.json();
@@ -131,6 +145,8 @@ export {
     updateJudge,
     deleteJudge,
     getRunningCountryNumber,
+    getVotingCountryStatuses,
+    getVotingCountryStatus,
     getAllCountries,
     createCountry,
     updateCountry,
