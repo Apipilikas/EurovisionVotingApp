@@ -1,55 +1,53 @@
 import { votingTemplates } from "./utils/handlebarsUtils.js"
-import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
+import { getAllCountries, getRunningCountryNumber, getVotingCountryStatus, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
 var loginJudgeCode = "agg";
-var runningCountryNumber = 0;
+var runningCountry = 0;
+var totalCountries = 0;
+var runningCountryCode = null;
 const socket = io(serverURL.p3000);
 
 window.onload = init;
 
 function init() {
-    // Get all countries
+    // Initialize carousel
+    initCarousel();
+}
+
+function initCarousel() {
     getAllCountries()
     .then(response => {
         if (response.success) {
             getRunningCountryNumber()
             .then(response2 => {
                 if (response2.success) {
-                    runningCountryNumber = response2.jsonData.runningOrder;
+                    runningCountry = response2.jsonData.runningCountry;
 
-                    setCountriesToCarousel(response.jsonData.countries, runningCountryNumber);
+                    setCountriesToCarousel(response.jsonData.countries);
+
+                    getVotingCountryStatus(runningCountryCode)
+                    .then(response3 => {
+                        if (response3.success) {
+                            let isVotingOpen = response3.jsonData.status == "OPEN";
+                            console.log(response3)
+                            setVotingContentToRunningCountry(isVotingOpen);
+                        }
+                    })
+
                 };
             })
         };
     });
-    // Get current running country
-
-    // if contest hasnt began:
-
-    // if running country is 01
-
-    const connectBtn = document.getElementById("connect-btn");
-
-    connectBtn.addEventListener("click", connectBtnListener);
 }
 
-function checkRunningOrderCompliance()
+function setCountriesToCarousel(countries)
 {
-    // if getcurrentrunningorder != running order
-    // then we want to get to the correct country.
-    // Further implementation should be added to transition
-    // Add a class that says to objects move without stopping
-    // untill the correct country. For scenario that ro = 2
-    // and fetched ro = 7.
-}
-
-function setCountriesToCarousel(countries, runningCountryNumber)
-{
+    totalCountries = countries.length;
     // FUTURE-TO-DO: Get countries 10 by 10 batches
 
     // Get correct country order
-    var startIndex = (runningCountryNumber - 4 <= 0) ? 0 : runningCountryNumber - 4;
+    var startIndex = (runningCountry - 4 <= 0) ? 0 : runningCountry - 4;
 
     // Shift countries to find the current one
     for (var i = 0; i < startIndex; i++) countries.push(countries.shift());
@@ -57,7 +55,7 @@ function setCountriesToCarousel(countries, runningCountryNumber)
     let emptyCountries = [];
 
     // Add empty country containers [only for runningOrder = 1 - 3]
-    for (var i = 0; i < 4 - runningCountryNumber; i++) emptyCountries.push({});
+    for (var i = 0; i < 4 - runningCountry; i++) emptyCountries.push({});
 
     const countriesCarouselContainer = document.getElementById("countries-carousel-container");
     const countriesData = {countries : countries, emptyCountries : emptyCountries};
@@ -66,8 +64,14 @@ function setCountriesToCarousel(countries, runningCountryNumber)
     countriesCarouselContainer.innerHTML = content;
 }
 
-function moveToNextCountry() {
-    // Get the first country container and move it at the end
+function moveToNextCountry(nextRunningCountry) {
+    if (nextRunningCountry.runningCountry != (runningCountry + 1) % totalCountries) {
+        // Country carousel is not syncronized.
+        initCarousel();
+        return;
+    }
+
+    // Get the first country container and move it at the end.
     var removedVotingCountry = document.querySelectorAll(".voting-country-container")[0];
     removedVotingCountry.remove();
 
@@ -77,71 +81,66 @@ function moveToNextCountry() {
     }
 }
 
-function connectBtnListener(e) {
-
-    moveToNextCountry();
-
-    setVotingContentToRunningCountry();
-}
-
-function setVotingContentToRunningCountry()
+function setVotingContentToRunningCountry(isVotingOpen)
 {
     var currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
 
+    runningCountryCode = currentRunningCountry.getAttribute("countrycode");
+    
     if (currentRunningCountry == null) return;
-
-    let countryCode = currentRunningCountry.getAttribute("countrycode");
-
+    
     let votingCountryContent = currentRunningCountry.querySelector(".voting-country-content");
+    
+    if (!isVotingOpen) {
+        votingCountryContent.innerHTML = "VOTING CLOSED";
+        return;
+    }
 
     let votingData = votingTemplates.votingContent.content;
-    votingData.countryCode = countryCode;
+    votingData.countryCode = runningCountryCode;
     let content = votingTemplates.votingContent(votingData);
 
     votingCountryContent.innerHTML = content;
 
-    votingCountryContent.querySelector("button").addEventListener("click", e => voteBtnListener(e, countryCode));
+    votingCountryContent.querySelector("button").addEventListener("click", e => voteBtnListener(e));
 }
 
-function voteBtnListener(e, countryCode)
+function getRunningCountryCode() {
+    var currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
+
+    return currentRunningCountry.getAttribute("countrycode");
+}
+
+//#region  Event Listeners
+function voteBtnListener(e)
 {
     let points = e.target.parentNode.querySelector("input[name='choose-vote']:checked").value;
-    voteCountry(countryCode, loginJudgeCode, points);
+    voteCountry(runningCountryCode, loginJudgeCode, points);
 }
-
-function setVotingStatusToOpen()
-{
-
-}
-
-function setVotingStatusToClosed()
-{
-
-}
+//#endregion
 
 //#region Socket Listeners
 
 socket.on("hi", (arg) => {
     console.log(arg)
-})
+});
 
-socket.on("nextCountry", (arg) => {
-    console.log(arg);
+socket.on("nextCountry", (nextRunningCountry) => {
+    moveToNextCountry(nextRunningCountry);
+});
 
-    moveToNextCountry();
-    // next country. To ensure:
-    // {runningCountry : 01, isVotingOpen : false}
+socket.on("points", (vote) => {
+    console.log(vote);
+});
 
-    // Find detail by ID and fill voting content.
-})
+socket.on("votingStatus", (votingStatus) => {
+    console.log(votingStatus);
 
-socket.on("points", (arg) => {
-    console.log(arg);
-    // current country. To ensure:
-    // {runningCountry : 01, isVotingOpen : true}
+    let isVotingOpen = votingStatus.status == "OPEN";
 
-    // Find detail by ID. Create a new class
-    // transitions etc for close/open voting.
-})
+    if (votingStatus.countries.find(el => el == getRunningCountryCode()) != null) {
+        setVotingContentToRunningCountry(isVotingOpen);
+    }
+});
 
 //#endregion
