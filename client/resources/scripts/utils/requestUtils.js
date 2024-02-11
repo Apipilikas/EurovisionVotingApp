@@ -85,7 +85,7 @@ async function getRunningCountryNumber() {
 }
 
 async function getVotingCountryStatuses() {
-    const response = await sendRequest(Method.GET, "countries/votingStatuses");
+    const response = await sendRequest(Method.GET, "countries/votingStatuses/all");
     const jsonData = await response.json();
 
     return new ClientResponse(jsonData, response.status);
@@ -128,7 +128,7 @@ async function deleteCountry(code) {
 
 async function voteCountry(countryCode, judgeCode, points) {
     let data = { points : points };
-
+    
     const response = await sendRequest(Method.PATCH, "countries/vote/" + countryCode + "/" + judgeCode, data);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
