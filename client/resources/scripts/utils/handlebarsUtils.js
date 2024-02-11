@@ -164,8 +164,8 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
         <p class="code-txt">{{this.code}}</p>
         <p class="name-txt">{{this.name}}</p>
         <p class="total-votes-txt">50</p>
-        <label class="voting-toggle-switch" id="{{this.code}}-voting-toggle" countrycode="{{this.code}}">
-            <input type="checkbox">
+        <label class="voting-toggle-switch" id="{{this.code}}-voting-toggle">
+            <input type="checkbox" countrycode="{{this.code}}" {{#if this.isVotingOpen}} checked {{/if}}>
             <span class="slider"></span>
         </label>
     </summary>

@@ -20,7 +20,6 @@ function initCarousel() {
         if (data == null) return;
         
         setCountriesToCarousel(data.countries);
-
         setVotingContentToRunningCountry(data.isVotingOpen);
     })
 }
@@ -127,7 +126,8 @@ function setVotingContentToRunningCountry(isVotingOpen)
 function voteBtnListener(e)
 {
     let points = e.target.parentNode.querySelector("input[name='choose-vote']:checked").value;
-    voteCountry(runningCountryCode, loginJudgeCode, points);
+    
+    voteCountry(getCountryCodeByRunningCountry(), loginJudgeCode, points);
 }
 //#endregion
 
