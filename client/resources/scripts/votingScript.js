@@ -4,46 +4,61 @@ import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
 var loginJudgeCode = "agg";
 var runningCountry = 0;
-var totalCountries = 0;
-var runningCountryCode = null;
+var countries = [];
 const socket = io(serverURL.p3000);
 
 window.onload = init;
 
 function init() {
-    // Initialize carousel
     initCarousel();
 }
 
+//#region Init functions
 function initCarousel() {
-    getAllCountries()
-    .then(response => {
-        if (response.success) {
-            getRunningCountryNumber()
-            .then(response2 => {
-                if (response2.success) {
-                    runningCountry = response2.jsonData.runningCountry;
+    getInitData()
+    .then(data => {
+        if (data == null) return;
+        
+        setCountriesToCarousel(data.countries);
 
-                    setCountriesToCarousel(response.jsonData.countries);
+        setVotingContentToRunningCountry(data.isVotingOpen);
+    })
+}
+//#endregion
 
-                    getVotingCountryStatus(runningCountryCode)
-                    .then(response3 => {
-                        if (response3.success) {
-                            let isVotingOpen = response3.jsonData.status == "OPEN";
-                            console.log(response3)
-                            setVotingContentToRunningCountry(isVotingOpen);
-                        }
-                    })
+//#region General functions
+async function getInitData() {
+    const runningCountryResponse = await getRunningCountryNumber(); 
+    const countriesResponse = await getAllCountries();
 
-                };
-            })
-        };
-    });
+    if (runningCountryResponse.success && countriesResponse.success) {
+        runningCountry = runningCountryResponse.jsonData.runningCountry;
+
+        countries = []; // Clear in case of re - initialization
+
+        countriesResponse.jsonData.countries.forEach(country => {
+            countries.push({code : country.code, runningOrder : parseInt(country.runningOrder)});
+        });
+
+        const runningCountryCode = getCountryCodeByRunningCountry();
+        const votingCountryStatusResponse = await getVotingCountryStatus(runningCountryCode);
+        
+        if(votingCountryStatusResponse.success) {
+            return {countries : countriesResponse.jsonData.countries, isVotingOpen : votingCountryStatusResponse.jsonData.status == "OPEN"};
+        }
+    }
+
+    return null;
 }
 
+function getCountryCodeByRunningCountry() {
+    let country = countries.find(element => element.runningOrder == runningCountry);
+    
+    if (country == null) return null;
+    else return country.code;
+}
 function setCountriesToCarousel(countries)
 {
-    totalCountries = countries.length;
     // FUTURE-TO-DO: Get countries 10 by 10 batches
 
     // Get correct country order
@@ -65,7 +80,9 @@ function setCountriesToCarousel(countries)
 }
 
 function moveToNextCountry(nextRunningCountry) {
-    if (nextRunningCountry.runningCountry != (runningCountry + 1) % totalCountries) {
+    runningCountry = runningCountry % countries.length + 1;
+
+    if (nextRunningCountry.runningCountry != runningCountry) {
         // Country carousel is not syncronized.
         initCarousel();
         return;
@@ -85,7 +102,7 @@ function setVotingContentToRunningCountry(isVotingOpen)
 {
     var currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
 
-    runningCountryCode = currentRunningCountry.getAttribute("countrycode");
+    var runningCountryCode = currentRunningCountry.getAttribute("countrycode");
     
     if (currentRunningCountry == null) return;
     
@@ -104,14 +121,9 @@ function setVotingContentToRunningCountry(isVotingOpen)
 
     votingCountryContent.querySelector("button").addEventListener("click", e => voteBtnListener(e));
 }
+//#endregion
 
-function getRunningCountryCode() {
-    var currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
-
-    return currentRunningCountry.getAttribute("countrycode");
-}
-
-//#region  Event Listeners
+//#region  Event Listener Functions
 function voteBtnListener(e)
 {
     let points = e.target.parentNode.querySelector("input[name='choose-vote']:checked").value;
@@ -137,8 +149,7 @@ socket.on("votingStatus", (votingStatus) => {
     console.log(votingStatus);
 
     let isVotingOpen = votingStatus.status == "OPEN";
-
-    if (votingStatus.countries.find(el => el == getRunningCountryCode()) != null) {
+    if (votingStatus.countries.find(el => el == getCountryCodeByRunningCountry()) != null) {
         setVotingContentToRunningCountry(isVotingOpen);
     }
 });
