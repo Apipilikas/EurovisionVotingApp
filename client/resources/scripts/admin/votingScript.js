@@ -2,59 +2,67 @@ import { getAllCountries, getAllJudges, getRunningCountryNumber, serverURL } fro
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 
-var runningCountryNumber = 0;
+var runningCountry = 0;
 var countries = [];
 const socket = io(serverURL.p3000);
 
 window.onload = init;
 
 function init() {
+    initVotingCountryContainer();
+}
+
+//#region Init functions
+function initVotingCountryContainer() {
     const countriesListContainer = document.getElementById("voting-countries-order-list-container");
-    const nextCountryBtn = document.getElementById("next-country-btn");
-    //const allCountriesVotingToggle
 
-    getRunningCountryNumber()
-    .then(response => {
-        if (response.success) {
-            runningCountryNumber = response.jsonData.runningCountry;
-        }
-    });
-
-    initVotingCountryContainer()
+    getInitData()
     .then(data => {
+        if (data == null) return;
+        
         var content = adminTemplates.voting.votingCountryContainer.content;
         content.countries = data.countries;
         content.judges = data.judges;
-
-        data.countries.forEach(country => {
-            countries.push({code : country.code, runningOrder : parseInt(country.runningOrder)});
-        });
         
         countriesListContainer.innerHTML = adminTemplates.voting.votingCountryContainer(content);
 
-        const votingToggleSwitches = document.getElementsByClassName("voting-toggle-switch");
-
-        for (var toggleSwitch of votingToggleSwitches) {
-            toggleSwitch.addEventListener("change", e => toggleSwitchListener(e));
-        };
-    });
-
-    nextCountryBtn.addEventListener("click", e => nextCountryBtnListener());
+        initBtnLinsteners();
+    })
 }
 
-async function initVotingCountryContainer() {
+function initBtnLinsteners() {
+    const nextCountryBtn = document.getElementById("next-country-btn");
+    nextCountryBtn.addEventListener("click", e => nextCountryBtnListener());
+
+    const votingToggleSwitches = document.getElementsByClassName("voting-toggle-switch");
+    for (var toggleSwitch of votingToggleSwitches) {
+        toggleSwitch.addEventListener("change", e => toggleSwitchListener(e));
+    };
+}
+//#endregion
+
+//#region General functions
+async function getInitData() {
     const countriesResponse = await getAllCountries();
     const judgesResponse = await getAllJudges();
+    const runningCountryResponse = await getRunningCountryNumber();
 
-    if (countriesResponse.success && judgesResponse.success) {
+    if (countriesResponse.success && judgesResponse.success && runningCountryResponse.success) {
+        runningCountry = runningCountryResponse.jsonData.runningCountry;
+
+        countriesResponse.jsonData.countries.forEach(country => {
+            countries.push({code : country.code, runningOrder : parseInt(country.runningOrder)});
+        });
+
         return {countries : countriesResponse.jsonData.countries, judges : judgesResponse.jsonData.judges};
     }
 
     return null;
 }
+//#endregion
 
 function findCountryCodeByRunningCountry() {
-    let country = countries.find(element => element.runningOrder == runningCountryNumber);
+    let country = countries.find(element => element.runningOrder == runningCountry);
 
     if (country == null) return null;
     else return country.code;
@@ -64,9 +72,10 @@ function emitVotingStatus(status, countryCodes) {
     socket.emit("votingStatus", {status : status, countries : countryCodes});
 }
 
-//#region Event Listeners
+//#region Event Listener Functions
 
 function toggleSwitchListener(e) {
+    console.log("hi")
     let countryCode = e.target.parentElement.getAttribute("countrycode");
     let status = e.target.checked ? "OPEN" : "CLOSED";
 
@@ -74,9 +83,9 @@ function toggleSwitchListener(e) {
 }
 
 function nextCountryBtnListener() {
-    runningCountryNumber = runningCountryNumber % countries.length; 
+    runningCountry = runningCountry % countries.length; 
 
-    socket.emit("nextCountry", {runningCountry : ++runningCountryNumber});
+    socket.emit("nextCountry", {runningCountry : ++runningCountry});
 
     emitVotingStatus("OPEN", [findCountryCodeByRunningCountry()]);
 }
