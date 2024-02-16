@@ -3,7 +3,7 @@ import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 
 var runningCountry = 0;
-var countries = [];
+var totalCountries = 0;
 const socket = io(serverURL.p3000);
 
 window.onload = init;
@@ -26,6 +26,8 @@ function initVotingCountryContainer() {
         content.judges = data.judges;
         
         countriesListContainer.innerHTML = adminTemplates.voting.votingCountryContainer(content);
+        
+        initVotesToJudges(data.countries);
 
         initBtnLinsteners();
     })
@@ -41,6 +43,19 @@ function initBtnLinsteners() {
     };
 }
 
+function initVotesToJudges(countries) {
+    for (var country of countries) {
+        console.log(country)
+        console.log(country.votes)
+        if (country.votes == 0) continue; // TO CHANGE
+
+        for (var [judgeCode, points] of Object.entries(country.votes)) {
+            console.log(judgeCode)
+            setVoteToJudge(judgeCode, country.code, points);
+        }
+    }
+}
+
 //#endregion
 
 //#region General functions
@@ -54,13 +69,10 @@ async function getInitData() {
     if (countriesResponse.success && judgesResponse.success && runningCountryResponse.success && votingCountryStatusesResponse.success) {
         runningCountry = runningCountryResponse.jsonData.runningCountry;
 
-        countriesResponse.jsonData.countries.forEach(country => {
-            countries.push({code : country.code, runningOrder : parseInt(country.runningOrder)});
-        });
-
         const fetchedCountries = countriesResponse.jsonData.countries;
+        totalCountries = fetchedCountries.length;
         const fetchedVotingCountryStatuses = votingCountryStatusesResponse.jsonData.votingStatuses;
-
+        
         return {countries : mergeVotingStatusesToCountries(fetchedCountries, fetchedVotingCountryStatuses), judges : judgesResponse.jsonData.judges};
     }
 
@@ -83,21 +95,16 @@ function mergeVotingStatusesToCountries(countries, votingStatuses) {
     return countries;
 }
 
-function setVotingStatusToToggleSwitch(countryCode, votingStatus) {
-    const votingStatusToggleSwitch = document.querySelector('input[countrycode="' + countryCode + '"]');
+function setVotingStatusToToggleSwitch(runningOrder, votingStatus) {
+    const votingStatusToggleSwitch = document.querySelector('input[runningorder="' + runningOrder + '"]');
     
     if (votingStatusToggleSwitch != null) votingStatusToggleSwitch.checked = votingStatus == "OPEN";
 }
 
-function findCountryCodeByRunningCountry() {
-    let country = countries.find(element => element.runningOrder == runningCountry);
-
-    if (country == null) return null;
-    else return country.code;
-}
-
-function emitVotingStatus(status, countryCodes) {
-    socket.emit("votingStatus", {status : status, countries : countryCodes});
+function setVoteToJudge(judgeCode, countryCode, points) {
+    const tag = countryCode + "-" + judgeCode + "-point" + points;
+    const chosenPoint = document.getElementById(tag);
+    chosenPoint.checked = true;
 }
 
 //#endregion
@@ -109,17 +116,15 @@ function toggleSwitchListener(e) {
     let countryCode = e.target.getAttribute("countrycode");
     let status = e.target.checked ? "OPEN" : "CLOSED";
 
-    emitVotingStatus(status, [countryCode]);
+    socket.emit("votingStatus", {status : status, countries : [countryCode]});
 }
 
 function nextCountryBtnListener() {
-    runningCountry = runningCountry % countries.length + 1; 
-    const runningCountryCode = findCountryCodeByRunningCountry();
+    runningCountry = runningCountry % totalCountries + 1; 
     const votingStatus = "OPEN";
 
-    socket.emit("nextCountry", {runningCountry : runningCountry});
-    emitVotingStatus(votingStatus, [runningCountryCode]);
-    setVotingStatusToToggleSwitch(runningCountryCode, votingStatus);
+    socket.emit("nextCountry", {runningCountry : runningCountry, votingStatus : votingStatus});
+    setVotingStatusToToggleSwitch(runningCountry, votingStatus);
 }
 
 //#endregion
@@ -130,8 +135,8 @@ socket.on("hi", (arg) => {
     console.log(arg);
 })
 
-socket.on("points", (arg) => {
-    console.log(arg);
+socket.on("points", (voting) => {
+    setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points);
 })
 
 //#endregion

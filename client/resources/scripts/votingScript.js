@@ -1,10 +1,11 @@
 import { votingTemplates } from "./utils/handlebarsUtils.js"
-import { getAllCountries, getRunningCountryNumber, getVotingCountryStatus, serverURL, voteCountry } from "./utils/requestUtils.js";
+import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
 var loginJudgeCode = "agg";
 var runningCountry = 0;
-var countries = [];
+var totalCountries = 0;
+var runningCountryCode = null;
 const socket = io(serverURL.p3000);
 
 window.onload = init;
@@ -32,30 +33,16 @@ async function getInitData() {
 
     if (runningCountryResponse.success && countriesResponse.success) {
         runningCountry = runningCountryResponse.jsonData.runningCountry;
-
-        countries = []; // Clear in case of re - initialization
-
-        countriesResponse.jsonData.countries.forEach(country => {
-            countries.push({code : country.code, runningOrder : parseInt(country.runningOrder)});
-        });
-
-        const runningCountryCode = getCountryCodeByRunningCountry();
-        const votingCountryStatusResponse = await getVotingCountryStatus(runningCountryCode);
+        runningCountryCode = runningCountryResponse.jsonData.runningCountryCode;
+        let votingStatus = runningCountryResponse.jsonData.votingStatus;
+        totalCountries = countriesResponse.jsonData.countries.length;
         
-        if(votingCountryStatusResponse.success) {
-            return {countries : countriesResponse.jsonData.countries, isVotingOpen : votingCountryStatusResponse.jsonData.status == "OPEN"};
-        }
+        return {countries : countriesResponse.jsonData.countries, isVotingOpen : votingStatus == "OPEN"};
     }
 
     return null;
 }
 
-function getCountryCodeByRunningCountry() {
-    let country = countries.find(element => element.runningOrder == runningCountry);
-    
-    if (country == null) return null;
-    else return country.code;
-}
 function setCountriesToCarousel(countries)
 {
     // FUTURE-TO-DO: Get countries 10 by 10 batches
@@ -79,7 +66,7 @@ function setCountriesToCarousel(countries)
 }
 
 function moveToNextCountry(nextRunningCountry) {
-    runningCountry = runningCountry % countries.length + 1;
+    runningCountry = runningCountry % totalCountries + 1;
 
     if (nextRunningCountry.runningCountry != runningCountry) {
         // Country carousel is not syncronized.
@@ -95,13 +82,17 @@ function moveToNextCountry(nextRunningCountry) {
         var countriesCarouselContainer = document.getElementById("countries-carousel-container");
         countriesCarouselContainer.innerHTML += removedVotingCountry.outerHTML;
     }
+
+    if (nextRunningCountry.votingStatus == "OPEN") {
+        setVotingContentToRunningCountry(true);
+    }
 }
 
 function setVotingContentToRunningCountry(isVotingOpen)
 {
     var currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
 
-    var runningCountryCode = currentRunningCountry.getAttribute("countrycode");
+    runningCountryCode = currentRunningCountry.getAttribute("countrycode");
     
     if (currentRunningCountry == null) return;
     
@@ -123,11 +114,11 @@ function setVotingContentToRunningCountry(isVotingOpen)
 //#endregion
 
 //#region  Event Listener Functions
-function voteBtnListener(e)
-{
+function voteBtnListener(e) {
+    let countryCode = e.target.parentNode.parentNode.getAttribute("countrycode");
     let points = e.target.parentNode.querySelector("input[name='choose-vote']:checked").value;
     
-    voteCountry(getCountryCodeByRunningCountry(), loginJudgeCode, points);
+    voteCountry(countryCode, loginJudgeCode, points);
 }
 //#endregion
 
@@ -149,7 +140,7 @@ socket.on("votingStatus", (votingStatus) => {
     console.log(votingStatus);
 
     let isVotingOpen = votingStatus.status == "OPEN";
-    if (votingStatus.countries.find(el => el == getCountryCodeByRunningCountry()) != null) {
+    if (votingStatus.countries.find(el => el == runningCountryCode) != null) {
         setVotingContentToRunningCountry(isVotingOpen);
     }
 });
