@@ -51,8 +51,8 @@ function createCountryFormListener(e) {
 
     // TODO: Success / Failure message
     createCountry(country)
-    .then(result => {
-        if (result) resultBtn.switchToSuccessState();
+    .then(response => {
+        if (response.success) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
     });
 }
@@ -62,8 +62,8 @@ function loadCountries() {
 
     if (!areCountriesLoaded) {
         getAllCountries()
-        .then(result => {
-            countries = result;
+        .then(response => {
+            countries = response.jsonData.countries;
             areCountriesLoaded = true;
             
             var content = { countries: countries };
