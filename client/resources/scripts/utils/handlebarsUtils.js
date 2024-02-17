@@ -39,7 +39,7 @@ votingTemplates.countries = Handlebars.compile(`
         </div>
         <div class="right-container">
             <p class="my-vote">10</p>
-            <p class="total-votes">30</p>
+            <p class="total-votes">{{this.totalVotes}}</p>
         </div>
     </summary>
     <div class="voting-country-content"></div>
@@ -157,13 +157,13 @@ adminTemplates.voting = {};
 
 adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
 {{#each countries}}
-<details class="voting-country-container">
+<details class="voting-country-container" countrycode="{{this.code}}">
     <summary>
         <p class="running-order-txt">01</p>
         <img src="/client/resources/images/flags/gr.svg" width="55px">
         <p class="code-txt">{{this.code}}</p>
         <p class="name-txt">{{this.name}}</p>
-        <p class="total-votes-txt">50</p>
+        <p class="total-votes-txt">{{this.totalVotes}}</p>
         <label class="voting-toggle-switch" id="{{this.code}}-voting-toggle">
             <input type="checkbox" runningorder="{{this.runningOrder}}"  countrycode="{{this.code}}" {{#if this.isVotingOpen}} checked {{/if}}>
             <span class="slider"></span>

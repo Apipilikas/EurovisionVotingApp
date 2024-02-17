@@ -15,6 +15,7 @@ function init() {
 }
 
 //#region Init functions
+
 function initCarousel() {
     getInitData()
     .then(data => {
@@ -24,9 +25,11 @@ function initCarousel() {
         setVotingContentToRunningCountry(data.isVotingOpen);
     })
 }
+
 //#endregion
 
 //#region General functions
+
 async function getInitData() {
     const runningCountryResponse = await getRunningCountryNumber(); 
     const countriesResponse = await getAllCountries();
@@ -88,8 +91,7 @@ function moveToNextCountry(nextRunningCountry) {
     }
 }
 
-function setVotingContentToRunningCountry(isVotingOpen)
-{
+function setVotingContentToRunningCountry(isVotingOpen) {
     var currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
 
     runningCountryCode = currentRunningCountry.getAttribute("countrycode");
@@ -111,6 +113,14 @@ function setVotingContentToRunningCountry(isVotingOpen)
 
     votingCountryContent.querySelector("button").addEventListener("click", e => voteBtnListener(e));
 }
+
+function setTotalVotes(countryCode, totalVotes) {
+    const votingCountryDetail = document.querySelector("details[countrycode=" + countryCode +"]");
+    if (votingCountryDetail == null) return;
+
+    votingCountryDetail.querySelector(".total-votes").innerHTML = totalVotes;
+}
+
 //#endregion
 
 //#region  Event Listener Functions
@@ -132,8 +142,9 @@ socket.on("nextCountry", (nextRunningCountry) => {
     moveToNextCountry(nextRunningCountry);
 });
 
-socket.on("points", (vote) => {
-    console.log(vote);
+socket.on("votes", (voting) => {
+    console.log(voting);
+    setTotalVotes(voting.countryCode, voting.totalVotes);
 });
 
 socket.on("votingStatus", (votingStatus) => {
