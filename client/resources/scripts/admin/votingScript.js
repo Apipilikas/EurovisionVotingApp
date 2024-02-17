@@ -45,8 +45,6 @@ function initBtnLinsteners() {
 
 function initVotesToJudges(countries) {
     for (var country of countries) {
-        console.log(country)
-        console.log(country.votes)
         if (country.votes == 0) continue; // TO CHANGE
 
         for (var [judgeCode, points] of Object.entries(country.votes)) {
@@ -104,7 +102,17 @@ function setVotingStatusToToggleSwitch(runningOrder, votingStatus) {
 function setVoteToJudge(judgeCode, countryCode, points) {
     const tag = countryCode + "-" + judgeCode + "-point" + points;
     const chosenPoint = document.getElementById(tag);
+
+    if (chosenPoint == null) return;
+
     chosenPoint.checked = true;
+}
+
+function setTotalVotes(countryCode, totalVotes) {
+    const votingCountryDetail = document.querySelector("details[countrycode=" + countryCode + "]");
+    if (votingCountryDetail == null) return;
+
+    votingCountryDetail.querySelector(".total-votes-txt").innerHTML = totalVotes;
 }
 
 //#endregion
@@ -135,8 +143,9 @@ socket.on("hi", (arg) => {
     console.log(arg);
 })
 
-socket.on("points", (voting) => {
+socket.on("votes", (voting) => {
     setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points);
+    setTotalVotes(voting.countryCode, voting.totalVotes);
 })
 
 //#endregion
