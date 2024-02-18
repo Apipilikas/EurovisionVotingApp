@@ -1,6 +1,6 @@
 const serverURL = {
-    p8080: "http://localhost:8080/",
-    p3000: "http://localhost:3000/",
+    p8080: "http://192.168.1.82:8080/",
+    p3000: "http://192.168.1.82:3000/",
     prefix : "api/v1/"
 };
 
