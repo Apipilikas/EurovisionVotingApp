@@ -10,6 +10,12 @@ const inputsArea = adminTemplates.countries.formInputsArea;
 window.onload = init;
 
 function init() {
+    initBtnListeners();
+}
+
+//#region Init functions
+
+function initBtnListeners() {
     const createCountryContainer = document.getElementById("create-country-container");
     const modifyCountriesContainer = document.getElementById("modify-countries-container");
     
@@ -38,23 +44,24 @@ function init() {
     deleteBtn.addEventListener("click", e => deleteBtnListener(e));
 }
 
-function createCountryFormListener(e) {
-    e.preventDefault();
+//#endregion
 
-    let submitBtn = e.target.querySelector("#submit-btn");
-    let resultBtn = new ResultButton(submitBtn);
+//#region General functions
 
-    resultBtn.switchToLoadingState();
+function initColorPickerInputs() {
+    const colorPickerContainers = document.querySelectorAll(".color-picker-container");
 
-    // TODO: Add validation checks and required fields
-    let country = getCountryInputsValue();
+    for (var container of colorPickerContainers) {
+        var inputClr = container.querySelector("input[type='color']");
+        var inputTxt = container.querySelector("input[type='text']");
 
-    // TODO: Success / Failure message
-    createCountry(country)
-    .then(response => {
-        if (response.success) resultBtn.switchToSuccessState();
-        else resultBtn.switchToFailureState();
-    });
+        updateColorInput(inputClr, inputTxt)
+    }
+}
+
+function updateColorInput(inputClr, inputTxt) {
+    inputClr.addEventListener("input", e => inputTxt.value = e.target.value);
+    inputTxt.addEventListener("input", e => inputClr.value = e.target.value);
 }
 
 function loadCountries() {
@@ -73,30 +80,6 @@ function loadCountries() {
         })
 
     }
-}
-
-function initColorPickerInputs() {
-    const colorPickerContainers = document.querySelectorAll(".color-picker-container");
-
-    for (var container of colorPickerContainers) {
-        var inputClr = container.querySelector("input[type='color']");
-        var inputTxt = container.querySelector("input[type='text']");
-
-        updateColorInput(inputClr, inputTxt)
-    }
-}
-
-function updateColorInput(inputClr, inputTxt) {
-    inputClr.addEventListener("input", e => inputTxt.value = e.target.value);
-    inputTxt.addEventListener("input", e => inputClr.value = e.target.value);
-}
-
-function countryContainerListener(e) {
-    var country = countries.find(({code}) => code == e.target.id);
-
-    // TODO: When clicked, highlight the selected container
-
-    fillInputs(country)
 }
 
 function fillInputs(country) {
@@ -137,6 +120,37 @@ function getCountryInputsValue() {
     return country;
 }
 
+//#endregion
+
+//#region Event Listener functions
+
+function createCountryFormListener(e) {
+    e.preventDefault();
+
+    let submitBtn = e.target.querySelector("#submit-btn");
+    let resultBtn = new ResultButton(submitBtn);
+
+    resultBtn.switchToLoadingState();
+
+    // TODO: Add validation checks and required fields
+    let country = getCountryInputsValue();
+
+    // TODO: Success / Failure message
+    createCountry(country)
+    .then(response => {
+        if (response.success) resultBtn.switchToSuccessState();
+        else resultBtn.switchToFailureState();
+    });
+}
+
+function countryContainerListener(e) {
+    var country = countries.find(({code}) => code == e.target.id);
+
+    // TODO: When clicked, highlight the selected container
+
+    fillInputs(country)
+}
+
 function modifyBtnListener(e) {
     e.preventDefault();
 
@@ -169,3 +183,5 @@ function deleteBtnListener(e) {
         else resultBtn.switchToFailureState();
     });
 }
+
+//#endregion

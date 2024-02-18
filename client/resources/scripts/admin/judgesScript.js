@@ -10,6 +10,12 @@ const inputsArea = adminTemplates.judges.formInputsArea;
 window.onload = init;
 
 function init() {
+    initBtnListeners();
+}
+
+//#region Init functions
+
+function initBtnListeners() {
     const createJudgeContainer = document.getElementById("create-judge-container");
     const modifyJudgesContainer = document.getElementById("modify-judges-container");
     
@@ -37,30 +43,9 @@ function init() {
     deleteBtn.addEventListener("click", e => deleteBtnListener(e));
 }
 
-function createJudgeFormListener(e) {
-    e.preventDefault();
+//#endregion
 
-    let submitBtn = e.target.querySelector("#submit-btn");
-    let resultBtn = new ResultButton(submitBtn);
-
-    // TODO: Add validation checks and required fields
-    let judge = getJudgeInputsValue();
-
-    resultBtn.switchToLoadingState();
-
-    try
-    {
-        createJudge(judge)
-        .then(result => {
-            if (result)  resultBtn.switchToSuccessState();
-            else resultBtn.switchToFailureState();
-        });
-    }
-    catch (error)
-    {
-        resultBtn.switchToFailureState();
-    }
-}
+//#region General functions
 
 function loadJudges() {
     if (!areJudgesLoaded) {
@@ -68,25 +53,14 @@ function loadJudges() {
         .then(response => {
 
             if (response.success) {
-                console.log(response);
                 areJudgesLoaded = true;
-                
+                judges = response.jsonData.judges;
+
                 const modifyCountriesListContainer = document.getElementById("modify-judges-list-container");
-                modifyCountriesListContainer.innerHTML = adminTemplates.judges.judgeContainer(response.jsonText);
+                modifyCountriesListContainer.innerHTML = adminTemplates.judges.judgeContainer(response.jsonData);
             }
-
-        })
-
+        });
     }
-}
-
-function judgeContainerListener(e) {
-    var judge = judges.find(({name}) => name == e.target.id);
-    console.log(e.target.id)
-
-    // TODO: When clicked, highlight the selected container
-
-    fillInputs(judge)
 }
 
 function fillInputs(judge) {
@@ -109,6 +83,44 @@ function getJudgeInputsValue() {
     return judge;
 }
 
+//#endregion
+
+//#region Event Listener functions
+
+function createJudgeFormListener(e) {
+    e.preventDefault();
+
+    let submitBtn = e.target.querySelector("#submit-btn");
+    let resultBtn = new ResultButton(submitBtn);
+
+    // TODO: Add validation checks and required fields
+    let judge = getJudgeInputsValue();
+
+    resultBtn.switchToLoadingState();
+
+    try
+    {
+        createJudge(judge)
+        .then(response => {
+            if (response.success)  resultBtn.switchToSuccessState();
+            else resultBtn.switchToFailureState();
+        });
+    }
+    catch (error)
+    {
+        resultBtn.switchToFailureState();
+    }
+}
+
+function judgeContainerListener(e) {
+    var judge = judges.find(({code}) => code == e.target.id);
+    console.log(e.target.id)
+
+    // TODO: When clicked, highlight the selected container
+
+    fillInputs(judge)
+}
+
 function modifyBtnListener(e) {
     e.preventDefault();
 
@@ -121,8 +133,8 @@ function modifyBtnListener(e) {
     resultBtn.switchToLoadingState();
 
     updateJudge(selectedModifiedJudgeCode, modifiedJudge)
-    .then(result => {
-        if (result) resultBtn.switchToSuccessState();
+    .then(response => {
+        if (response.success) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
     });
 }
@@ -137,8 +149,10 @@ function deleteBtnListener(e) {
     resultBtn.switchToLoadingState();
 
     deleteJudge(selectedModifiedJudgeCode)
-    .then(result => {
-        if (result) resultBtn.switchToSuccessState();
+    .then(response => {
+        if (response.success) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
     });
 }
+
+//#endregion

@@ -146,7 +146,7 @@ adminTemplates.judges.formInputsArea = `
 
 adminTemplates.judges.judgeContainer = Handlebars.compile(`
 {{#each judges}}
-<div class="judge-container" id="{{this.name}}">
+<div class="judge-container" id="{{this.code}}">
 <h1>{{this.name}}</h1>
 <h2>{{this.judgesOrigin}}</h2>
 </div>
