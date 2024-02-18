@@ -1,14 +1,15 @@
 fieldset {
-    margin: auto;
+    margin: 1em auto;
     width: 80%;
     height: 75%;
     display: flex;
     flex-direction: column;
-    background-color: var(--forth-color);
+    background-color: var(--main-color);
+    border: none;
 }
 
 legend {
-    background-color: var(--secondary-color);
+    background-color: var(--forth-color);
     padding: 0.5em;
 }
 
@@ -21,15 +22,15 @@ input[type="radio"]:focus + label {
 }
 
 input[type="radio"]:checked + label {
-    border: 2px solid #215ef9;
-    background-color: #215ef9;
+    border: 2px solid var(--fifth-color);
+    background-color: var(--fifth-color);
 }
 
 label {
     display: inline-block;
     width: 50%;
-    border: 2px solid #858da8;
-    color: #858da8;
+    border: 2px solid var(--fifth-color);
+    color: var(--fifth-color);
     font-weight: 700;
     padding: 1em;
     margin: 1em auto;

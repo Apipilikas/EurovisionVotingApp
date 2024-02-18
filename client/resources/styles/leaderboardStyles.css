@@ -1,0 +1,31 @@
+/* voting leaderboard container */
+
+table {
+    border-collapse: collapse;
+}
+
+table th {
+    padding: 1em;
+}
+
+table tr:first-child {
+    border-bottom: 2px solid black;
+}
+
+table td {
+    padding: 1em;
+    text-align: center;
+    border-bottom: 2px solid black;
+}
+
+table td:first-child, table th:first-child {
+    border-right: 2px solid black;
+}
+
+td.voting-status {
+    font-weight: 700;
+}
+
+td.closed-voting-status {
+    background-color: red;
+}
