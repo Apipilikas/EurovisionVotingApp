@@ -22,7 +22,40 @@ function areRequiredInputsFilled(inputsArea) {
     return true;
 }
 
+// #region Menu button
+
+function initMenuBtnListener() {
+    const menuBtn = document.getElementById("menu-button");
+
+    menuBtn.addEventListener("click", e => menuBtnListener(e));
+}
+
+function menuBtnListener(e) {
+    const menuClassName = "menu-button-clicked";
+    const navClassName = "hide-nav";
+    let menuBtn = e.target;
+    let navigationBar = document.getElementById("header-navigation-bar");
+
+    navigationBar.classList.remove(navClassName);
+
+    if (menuBtn.classList.contains(menuClassName)) {
+        menuBtn.classList.remove(menuClassName);
+        navigationBar.classList.add(navClassName);
+        setTimeout(() => {
+            navigationBar.style.display = "none";
+        }, 800);
+        
+    }
+    else {
+        menuBtn.classList.add(menuClassName);
+        navigationBar.style.display = "flex";
+    }
+}
+
+// #endregion
+
 export {
     fillDetailInputsAreaListener,
-    areRequiredInputsFilled
+    areRequiredInputsFilled,
+    initMenuBtnListener
 }

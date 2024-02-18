@@ -1,3 +1,4 @@
+import { initMenuBtnListener } from "./utils/documentUtils.js";
 import { leaderboardTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
@@ -15,9 +16,15 @@ window.onload = init;
 
 function init() {
     initLeaderboardContainer();
+
+    initBtnListeners();
 }
 
 //#region Init functions
+
+function initBtnListeners() {
+    initMenuBtnListener();
+}
 
 function initLeaderboardContainer() {
     getInitData()
