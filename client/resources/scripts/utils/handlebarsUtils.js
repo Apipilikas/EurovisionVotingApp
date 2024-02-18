@@ -198,4 +198,29 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
 
 adminTemplates.voting.votingCountryContainer.content = {points : points, countries : null, judges : null};
 
-export {votingTemplates, registerTemplates, adminTemplates};
+leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
+<table id="voting-leaderboard-table">
+    <tr>
+        <th>R/O</th>
+        <th>Country</th>
+        {{#each judges}}
+        <th>{{this.name}}</th>
+        {{/each}}
+        <th>Points</th>
+        <th>Status</th>
+    </tr>
+    {{#each countries}}
+    <tr>
+        <td>{{this.runningOrder}}</th>
+        <td>{{this.name}}</th>
+        {{#each ../judges}}
+        <td id="{{../this.code}}-{{this.code}}-points">0</td>
+        {{/each}}
+        <td id="{{this.code}}-total-votes">{{this.totalVotes}}</td>
+        <td id="{{this.code}}-voting-status" class="voting-status closed-voting-status">CLOSED</td>
+    </tr>
+    {{/each}}
+</table>
+`);
+
+export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates};
