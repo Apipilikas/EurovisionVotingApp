@@ -59,12 +59,14 @@
     --forth-color: #6e45ec;
     --fifth-color: #1dc0df;
     --sixth-color: #3d47f7;
+    --bg-main-color: #3f1c71;
+    --bg-secondary-color : #1dc1df;
 }
 
 /* #region body, html, header, main, footer */
 
 body {
-    background-color: var(--third-color);
+    background-color: var(--bg-main-color);
     font-family: 'Onest', sans-serif;
     margin: 0em;
     display: grid;
@@ -109,21 +111,17 @@ footer {
 
 .color-segment {
     width: 100%;
-    /* background: linear-gradient( var(--main-color), var(--secondary-color), var(--third-color), var(--secondary-color), var(--main-color)); */
-    background: linear-gradient( var(--sixth-color), var(--fifth-color) 10%, var(--third-color), var(--fifth-color), var(--sixth-color));
+    background: linear-gradient( var(--main-color), var(--secondary-color), var(--third-color), var(--secondary-color), var(--main-color));
+    /* background: linear-gradient( var(--sixth-color), var(--fifth-color) 10%, var(--third-color), var(--fifth-color), var(--sixth-color)); */
     background-size: 200% 200%;
     animation: color-animation 7s ease infinite;
 }
 
-.color-segment:nth-child(2) {animation-delay: 0.5s;}
-.color-segment:nth-child(3) {animation-delay: 1s;}
-.color-segment:nth-child(4) {animation-delay: 2s;}
-.color-segment:nth-child(5) {animation-delay: 2.5s;}
-.color-segment:nth-child(6) {animation-delay: 3s;}
-.color-segment:nth-child(7) {animation-delay: 3.5s;}
-.color-segment:nth-child(8) {animation-delay: 4s;}
-.color-segment:nth-child(9) {animation-delay: 4.5s;}
-.color-segment:nth-child(10) {animation-delay: 5s;}
+.color-segment:nth-child(4n + 1) {animation-delay: 0.5s;}
+.color-segment:nth-child(4n + 2) {animation-delay: 1s;}
+.color-segment:nth-child(4n + 3) {animation-delay: 2s;}
+.color-segment:nth-child(4n + 4) {animation-delay: 2.5s;}
+
 
 #main-logo-container {
     z-index: 2;
@@ -243,7 +241,7 @@ footer {
 
 /* #endregion */
 
-/* #region input-containers */
+/* #region input containers */
 
 .text-input-container > label, .number-input-container > label, 
 .color-picker-input-container > label {
@@ -373,7 +371,7 @@ input[type="color"]:focus {
 
 /* #endregion */
 
-/* #region admin-details-containers */
+/* #region admin details containers */
 
 details.admin-details-container {
     margin: 1em auto;
@@ -396,7 +394,7 @@ details.admin-details-container {
 
 /* #endregion */
 
-/* #region admin-modify-content */
+/* #region admin modify content */
 
 .admin-modify-content {
     display: flex;
@@ -404,14 +402,14 @@ details.admin-details-container {
 
 /* #endregion */
 
-/* #region admin-modify-list-containers */
+/* #region admin modify list containers */
 .admin-modify-list-container {
     flex-basis: 50%;
     overflow-y: scroll;
 }
 /* #endregion */
 
-/* #region admin-buttons-area */
+/* #region admin buttons area */
 
 .admin-buttons-area {
     display: flex;
@@ -428,7 +426,7 @@ details.admin-details-container {
 
 /* #endregion */
 
-/* #region result-button */
+/* #region result button */
 /* https://stackoverflow.com/questions/48694894/drawing-border-colors-during-a-css-transition */
 .result-button {
     display: flex;
@@ -552,6 +550,48 @@ details.admin-details-container {
   
 /* #endregion */
 
+/* #region live announcements container */
+#live-announcement-container {
+    display: flex;
+    margin-bottom: 1em;
+    /* height: 20px; */
+}
+
+#live-box-content {
+
+}
+
+#announcement-content {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+}
+
+#announcement-content > p {
+    margin: auto;
+}
+
+#announcement-content > p {
+    animation: announcement-in-animation 1s;
+}
+
+.hide-announcement-box {
+    animation: announcement-out-animation 1s !important;
+    animation-fill-mode: forwards !important;
+}
+
+@keyframes announcement-in-animation {
+    0% {transform: translateY(-50px);}
+    100% {transform: translateY(0);}
+}
+
+@keyframes announcement-out-animation {
+    0% {transform: translateY(0); }
+    100% {transform: translateY(50px);}
+}
+/* #endregion */
+
 /* TABLET-BASED LAYOUT */
 @media only screen and (min-width: 425px) {
     /* menu button */
@@ -576,7 +616,7 @@ details.admin-details-container {
     }
 
     #header-navigation-bar > li:hover {
-        background:  #ff6b66;
+        background:  var(--bg-secondary-color);
         transition: 0.5s;
         background-size: 200% 200%;
     }
