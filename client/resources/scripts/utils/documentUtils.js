@@ -1,3 +1,5 @@
+const defaultAnnouncement = "UNITED BY MUSIC";
+
 function fillDetailInputsAreaListener(currentDetail, otherDetail, inputsArea, callbackFunction = null) {
     if (!currentDetail.hasAttribute("open")) {
         otherDetail.removeAttribute("open");
@@ -52,10 +54,53 @@ function menuBtnListener(e) {
     }
 }
 
+function announcementContainer(votingAnnouncements, votingStatusAnnouncements) {
+    const announcementContainer = document.getElementById("announcement-content");
+    var pElement = announcementContainer.firstChild;
+
+    if (pElement == null) return;
+    let isDefaultAnnouncementSet = false;
+    
+    setInterval(() => {
+        let pElement = announcementContainer.querySelector("p");
+        if (pElement == null) return;
+        
+        let nextAnnouncement = defaultAnnouncement;
+        let isAnnouncementSet = false;
+
+        if (votingStatusAnnouncements.length > 0) {
+            isAnnouncementSet = true;
+            isDefaultAnnouncementSet = false;
+            nextAnnouncement  = votingStatusAnnouncements.shift();
+        }
+        else if (votingAnnouncements.length > 0) {
+            isAnnouncementSet = true;
+            isDefaultAnnouncementSet = false;
+            nextAnnouncement = votingAnnouncements.shift();
+        }
+
+        if (isDefaultAnnouncementSet && !isAnnouncementSet) return;
+
+        pElement.classList.add("hide-announcement-box");
+
+        setTimeout(() => {
+            pElement.classList.remove("hide-announcement-box");
+            pElement.innerHTML = nextAnnouncement;
+
+            if (!isAnnouncementSet) isDefaultAnnouncementSet = true;
+        }, 1000);
+    }, 4000);
+}
+
+function announcementListener(votingAnnouncements, votingStatusAnnouncements) {
+    
+}
+
 // #endregion
 
 export {
     fillDetailInputsAreaListener,
     areRequiredInputsFilled,
-    initMenuBtnListener
+    initMenuBtnListener,
+    announcementContainer
 }
