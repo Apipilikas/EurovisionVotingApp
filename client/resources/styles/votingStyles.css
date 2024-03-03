@@ -46,54 +46,6 @@
   background-color: var(--third-color);
 }
 
-.voting-country-container .voting-country-content {
-  height: auto;
-  width: auto;
-  color: var(--secondary-color);
-  background-color: var(--third-color);
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:focus + label {
-  background-color: #7c7c99;
-}
-
-input[type="radio"]:checked + label {
-  border: 2px solid var(--secondary-color);
-  background-color: var(--secondary-color);
-}
-
-label {
-  display: inline-block;
-  height: 15px;
-  width: 15px;
-  border: 2px solid black;
-  color: black;
-  font-weight: 900;
-  font-size: 15px;
-  padding: 1em;
-  margin: 0.5em auto;
-  text-align: center;
-  transition-duration: 0.5s;
-}
-
-.voting-country-content > button {
-  font-size: 20px;
-  padding: 0em;
-  margin: 0.5em auto;
-  border: 2px solid black;
-  color: black;
-  font-weight: 900;
-  width: 80%;
-  background-color: var(--third-color);
-  grid-column: 1/6;
-}
-
 /*  CAROUSEL STYLES  */
 
 #countries-carousel-container {

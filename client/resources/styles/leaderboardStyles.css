@@ -1,7 +1,13 @@
-/* voting leaderboard container */
+:root {
+    --open-voting-status-color : #31cc39;
+    --closed-voting-status-color: #f75252;
+}
+
+/* #region voting leaderboard container / table */
 
 table {
-    border-collapse: collapse;
+    margin: auto;
+    border-spacing: 0 0.5em;
 }
 
 table th {
@@ -9,23 +15,118 @@ table th {
 }
 
 table tr:first-child {
-    border-bottom: 2px solid black;
+    background-color: var(--eighth-color);
+}
+
+table tr:not(:first-child) {
+
+    transition: all 1s ease-out;
 }
 
 table td {
     padding: 1em;
     text-align: center;
-    border-bottom: 2px solid black;
+    transition: background-color 0.5s ease-out;
 }
 
-table td:first-child, table th:first-child {
-    border-right: 2px solid black;
+table td.voting-animation {
+    background-color: var(--secondary-color);
 }
 
-td.voting-status {
-    font-weight: 700;
+table tr td:first-child {
+    background: linear-gradient(90deg, var(--eighth-color) 20%, var(--forth-color) 100%);
+}
+
+table tr.running-country td:first-child {
+    background: linear-gradient(90deg, var(--secondary-color) 20%, var(--forth-color) 100%);
+}
+
+table tr {
+    font-weight: bold;
+}
+
+td.open-voting-status {
+    background-color: var(--open-voting-status-color);
+    transition: background-color 0.5s ease-out;
 }
 
 td.closed-voting-status {
-    background-color: red;
+    background-color: var(--closed-voting-status-color);
+    transition: background-color 0.5s ease-out;
 }
+
+table tr:not(:first-child):has(> td.open-voting-status) {
+    background: linear-gradient(to right, var(--forth-color) 25%, var(--open-voting-status-color) 75%) left;
+    background-size: 400% 100%;
+    transition: all 1s ease-out;
+}
+
+table tr:not(:first-child):has(td.closed-voting-status) {
+    background: linear-gradient(to right, var(--forth-color) 25%, var(--closed-voting-status-color) 75%) left;
+    background-size: 400% 100%;
+    transition: all 1s ease-out;
+}
+
+
+table tr.voting-status-animation:has(> td.open-voting-status),
+table tr.voting-status-animation:has(> td.closed-voting-status) {
+    background-position: right;
+}
+
+/* #endregion */
+
+/* #region Voting panel container */
+
+#blur-screen {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+#voting-country-panel-bar-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+#voting-country-panel-bar-content .left-container p {
+    padding-left: 0.5em;
+    margin: 0em;
+    font-size: 1.5em;
+}
+
+#voting-country-panel-bar-content .left-container span {
+    margin: 0em;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+#voting-country-panel-bar-content > div {
+    margin: auto 0em;
+    display: flex;
+}
+
+#voting-country-panel-bar-content .right-container span {
+    padding-right: 0.5em;
+    margin: auto;
+    font-size: 2em;
+}
+
+#voting-country-panel-container {
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    overflow: auto;
+    background-color: var(--secondary-color);
+
+  }
+
+/* #endregion */
