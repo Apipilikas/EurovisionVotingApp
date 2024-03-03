@@ -3,6 +3,13 @@
     --closed-voting-status-color: #f75252;
 }
 
+.color-segment {
+    /* background: linear-gradient( var(--main-color), var(--secondary-color), var(--third-color), var(--secondary-color), var(--main-color)); */
+    background: linear-gradient( var(--sixth-color), var(--fifth-color) 10%, var(--third-color), var(--fifth-color), var(--sixth-color));
+    background-size: 200% 200%;
+    animation: color-animation 7s ease infinite;
+}
+
 /* #region voting leaderboard container / table */
 
 table {
@@ -30,7 +37,7 @@ table td {
 }
 
 table td.voting-animation {
-    background-color: var(--secondary-color);
+    background-color: var(--third-color);
 }
 
 table tr td:first-child {
@@ -38,7 +45,7 @@ table tr td:first-child {
 }
 
 table tr.running-country td:first-child {
-    background: linear-gradient(90deg, var(--secondary-color) 20%, var(--forth-color) 100%);
+    background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
 }
 
 table tr {
