@@ -54,32 +54,33 @@ function menuBtnListener(e) {
     }
 }
 
-function announcementContainer(votingAnnouncements, votingStatusAnnouncements) {
+// #endregion
+
+//#region Announcement container
+
+function initAnnouncementContainer(announcements, importantAnnouncements) {
     const announcementContainer = document.getElementById("announcement-content");
     var pElement = announcementContainer.firstChild;
 
     if (pElement == null) return;
-    let isDefaultAnnouncementSet = false;
+    let isAnnouncementSet = 1;
     
     setInterval(() => {
         let pElement = announcementContainer.querySelector("p");
         if (pElement == null) return;
         
         let nextAnnouncement = defaultAnnouncement;
-        let isAnnouncementSet = false;
 
-        if (votingStatusAnnouncements.length > 0) {
-            isAnnouncementSet = true;
-            isDefaultAnnouncementSet = false;
-            nextAnnouncement  = votingStatusAnnouncements.shift();
+        if (importantAnnouncements.length > 0) {
+            isAnnouncementSet = 0;
+            nextAnnouncement  = importantAnnouncements.shift();
         }
-        else if (votingAnnouncements.length > 0) {
-            isAnnouncementSet = true;
-            isDefaultAnnouncementSet = false;
-            nextAnnouncement = votingAnnouncements.shift();
+        else if (announcements.length > 0) {
+            isAnnouncementSet = 0;
+            nextAnnouncement = announcements.shift();
         }
 
-        if (isDefaultAnnouncementSet && !isAnnouncementSet) return;
+        if (isAnnouncementSet > 1) return;
 
         pElement.classList.add("hide-announcement-box");
 
@@ -87,20 +88,16 @@ function announcementContainer(votingAnnouncements, votingStatusAnnouncements) {
             pElement.classList.remove("hide-announcement-box");
             pElement.innerHTML = nextAnnouncement;
 
-            if (!isAnnouncementSet) isDefaultAnnouncementSet = true;
+            isAnnouncementSet++;
         }, 1000);
     }, 4000);
 }
 
-function announcementListener(votingAnnouncements, votingStatusAnnouncements) {
-    
-}
-
-// #endregion
+//#endregion
 
 export {
     fillDetailInputsAreaListener,
     areRequiredInputsFilled,
     initMenuBtnListener,
-    announcementContainer
+    initAnnouncementContainer
 }

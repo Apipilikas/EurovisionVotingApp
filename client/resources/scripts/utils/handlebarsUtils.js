@@ -52,10 +52,10 @@ votingTemplates.votingContent = Handlebars.compile(`
 <input type="radio" id="point{{this}}" name="choose-vote" value="{{this}}">
 <label for="point{{this}}">{{this}}</label>
 {{/each}}
-<button id="{{countryCode}}-vote-btn">VOTE</button>
+<button>VOTE</button>
 `);
 
-votingTemplates.votingContent.content = {points: points, countryCode: null};
+votingTemplates.votingContent.content = {points: points};
 
 adminTemplates.countries = {};
 
@@ -210,14 +210,14 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
         <th>Status</th>
     </tr>
     {{#each countries}}
-    <tr>
+    <tr countrycode="{{this.code}}" countryname="{{this.name}}">
         <td>{{this.runningOrder}}</th>
         <td>{{this.name}}</th>
         {{#each ../judges}}
         <td id="{{../this.code}}-{{this.code}}-points">0</td>
         {{/each}}
         <td id="{{this.code}}-total-votes">{{this.totalVotes}}</td>
-        <td id="{{this.code}}-voting-status" class="voting-status closed-voting-status">CLOSED</td>
+        <td id="{{this.code}}-voting-status" class="closed-voting-status">CLOSED</td>
     </tr>
     {{/each}}
 </table>

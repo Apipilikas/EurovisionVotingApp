@@ -1,5 +1,5 @@
-import { announcementContainer, initMenuBtnListener } from "./utils/documentUtils.js";
-import { leaderboardTemplates } from "./utils/handlebarsUtils.js";
+import { initAnnouncementContainer, initMenuBtnListener } from "./utils/documentUtils.js";
+import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
@@ -21,26 +21,18 @@ function init() {
 
     initBtnListeners();
 
-    announcementContainer(announcements, importantAnnouncements);
-    const test = document.getElementById("test");
+    initAnnouncementContainer(announcements, importantAnnouncements);
 
-    test.addEventListener("click", e => test2(e))
-}
-
-function test2(e) {
-    const d = document.getElementById("announcement-content");
-    d.querySelector("p").classList.add("hide-announcement-box");
-    
-    setTimeout(() => {
-        d.innerHTML = "<p>Announcements-2</p>";
-        
-    }, 1000);
+    initVotingCountryPanelContainer();
 }
 
 //#region Init functions
 
 function initBtnListeners() {
     initMenuBtnListener();
+
+    const closeVotingCountryPanelBtn = document.getElementById("close-voting-country-panel-btn");
+    closeVotingCountryPanelBtn.addEventListener("click", e => closeBtnListener());
 }
 
 function initLeaderboardContainer() {
@@ -53,6 +45,8 @@ function initLeaderboardContainer() {
             votingLeaderboardContainer.innerHTML = content;
 
             initVotesToJudgesAndVotingStatuses(data.countries, data.votingStatuses);
+            highlightRunningCountry();
+            initTableRowListeners();
         }
     });
 }
@@ -68,6 +62,23 @@ function initVotesToJudgesAndVotingStatuses(countries, votingStatuses) {
         if (votingStatus == null) continue;
         setVotingStatus(country.code, votingStatus.status);
     }
+}
+
+function initTableRowListeners() {
+    const leaderboardTableRows = document.querySelectorAll("tr:not(:first-child)");
+
+    leaderboardTableRows.forEach(tr => {
+        tr.addEventListener("click", e => tableRowListener(e));
+    });
+}
+
+function initVotingCountryPanelContainer() {
+    const votingCountryPanelContent = document.getElementById("voting-country-panel-content");
+    let content = votingTemplates.votingContent(votingTemplates.votingContent.content);
+    votingCountryPanelContent.innerHTML = content;
+    
+    const votingCountryPanelBtn = votingCountryPanelContent.querySelector("button");
+    votingCountryPanelBtn.addEventListener("click", e => voteBtnListener(e));
 }
 
 //#endregion
@@ -91,24 +102,45 @@ async function getInitData() {
     return null;
 }
 
-function setVoteToJudge(judgeCode, countryCode, points) {
+function setVoteToJudge(judgeCode, countryCode, points, disableAnimation = true) {
+    const className = "voting-animation";
     const tag = countryCode + "-" + judgeCode + "-points";
     const votingCell = document.getElementById(tag);
 
     if (votingCell == null) return;
 
     votingCell.innerHTML = points;
+
+    if (disableAnimation) return;
+
+    // Setting voting animation
+    votingCell.classList.add(className);
+
+    setTimeout(() => {
+        votingCell.classList.remove(className);
+    }, 2000);
 }
 
 function setVotingStatus(countryCode, votingStatus) {
+    const className = "voting-status-animation";
     const tag = countryCode + "-voting-status";
     const votingStatusCell = document.getElementById(tag);
 
     if (votingStatusCell == null) return;
 
+    let previousVotingStatus = votingStatusCell.innerHTML;
+    if (previousVotingStatus == votingStatus) return;
+
+    votingStatusCell.className = "";
+    votingStatusCell.classList.add(StatusMapping.get(votingStatus));
     votingStatusCell.innerHTML = votingStatus;
-    //let votingStatusClass = StatusMapping.get(votingStatus);
-    //votingStatusCell.classList.remove()
+
+    // Setting voting status animation
+    votingStatusCell.parentElement.classList.add(className)
+
+    setTimeout(() => {
+        votingStatusCell.parentElement.classList.remove(className);
+    }, 5000);
 }
 
 function setTotalVotes(countryCode, totalVotes) {
@@ -120,6 +152,65 @@ function setTotalVotes(countryCode, totalVotes) {
     totalVotesCell.innerHTML = totalVotes;
 }
 
+function closeVotingCountryPanel() {
+    const blurScreen = document.getElementById("blur-screen");
+
+    blurScreen.style.display = "none";
+}
+
+//#endregion
+
+//#region Event Listener functions
+
+function tableRowListener(e) {
+    let tr = e.target.parentNode;
+    let countryName = tr.getAttribute("countryname");
+    let countryCode = tr.getAttribute("countrycode");
+    const blurScreen = document.getElementById("blur-screen");
+    const countryNameCaption = document.getElementById("country-name-caption");
+
+    window.VotingCountryPanel = {};
+    VotingCountryPanel.countryCode = countryCode;
+    
+    // Open voting country panel
+    blurScreen.style.display = "initial";
+    countryNameCaption.innerHTML = countryName;
+}
+
+function closeBtnListener() {
+    closeVotingCountryPanel();
+}
+
+function voteBtnListener(e) {
+    let countryCode = VotingCountryPanel.countryCode;
+    let points = e.target.parentNode.querySelector("input[name='choose-vote']:checked").value;
+
+    voteCountry(countryCode, loginJudgeCode, points)
+    .then(response => {
+        if (response.success) {
+            closeVotingCountryPanel();
+        }
+    })
+}
+
+//#endregion
+
+//#region Animation functions
+
+function highlightRunningCountry() {
+    const className = "running-country";
+    // First tr is the header - Next running country table row
+    const nextRunningCountryTableRow = document.querySelector("tr:nth-child(" + (runningCountry + 1) +")");
+
+    // Running country table row
+    const runningCountryTableRow = document.querySelector(".running-country");
+    if (runningCountryTableRow != null) {
+        runningCountryTableRow.classList.remove(className)
+    }
+
+    nextRunningCountryTableRow.classList.add(className);
+}
+
 //#endregion
 
 //#region Socket Listeners
@@ -129,14 +220,20 @@ socket.on("hi", (arg) => {
 });
 
 socket.on("nextCountry", (nextRunningCountry) => {
-    // TO-ADD: Next running country sync.
-    //moveToNextCountry(nextRunningCountry); // TO-DO: Highlight next country
+    runningCountry = runningCountry % totalCountries + 1;
+
+    if (nextRunningCountry.runningCountry != runningCountry) {
+        initLeaderboardContainer()
+        return;
+    }
+
+    highlightRunningCountry();
     setVotingStatus(nextRunningCountry.runningCountryCode, nextRunningCountry.votingStatus);
     importantAnnouncements.push(nextRunningCountry.message.innerHTML);
 });
 
 socket.on("votes", (voting) => {
-    setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points);
+    setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points, false);
     setTotalVotes(voting.countryCode, voting.totalVotes);
     announcements.push(voting.message.innerHTML);
 });

@@ -106,7 +106,7 @@ function setVotingContentToRunningCountry(isVotingOpen) {
     }
 
     let votingData = votingTemplates.votingContent.content;
-    votingData.countryCode = runningCountryCode;
+    //votingData.countryCode = runningCountryCode;
     let content = votingTemplates.votingContent(votingData);
 
     votingCountryContent.innerHTML = content;
