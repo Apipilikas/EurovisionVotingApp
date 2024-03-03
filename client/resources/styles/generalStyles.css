@@ -61,6 +61,10 @@
     --sixth-color: #3d47f7;
     --seventh-color: #3f1c71;
     --eighth-color : #1dc1df;
+    --success-notification-color: #57e45e;
+    --info-notification-color: #1b85fd;
+    --warning-notification-color: #fdb51b;
+    --error-notification-color: #fc3c3c;
 }
 
 /* #region body, html, header, main, footer */
@@ -644,6 +648,222 @@ details.admin-details-container {
     width: 80%;
     background-color: var(--third-color);
     grid-column: 1/6;
+}
+
+/* #endregion */
+
+/* #region Notification box */
+
+.notification-box {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    margin-bottom: 2em;
+    width: 150px;
+    height: 100px;
+    background-color: white;
+    overflow: hidden;
+    animation: notification-box-open-animation 1s ease-in-out 2s, show-notification-box-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+/* Success Notification */
+.notification-box.notification-success {
+    border: 5px solid var(--success-notification-color);
+}
+
+.notification-box.notification-success .icon-container {
+    background-color: var(--success-notification-color);
+}
+
+.notification-box.notification-success .message-container h1 {
+    border-bottom: 2px solid var(--success-notification-color);
+}
+
+/* Info Notification */
+.notification-box.notification-info {
+    border: 5px solid var(--info-notification-color);
+}
+
+.notification-box.notification-info .icon-container {
+    background-color: var(--info-notification-color);
+}
+
+.notification-box.notification-info .message-container h1 {
+    border-bottom: 2px solid var(--info-notification-color);
+}
+
+/* Warning Notification */
+.notification-box.notification-warning {
+    border: 5px solid var(--warning-notification-color);
+}
+
+.notification-box.notification-warning .icon-container {
+    background-color: var(--warning-notification-color);
+}
+
+.notification-box.notification-warning .message-container h1 {
+    border-bottom: 2px solid var(--warning-notification-color);
+}
+
+/* Error notification */
+.notification-box.notification-error {
+    border: 5px solid var(--error-notification-color);
+}
+
+.notification-box.notification-error .icon-container {
+    background-color: var(--error-notification-color);
+}
+
+.notification-box.notification-error .message-container h1 {
+    border-bottom: 2px solid var(--error-notification-color);
+}
+
+/* Close notification box */
+.notification-box.close-notification-box {
+    animation: notification-box-close-animation 1s ease-in-out, hide-notification-box-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards; 
+}
+
+@keyframes notification-box-open-animation {
+    0% {
+        width: 150px;
+    }
+    100% {
+        width: 50%;
+    }
+}
+
+@keyframes notification-box-close-animation {
+    0% {
+        width: 50%;
+    }
+    100% {
+        width: 150px;
+    }
+}
+
+@keyframes show-notification-box-animation {
+    0% {
+        bottom: -50%;
+    }
+
+    100% {
+        bottom: 0;
+    }
+}
+
+@keyframes hide-notification-box-animation {
+    0% {
+        bottom: 0;
+    }
+
+    100% {
+        bottom: -50%;
+    }
+    
+}
+
+.notification-box .left-container {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+.notification-box .icon-container {
+    /* margin: 0em 0em 0em 0em; */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 150px;
+}
+
+.notification-box .icon-container i {
+    font-size: 3em;
+    margin: auto;
+    /* color: #57e45e; */
+}
+
+.notification-box .icon-container span {
+    font-weight: 700;
+    margin: auto;
+}
+
+.notification-box .message-container {
+    overflow: hidden;
+    /* display: none; */
+    flex-direction: column;
+    margin: auto 0em;
+    width: 0%;
+    /* animation: width 1s ease-in-out; */
+    animation: message-container-fadein-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards; 
+}
+
+.notification-box.close-notification-box .message-container {
+    animation: message-container-fadeout-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+.notification-box .message-container h1 {
+    margin: 0em;
+    white-space: nowrap;
+}
+
+.notification-box .message-container p {
+    margin: 0.5em 0em 0em 0em;
+    white-space: nowrap;
+}
+
+/* Close button */
+.notification-box .close-btn {
+    /* display: none; */
+    font-size: 0em;
+    margin: 0em 0.2em 0em 0em;
+    animation: show-close-btn-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards;
+}
+
+.notification-box.close-notification-box .close-btn {
+    display: none;
+}
+
+@keyframes message-container-fadein-animation {
+    0% {
+        opacity: 0;
+        width: 0%;
+    }
+    100% {
+        opacity: 1.0;
+        width: 75%;
+        margin: auto 1em;
+    }
+}
+
+@keyframes message-container-fadeout-animation {
+    0% {
+        opacity: 1.0;
+        width: 75%;
+        margin: auto 1em;
+    }
+    100% {
+        opacity: 0;
+        width: 0%;
+        margin: auto 0em;
+    }
+}
+
+@keyframes show-close-btn-animation {
+    0% {
+        font-size: 0;
+    }
+
+    100% {
+        font-size: 2em;
+    }
 }
 
 /* #endregion */

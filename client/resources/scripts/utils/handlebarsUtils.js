@@ -2,6 +2,7 @@ var registerTemplates = {};
 var votingTemplates = {};
 var adminTemplates = {};
 var leaderboardTemplates = {};
+var generalTemplates = {};
 var points = [1,2,3,4,5,6,7,8,10,12];
 
 Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
@@ -223,4 +224,20 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
 </table>
 `);
 
-export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates};
+generalTemplates.notificationBox = Handlebars.compile(`
+<div class="notification-box {{this.className}}">
+    <div class="left-container">
+        <div class="icon-container">
+            <i class="material-icons">{{this.icon}}</i>
+            <span>{{this.type}}</span>
+        </div>
+        <div class="message-container">
+            <h1 class="notification-message">{{this.message}}</h1>
+            <p class="notification-description">{{this.description}}</p>
+        </div>
+    </div>
+    <span class="close-btn">&times;</span>
+</div>
+`)
+
+export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates, generalTemplates};

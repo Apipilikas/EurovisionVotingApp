@@ -1,3 +1,4 @@
+import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
 import { initAnnouncementContainer, initMenuBtnListener } from "./utils/documentUtils.js";
 import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
@@ -31,8 +32,7 @@ function init() {
 function initBtnListeners() {
     initMenuBtnListener();
 
-    const closeVotingCountryPanelBtn = document.getElementById("close-voting-country-panel-btn");
-    closeVotingCountryPanelBtn.addEventListener("click", e => closeBtnListener());
+    NotificationBox.createAndShow(NotificationType.ERROR, "test", "notification-box-container", "HI");
 }
 
 function initLeaderboardContainer() {
@@ -172,12 +172,15 @@ function tableRowListener(e) {
     window.VotingCountryPanel = {};
     VotingCountryPanel.countryCode = countryCode;
     
-    // Open voting country panel
+    // Open voting country panel if voting status is OPEN
+    let isVotingOpen = tr.querySelector(".open-voting-status") != null;
+    if (!isVotingOpen) return;
+
     blurScreen.style.display = "initial";
     countryNameCaption.innerHTML = countryName;
 }
 
-function closeBtnListener() {
+function closeVotingCountryPanelBtnListener() {
     closeVotingCountryPanel();
 }
 
