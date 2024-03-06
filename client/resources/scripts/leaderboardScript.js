@@ -203,8 +203,8 @@ function voteBtnListener(e) {
 function highlightRunningCountry() {
     const className = "running-country";
     // First tr is the header - Next running country table row
-    const nextRunningCountryTableRow = document.querySelector("tr:nth-child(" + (runningCountry + 1) +")");
-
+    const nextRunningCountryTableRow = document.querySelector("tbody tr:nth-child(" + runningCountry +")");
+    
     // Running country table row
     const runningCountryTableRow = document.querySelector(".running-country");
     if (runningCountryTableRow != null) {
