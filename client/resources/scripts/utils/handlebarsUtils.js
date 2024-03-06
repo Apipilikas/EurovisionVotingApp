@@ -201,15 +201,18 @@ adminTemplates.voting.votingCountryContainer.content = {points : points, countri
 
 leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
 <table id="voting-leaderboard-table">
-    <tr>
-        <th>R/O</th>
-        <th>Country</th>
-        {{#each judges}}
-        <th>{{this.name}}</th>
-        {{/each}}
-        <th>Points</th>
-        <th>Status</th>
-    </tr>
+    <thead>
+        <tr>
+            <th>R/O</th>
+            <th>Country</th>
+            {{#each judges}}
+            <th>{{this.name}}</th>
+            {{/each}}
+            <th>Points</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
     {{#each countries}}
     <tr countrycode="{{this.code}}" countryname="{{this.name}}">
         <td>{{this.runningOrder}}</th>
@@ -221,6 +224,7 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
         <td id="{{this.code}}-voting-status" class="closed-voting-status">CLOSED</td>
     </tr>
     {{/each}}
+    </tbody>
 </table>
 `);
 

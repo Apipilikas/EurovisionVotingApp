@@ -12,7 +12,13 @@
 
 /* #region voting leaderboard container / table */
 
+#voting-leaderboard-container {
+    width: 100vw;
+    overflow-x: scroll;
+}
+
 table {
+    table-layout: fixed;
     margin: auto;
     border-spacing: 0 0.5em;
 }
@@ -21,12 +27,17 @@ table th {
     padding: 1em;
 }
 
-table tr:first-child {
+table thead tr {
     background-color: var(--eighth-color);
 }
 
-table tr:not(:first-child) {
+table thead th:first-child {
+    position: sticky;
+    left: 0;
+    background-color: var(--eighth-color);
+}
 
+table tbody tr {
     transition: all 1s ease-out;
 }
 
@@ -40,11 +51,13 @@ table td.voting-animation {
     background-color: var(--third-color);
 }
 
-table tr td:first-child {
+table tbody tr td:first-child {
+    position: sticky;
+    left: 0;
     background: linear-gradient(90deg, var(--eighth-color) 20%, var(--forth-color) 100%);
 }
 
-table tr.running-country td:first-child {
+table tbody tr.running-country td:first-child {
     background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
 }
 
@@ -62,13 +75,13 @@ td.closed-voting-status {
     transition: background-color 0.5s ease-out;
 }
 
-table tr:not(:first-child):has(> td.open-voting-status) {
+table tbody tr:has(> td.open-voting-status) {
     background: linear-gradient(to right, var(--forth-color) 25%, var(--open-voting-status-color) 75%) left;
     background-size: 400% 100%;
     transition: all 1s ease-out;
 }
 
-table tr:not(:first-child):has(td.closed-voting-status) {
+table tbody tr:has(td.closed-voting-status) {
     background: linear-gradient(to right, var(--forth-color) 25%, var(--closed-voting-status-color) 75%) left;
     background-size: 400% 100%;
     transition: all 1s ease-out;

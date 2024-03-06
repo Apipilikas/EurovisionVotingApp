@@ -662,8 +662,8 @@ details.admin-details-container {
     transform: translateX(-50%);
     bottom: 0;
     margin-bottom: 2em;
-    width: 150px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     background-color: white;
     overflow: hidden;
     animation: notification-box-open-animation 1s ease-in-out 2s, show-notification-box-animation 1s ease-in-out;
@@ -730,19 +730,19 @@ details.admin-details-container {
 
 @keyframes notification-box-open-animation {
     0% {
-        width: 150px;
+        width: 50px;
     }
     100% {
-        width: 50%;
+        width: 90%;
     }
 }
 
 @keyframes notification-box-close-animation {
     0% {
-        width: 50%;
+        width: 90%;
     }
     100% {
-        width: 150px;
+        width: 50px;
     }
 }
 
@@ -778,11 +778,11 @@ details.admin-details-container {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 150px;
+    width: 50px;
 }
 
 .notification-box .icon-container i {
-    font-size: 3em;
+    font-size: 2em;
     margin: auto;
     /* color: #57e45e; */
 }
@@ -790,6 +790,8 @@ details.admin-details-container {
 .notification-box .icon-container span {
     font-weight: 700;
     margin: auto;
+    /* font-size: 0.7em; */
+    display: none;
 }
 
 .notification-box .message-container {
@@ -810,11 +812,13 @@ details.admin-details-container {
 
 .notification-box .message-container h1 {
     margin: 0em;
+    font-size: 1.2em;
     white-space: nowrap;
 }
 
 .notification-box .message-container p {
-    margin: 0.5em 0em 0em 0em;
+    margin: 0em;
+    font-size: 0.7em;
     white-space: nowrap;
 }
 
@@ -822,7 +826,7 @@ details.admin-details-container {
 .notification-box .close-btn {
     /* display: none; */
     font-size: 0em;
-    margin: 0em 0.2em 0em 0em;
+    margin: auto 0.2em auto 0em;
     animation: show-close-btn-animation 1s ease-in-out 2s;
     animation-fill-mode: forwards;
 }
@@ -838,7 +842,7 @@ details.admin-details-container {
     }
     100% {
         opacity: 1.0;
-        width: 75%;
+        width: 80%;
         margin: auto 1em;
     }
 }
@@ -846,7 +850,7 @@ details.admin-details-container {
 @keyframes message-container-fadeout-animation {
     0% {
         opacity: 1.0;
-        width: 75%;
+        width: 80%;
         margin: auto 1em;
     }
     100% {
@@ -896,4 +900,58 @@ details.admin-details-container {
         transition: 0.5s;
         background-size: 200% 200%;
     }
+
+    /* #region Notification box */
+
+    .notification-box {
+        width: 150px;
+        height: 100px;
+    }
+
+    @keyframes notification-box-open-animation {
+        0% {
+            width: 150px;
+        }
+        100% {
+            width: 50%;
+        }
+    }
+
+    @keyframes notification-box-close-animation {
+        0% {
+            width: 50%;
+        }
+        100% {
+            width: 150px;
+        }
+    }
+
+    .notification-box .icon-container {
+        height: 100%;
+        width: 150px;
+    }
+
+    .notification-box .icon-container i {
+        font-size: 3em;
+    }
+
+    .notification-box .icon-container span {
+        font-size: initial;
+        display: initial;
+    }
+
+    .notification-box .message-container h1 {
+        font-size: 2em;
+    }
+
+    .notification-box .message-container p {
+        font-size: 1.5em;
+    }
+
+    /* Close button */
+    .notification-box .close-btn {
+        margin: 0em 0.2em 0em 0em;
+    }
+
+    /* #endregion */
 }
