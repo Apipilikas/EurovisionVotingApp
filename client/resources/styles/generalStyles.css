@@ -117,7 +117,7 @@ footer {
     width: 100%;
     background: linear-gradient( var(--main-color), var(--secondary-color), var(--third-color), var(--secondary-color), var(--main-color));
     /* background: linear-gradient( var(--sixth-color), var(--fifth-color) 10%, var(--third-color), var(--fifth-color), var(--sixth-color)); */
-    background-size: 200% 200%;
+    background-size: 200% 200% !important;
     animation: color-animation 7s ease infinite;
 }
 
@@ -562,6 +562,12 @@ details.admin-details-container {
     /* height: 20px; */
 }
 
+#live-box-content p {
+    font-weight: 600;
+    animation: blink-animation 1.5s infinite;
+    animation-fill-mode: both;
+}
+
 #announcement-content {
     overflow: hidden;
     display: flex;
@@ -570,7 +576,8 @@ details.admin-details-container {
 }
 
 #announcement-content > p {
-    margin: auto;
+    padding-left: 0.5em;
+    margin: 1em auto auto auto;
 }
 
 #announcement-content > p {
@@ -591,18 +598,25 @@ details.admin-details-container {
     0% {transform: translateY(0); }
     100% {transform: translateY(50px);}
 }
+
+@keyframes blink-animation {
+    0% { opacity: 0.3 }
+    50% { opacity: 1 }
+    100% { opacity: 0.3 }
+}
 /* #endregion */
 
 /* #region voting / leaderboard panel container */
 
 .voting-country-content,
 #voting-country-panel-content {
-    height: auto;
-    width: auto;
+    height: 100%;
+    width: 100%;
     color: var(--secondary-color);
-    background-color: var(--third-color);
+    background-color: var(--forth-color);
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    overflow: hidden;
 }
   
 .voting-country-content input[type="radio"],
@@ -646,7 +660,7 @@ details.admin-details-container {
     color: black;
     font-weight: 900;
     width: 80%;
-    background-color: var(--third-color);
+    background-color: var(--secondary-color);
     grid-column: 1/6;
 }
 

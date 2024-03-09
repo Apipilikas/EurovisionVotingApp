@@ -32,7 +32,7 @@ function init() {
 function initBtnListeners() {
     initMenuBtnListener();
 
-    NotificationBox.createAndShow(NotificationType.ERROR, "test", "notification-box-container", "HI");
+    // NotificationBox.createAndShow(NotificationType.ERROR, "test", "notification-box-container", "HI");
 }
 
 function initLeaderboardContainer() {
@@ -65,7 +65,7 @@ function initVotesToJudgesAndVotingStatuses(countries, votingStatuses) {
 }
 
 function initTableRowListeners() {
-    const leaderboardTableRows = document.querySelectorAll("tr:not(:first-child)");
+    const leaderboardTableRows = document.querySelectorAll("tbody tr");
 
     leaderboardTableRows.forEach(tr => {
         tr.addEventListener("click", e => tableRowListener(e));
@@ -74,11 +74,13 @@ function initTableRowListeners() {
 
 function initVotingCountryPanelContainer() {
     const votingCountryPanelContent = document.getElementById("voting-country-panel-content");
+    const closeBtn = document.getElementById("close-voting-country-panel-btn");
     let content = votingTemplates.votingContent(votingTemplates.votingContent.content);
     votingCountryPanelContent.innerHTML = content;
     
     const votingCountryPanelBtn = votingCountryPanelContent.querySelector("button");
     votingCountryPanelBtn.addEventListener("click", e => voteBtnListener(e));
+    closeBtn.addEventListener("click", e => closeVotingCountryPanelBtnListener());
 }
 
 //#endregion
@@ -168,7 +170,7 @@ function tableRowListener(e) {
     let countryCode = tr.getAttribute("countrycode");
     const blurScreen = document.getElementById("blur-screen");
     const countryNameCaption = document.getElementById("country-name-caption");
-
+    
     window.VotingCountryPanel = {};
     VotingCountryPanel.countryCode = countryCode;
     
