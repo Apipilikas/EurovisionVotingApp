@@ -37,9 +37,23 @@ votingTemplates.countries = Handlebars.compile(`
             <p>{{this.runningOrder}}</p>
             <img src="/client/resources/images/flags/gr.svg" width="55px">
             <p class="country-name">{{this.name}}</p>
+            <div class="color-container">
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                </div>
         </div>
         <div class="right-container">
-            <p class="my-vote">10</p>
+            <p class="personal-vote">0</p>
             <p class="total-votes">{{this.totalVotes}}</p>
         </div>
     </summary>

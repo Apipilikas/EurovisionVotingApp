@@ -14,7 +14,7 @@
 
 #voting-leaderboard-container {
     width: 100vw;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 table {
@@ -145,7 +145,7 @@ table tr.voting-status-animation:has(> td.closed-voting-status) {
     transform: translate(-50%, -50%);
     width: 40%;
     overflow: auto;
-    background-color: var(--secondary-color);
+    background-color: var(--sixth-color);
 
   }
 

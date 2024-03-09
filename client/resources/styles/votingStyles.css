@@ -1,5 +1,4 @@
 #voting-page {
-  background: linear-gradient(60deg, #420285, #08BDBD);
   height: 100%;
   width: 100%;
   display: flex;
@@ -19,7 +18,7 @@
 
 .voting-country-container > summary {
   height: 40px;
-  background-color: var(--main-color);
+  background-color: var(--secondary-color);
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -41,9 +40,56 @@
   font-weight: 600;
 }
 
-.voting-country-container > summary .my-vote {
+.voting-country-container .left-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.voting-country-container:nth-child(3) .color-segment {
+  transform: translateY(100px);
+}
+
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, hide-color-animation 5s ease 10.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, hide-color-animation 5s ease 11s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, hide-color-animation 5s ease 11.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, hide-color-animation 5s ease 12s;}
+
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, show-color-animation 5s ease 0.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, show-color-animation 5s ease 1s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, show-color-animation 5s ease 1.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, show-color-animation 5s ease 2s;}
+
+.voting-country-container .color-segment {
+  /* animation: color-animation 7s ease infinite, hide-color-animation 5s ease; */
+  animation-fill-mode: forwards !important;
+}
+
+@keyframes hide-color-animation {
+  0% {transform: translateY(0);}
+  100% {transform: translateY(100px);}
+}
+
+@keyframes show-color-animation {
+  0% {transform: translateY(100px);}
+  100% {transform: translateY(0);}
+}
+
+.voting-country-container .left-container .country-name {
+  width: 100%;
+}
+
+.voting-country-container .left-container *:not(div) {
+  z-index: 2;
+}
+
+.voting-country-container .color-container {
+  position: absolute;
+}
+
+.voting-country-container > summary .personal-vote {
   color: var(--secondary-color);
-  background-color: var(--third-color);
+  background-color: var(--forth-color);
 }
 
 /*  CAROUSEL STYLES  */
