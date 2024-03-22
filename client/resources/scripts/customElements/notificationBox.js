@@ -30,7 +30,7 @@ export class NotificationBox {
         this.description = description;
     }
 
-    static createAndShow(type, message, description = null, elementID = "notification-box-container") {
+    static show(type, message, description = null, elementID = "notification-box-container") {
         let notificationBox = new NotificationBox(type, message, description);
 
         notificationBox.show(elementID);
