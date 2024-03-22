@@ -31,7 +31,10 @@
 
 .voting-country-container > summary div {
   display: flex;
-  justify-content: center;
+}
+
+.voting-country-container > summary > * {
+  pointer-events: none;
 }
 
 .voting-country-container > summary p {
@@ -50,32 +53,68 @@
   transform: translateY(100px);
 }
 
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, hide-color-animation 5s ease 10.5s;}
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, hide-color-animation 5s ease 11s;}
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, hide-color-animation 5s ease 11.5s;}
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, hide-color-animation 5s ease 12s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, hide-animation 5s ease 10.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, hide-animation 5s ease 11s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, hide-animation 5s ease 11.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, hide-animation 5s ease 12s;}
 
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, show-color-animation 5s ease 0.5s;}
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, show-color-animation 5s ease 1s;}
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, show-color-animation 5s ease 1.5s;}
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, show-color-animation 5s ease 2s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, show-animation 5s ease 0.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, show-animation 5s ease 1s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, show-animation 5s ease 1.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, show-animation 5s ease 2s;}
 
 .voting-country-container .color-segment {
-  /* animation: color-animation 7s ease infinite, hide-color-animation 5s ease; */
+  /* animation: color-animation 7s ease infinite, hide-animation 5s ease; */
   animation-fill-mode: forwards !important;
 }
 
-@keyframes hide-color-animation {
+@keyframes hide-animation {
   0% {transform: translateY(0);}
   100% {transform: translateY(100px);}
 }
 
-@keyframes show-color-animation {
+@keyframes show-animation {
   0% {transform: translateY(100px);}
   100% {transform: translateY(0);}
 }
 
+/* country name container */
+.voting-country-container .left-container .country-name-container {
+  width: 100%;
+  display: flex;
+}
+
 .voting-country-container .left-container .country-name {
+  width: 100%;
+}
+
+.voting-country-container .left-container .artist-song-container {
+  z-index: 2;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-100px);
+  /* width: 100%; */
+}
+
+.voting-country-container:nth-child(4) .left-container .country-name {
+  animation: hide-animation 2s ease 4s, show-animation 2s ease 10s;
+  animation-fill-mode: forwards;
+}
+
+.voting-country-container:nth-child(4) .left-container .artist-song-container {
+  animation: show-animation 2s ease 4s, hide-animation 2s ease 10s;
+  animation-fill-mode: forwards;
+  /* width: 100%; */
+}
+
+.voting-country-container .left-container .artist-name {
+  font-size: 0.5em;
+  width: 100%;
+}
+
+.voting-country-container .left-container .song-title {
+  font-size: 0.4em;
   width: 100%;
 }
 
@@ -90,6 +129,26 @@
 .voting-country-container > summary .personal-vote {
   color: var(--secondary-color);
   background-color: var(--forth-color);
+}
+
+.voting-country-container[open] .voting-country-content {
+  animation: show-container-animation ease 1.5s;
+  animation-fill-mode: forwards;
+}
+
+.voting-country-container.hide-container .voting-country-content {
+  animation: hide-container-animation ease 1.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes show-container-animation {
+  0% {max-height: 0px;}
+  100%{max-height: 180px;}
+}
+
+@keyframes hide-container-animation {
+  0% {max-height: 180px;}
+  100%{max-height: 0px;}
 }
 
 /*  CAROUSEL STYLES  */

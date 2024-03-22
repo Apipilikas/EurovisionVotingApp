@@ -111,13 +111,27 @@ function setVotingContentToRunningCountry(isVotingOpen) {
 
     votingCountryContent = currentRunningCountry.querySelector(".voting-country-content");
 
+    currentRunningCountry.addEventListener("click", e => {
+        const detail = e.target.parentNode;
+        
+        if (detail.open) {
+            e.preventDefault();
+            detail.classList.add("hide-container");
+
+            setTimeout(() => {
+                detail.open = false;
+                detail.classList.remove("hide-container");
+            }, 1500);
+        }
+
+    })
+
     if (!isVotingOpen) {
         votingCountryContent.innerHTML = "VOTING CLOSED";
         return;
     }
 
     let votingData = votingTemplates.votingContent.content;
-    //votingData.countryCode = runningCountryCode;
     let content = votingTemplates.votingContent(votingData);
 
     votingCountryContent.innerHTML = content;
@@ -156,7 +170,7 @@ function voteBtnListener(e) {
     let checkedPoint = e.target.parentNode.querySelector("input[name='choose-vote']:checked");
     
     if (checkedPoint == null) {
-        NotificationBox.createAndShow(NotificationType.WARNING, "You haven't selected a point.");
+        NotificationBox.show(NotificationType.WARNING, "You haven't selected a point.");
         return;
     }
     let points = checkedPoint.value;
@@ -165,6 +179,7 @@ function voteBtnListener(e) {
     .then(response => {
         if (response.success) {
             setPersonalVote(countryCode, points);
+            NotificationBox.show(NotificationType.SUCCESS, "You have voted successfully!");
         }
     });
 }
