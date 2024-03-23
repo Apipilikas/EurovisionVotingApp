@@ -111,23 +111,10 @@ function setVotingContentToRunningCountry(isVotingOpen) {
 
     votingCountryContent = currentRunningCountry.querySelector(".voting-country-content");
 
-    currentRunningCountry.addEventListener("click", e => {
-        const detail = e.target.parentNode;
-        
-        if (detail.open) {
-            e.preventDefault();
-            detail.classList.add("hide-container");
-
-            setTimeout(() => {
-                detail.open = false;
-                detail.classList.remove("hide-container");
-            }, 1500);
-        }
-
-    })
+    currentRunningCountry.addEventListener("click", e => currentRunningCountryContainerListener(e));
 
     if (!isVotingOpen) {
-        votingCountryContent.innerHTML = "VOTING CLOSED";
+        votingCountryContent.innerHTML = votingTemplates.votingContent.closedVoting;
         return;
     }
 
@@ -135,6 +122,10 @@ function setVotingContentToRunningCountry(isVotingOpen) {
     let content = votingTemplates.votingContent(votingData);
 
     votingCountryContent.innerHTML = content;
+
+    setTimeout(() => {
+        currentRunningCountry.open = true;
+    }, 3000);
 
     votingCountryContent.querySelector("button").addEventListener("click", e => voteBtnListener(e));
 }
@@ -165,6 +156,7 @@ function setPersonalVote(countryCode, points) {
 //#endregion
 
 //#region  Event Listener Functions
+
 function voteBtnListener(e) {
     let countryCode = e.target.parentNode.parentNode.getAttribute("countrycode");
     let checkedPoint = e.target.parentNode.querySelector("input[name='choose-vote']:checked");
@@ -183,6 +175,21 @@ function voteBtnListener(e) {
         }
     });
 }
+
+function currentRunningCountryContainerListener(e) {
+    const detail = e.target.parentNode;
+        
+    if (detail.open) {
+        e.preventDefault();
+        detail.classList.add("hide-container");
+
+        setTimeout(() => {
+            detail.open = false;
+            detail.classList.remove("hide-container");
+        }, 1500);
+    };
+}
+
 //#endregion
 
 //#region Socket Listeners

@@ -143,10 +143,26 @@ table tr.voting-status-animation:has(> td.closed-voting-status) {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 40%;
+    width: 80%;
     overflow: auto;
-    background-color: var(--sixth-color);
+    background-color: var(--third-color);
 
-  }
+}
+
+#voting-country-panel-content button {
+    background-color: var(--third-color);
+}
+
+#voting-country-panel-content input[type="radio"]:checked + label {
+    border: 2px solid var(--third-color);
+    background-color: var(--third-color);
+}
 
 /* #endregion */
+
+/* TABLET-BASED LAYOUT */
+@media only screen and (min-width: 425px) {
+    #voting-country-panel-container {
+        width: 40%;
+    }
+}
