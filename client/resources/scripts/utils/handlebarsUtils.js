@@ -78,6 +78,10 @@ votingTemplates.votingContent = Handlebars.compile(`
 
 votingTemplates.votingContent.content = {points: points};
 
+votingTemplates.votingContent.closedVoting = `
+<p class="voting-closed">Voting is now <span>CLOSED</span>!</p>
+`
+
 adminTemplates.countries = {};
 
 adminTemplates.countries.formInputsArea = `

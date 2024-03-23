@@ -151,6 +151,17 @@
   100%{max-height: 0px;}
 }
 
+.voting-country-container .voting-country-content .voting-closed {
+  font-size: 1.2em;
+  margin: 2em auto;
+  grid-column: 1/6;
+}
+
+.voting-country-container .voting-country-content .voting-closed span {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
 /*  CAROUSEL STYLES  */
 
 #countries-carousel-container {
