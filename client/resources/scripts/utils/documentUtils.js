@@ -24,6 +24,25 @@ function areRequiredInputsFilled(inputsArea) {
     return true;
 }
 
+//#region Init link pages url
+
+function initLoginJudge() {
+    const params = new URLSearchParams(document.location.search);
+    let judgeCode = params.get("judgeCode");
+
+    if (judgeCode != null) {
+        const urlParamTag = "?judgeCode=" + judgeCode; 
+        const votingPage = document.querySelector("a[href='voting.html']");
+        const leaderboardPage = document.querySelector("a[href='leaderboard.html']");
+        votingPage.href += urlParamTag;
+        leaderboardPage.href += urlParamTag;
+    }
+
+    return judgeCode;
+}
+
+//#endregion
+
 // #region Menu button
 
 function initMenuBtnListener() {
@@ -98,6 +117,7 @@ function initAnnouncementContainer(announcements, importantAnnouncements) {
 export {
     fillDetailInputsAreaListener,
     areRequiredInputsFilled,
+    initLoginJudge,
     initMenuBtnListener,
     initAnnouncementContainer
 }

@@ -1,7 +1,7 @@
 // to get arguments from url => index.html?userID=test&userName=name
 // const params = new URLSearchParams(document.location.search);
 
-import { clientURL, getAllJudges } from "./utils/requestUtils.js";
+import { clientURL, getAllJudges, getSpecificJudge } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
 
 
@@ -13,24 +13,31 @@ function init() {
     const connectBtn = document.getElementById("connect-btn");
     
     const params = new URLSearchParams(document.location.search);
-    let judgeName = params.get("judgeName");
+    let judgeCode = params.get("judgeCode");
 
     connectBtn.addEventListener("click", connectBtnListener);
     let content = {
         "judges": null
     }
     
-    // Find better way to handle this
-    if (judgeName != null) {
-        content.judges = [{name: judgeName}];
-        updateContainer(judgesContainer, content)
+    if (judgeCode != null) {
+        getSpecificJudge(judgeCode)
+        .then(response => {
+            console.log(response)
+            if (response.success) {
+                content.judges = [response.jsonData.judge];
+                updateContainer(judgesContainer, content)
+            }
+        });
     }
     else {
         getAllJudges()
-        .then(result => {
-            content.judges = result;
-            updateContainer(judgesContainer, content)
-        })
+        .then(response => {
+            if (response.success) {
+                content.judges = response.jsonData.judges;
+                updateContainer(judgesContainer, content)
+            }
+        });
     }
 }
 
@@ -43,7 +50,7 @@ function connectBtnListener(e) {
     const checkedRadioInput = document.querySelector("input[type=radio]:checked");
 
     if (checkedRadioInput != null) {
-        let judgeName = checkedRadioInput.value;
-        window.location.replace(clientURL + "client/voting.html?judgeName=" + judgeName);
+        let judgeCode = checkedRadioInput.value;
+        window.location.replace(clientURL + "client/voting.html?judgeCode=" + judgeCode);
     }
 }

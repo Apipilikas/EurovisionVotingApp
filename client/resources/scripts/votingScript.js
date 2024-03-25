@@ -1,5 +1,5 @@
 import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
-import { initAnnouncementContainer } from "./utils/documentUtils.js";
+import { initAnnouncementContainer, initLoginJudge } from "./utils/documentUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
 import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
@@ -15,6 +15,8 @@ const socket = io(serverURL.p3000);
 window.onload = init;
 
 function init() {
+    loginJudgeCode = initLoginJudge();
+
     initCarousel();
 
     initAnnouncementContainer(announcements, importantAnnouncements);
@@ -103,6 +105,9 @@ function setVotingContentToRunningCountry(isVotingOpen) {
     const currentRunningCountry = document.querySelectorAll(".voting-country-container")[3];
 
     runningCountryCode = currentRunningCountry.getAttribute("countrycode");
+    let flagColor1 = currentRunningCountry.getAttribute("flagColor1");
+    let flagColor2 = currentRunningCountry.getAttribute("flagColor2");
+    let flagColor3 = currentRunningCountry.getAttribute("flagColor3");
     
     if (currentRunningCountry == null) return;
     
@@ -112,6 +117,11 @@ function setVotingContentToRunningCountry(isVotingOpen) {
     votingCountryContent = currentRunningCountry.querySelector(".voting-country-content");
 
     currentRunningCountry.addEventListener("click", e => currentRunningCountryContainerListener(e));
+
+    // Style voting country content
+    const rootVariables = document.querySelector(":root");
+    rootVariables.style.setProperty("--label-color", flagColor2);
+    votingCountryContent.style = "background-color:" + flagColor1;
 
     if (!isVotingOpen) {
         votingCountryContent.innerHTML = votingTemplates.votingContent.closedVoting;

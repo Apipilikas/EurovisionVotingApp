@@ -629,9 +629,8 @@ details.admin-details-container {
     background-color: #7c7c99;
 }
   
-  .voting-country-content input[type="radio"]:checked + label,
-#voting-country-panel-content input[type="radio"]:checked + label
-{
+.voting-country-content input[type="radio"]:checked + label,
+#voting-country-panel-content input[type="radio"]:checked + label {
     border: 2px solid var(--secondary-color);
     background-color: var(--secondary-color);
 }

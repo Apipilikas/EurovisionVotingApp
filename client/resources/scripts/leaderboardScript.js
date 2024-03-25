@@ -1,5 +1,5 @@
 import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
-import { initAnnouncementContainer, initMenuBtnListener } from "./utils/documentUtils.js";
+import { initAnnouncementContainer, initLoginJudge, initMenuBtnListener } from "./utils/documentUtils.js";
 import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
@@ -18,6 +18,8 @@ const StatusMapping = new Map([
 window.onload = init;
 
 function init() {
+    loginJudgeCode = initLoginJudge();
+
     initLeaderboardContainer();
 
     initBtnListeners();

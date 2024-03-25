@@ -1,6 +1,6 @@
 const serverURL = {
-    p8080: "http://192.168.1.70:8080/",
-    p3000: "http://192.168.1.70:3000/",
+    p8080: "http://127.0.0.1:8080/",
+    p3000: "http://127.0.0.1:3000/",
     prefix : "api/v1/"
 };
 
@@ -47,6 +47,13 @@ function sendRequest(method, urlEnding, data = null) {
 
 async function getAllJudges() {
     const response = await sendRequest(Method.GET, "judges/all");
+    const jsonData = await response.json();
+
+    return new ClientResponse(jsonData, response.status);
+}
+
+async function getSpecificJudge(code) {
+    const response = await sendRequest(Method.GET, "judges/" + code);
     const jsonData = await response.json();
 
     return new ClientResponse(jsonData, response.status);
@@ -141,6 +148,7 @@ export {
     serverURL,
     clientURL,
     getAllJudges,
+    getSpecificJudge,
     createJudge,
     updateJudge,
     deleteJudge,
