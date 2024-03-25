@@ -1,3 +1,7 @@
+:root {
+  --label-color: var(--secondary-color);
+}
+
 #voting-page {
   height: 100%;
   width: 100%;
@@ -86,6 +90,7 @@
 
 .voting-country-container .left-container .country-name {
   width: 100%;
+  /* -webkit-text-stroke: 1px black; */
 }
 
 .voting-country-container .left-container .artist-song-container {
@@ -109,12 +114,12 @@
 }
 
 .voting-country-container .left-container .artist-name {
-  font-size: 0.5em;
+  font-size: 0.4em;
   width: 100%;
 }
 
 .voting-country-container .left-container .song-title {
-  font-size: 0.4em;
+  font-size: 0.5em;
   width: 100%;
 }
 
@@ -155,11 +160,23 @@
   font-size: 1.2em;
   margin: 2em auto;
   grid-column: 1/6;
+  color: var(--label-color);
 }
 
 .voting-country-container .voting-country-content .voting-closed span {
   font-size: 1.3em;
   font-weight: 700;
+}
+
+/* Voting country content */
+
+.voting-country-content input[type="radio"]:checked + label {
+    border: 2px solid var(--label-color);
+    background-color: var(--label-color);
+}
+
+.voting-country-content > button {
+  background-color: var(--label-color);
 }
 
 /*  CAROUSEL STYLES  */

@@ -11,8 +11,8 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
 
 registerTemplates.judges = Handlebars.compile(`
 {{#each judges}}
-<input type="radio" id="judge-name-{{@index}}" name="choose-judge" value="{{this.name}}" {{#ifEquals ../judges.length 1}}checked{{/ifEquals}}>
-<label for="judge-name-{{@index}}">{{this.name}}</label>
+<input type="radio" id="judge-name-{{this.code}}" name="choose-judge" value="{{this.code}}" {{#ifEquals ../judges.length 1}}checked{{/ifEquals}}>
+<label for="judge-name-{{this.code}}">{{this.name}}</label>
 {{/each}}
 `)
 
@@ -31,16 +31,16 @@ votingTemplates.countries = Handlebars.compile(`
 </details>
 {{/each}}
 {{#each countries}}
-<details class="voting-country-container" countrycode="{{this.code}}">
-    <summary>
+<details class="voting-country-container" countrycode="{{this.code}}" flagcolor1="{{this.flagColors.[0]}}" flagcolor2="{{this.flagColors.[1]}}", flagcolor3="{{this.flagColors.[2]}}">
+    <summary style="background-color: {{this.flagColors.[1]}}">
         <div class="left-container">
-            <p>{{this.runningOrder}}</p>
+            <p style="background-color: {{this.flagColors.[1]}}; color: {{this.flagColors.[0]}}">{{this.runningOrder}}</p>
             <img src="/client/resources/images/flags/gr.svg" width="55px">
             <div class="country-name-container">
-                <p class="country-name">{{this.name}}</p>
+                <p class="country-name" style="color: {{this.flagColors.[0]}}">{{this.name}}</p>
                 <div class="artist-song-container">
-                    <p class="artist-name">{{this.artist}}</p>
                     <p class="song-title">{{this.song}}</p>
+                    <p class="artist-name">{{this.artist}}</p>
                 </div>
             </div>
             <div class="color-container">
@@ -59,8 +59,8 @@ votingTemplates.countries = Handlebars.compile(`
             </div>
         </div>
         <div class="right-container">
-            <p class="personal-vote">0</p>
-            <p class="total-votes">{{this.totalVotes}}</p>
+            <p class="personal-vote" style="background-color: {{this.flagColors.[0]}}; color: {{this.flagColors.[1]}}">0</p>
+            <p class="total-votes" style="color: {{this.flagColors.[0]}}">{{this.totalVotes}}</p>
         </div>
     </summary>
     <div class="voting-country-content"></div>
@@ -184,7 +184,7 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
 {{#each countries}}
 <details class="voting-country-container" countrycode="{{this.code}}">
     <summary>
-        <p class="running-order-txt">01</p>
+        <p class="running-order-txt">{{this.runningOrder}}</p>
         <img src="/client/resources/images/flags/gr.svg" width="55px">
         <p class="code-txt">{{this.code}}</p>
         <p class="name-txt">{{this.name}}</p>

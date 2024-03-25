@@ -87,9 +87,9 @@ function fillInputs(country) {
     document.getElementById("name-txt").value = country.name;
     document.getElementById("qualified-cbx").value = country.qualified;
     document.getElementById("runningorder-nmbr").value = country.runningOrder;
-    document.getElementById("flagcolor1-txt").value = country.flagColor1;
-    document.getElementById("flagcolor2-txt").value = country.flagColor2;
-    document.getElementById("flagcolor3-txt").value = country.flagColor3;
+    document.getElementById("flagcolor1-txt").value = country.flagColors[0];
+    document.getElementById("flagcolor2-txt").value = country.flagColors[1];
+    document.getElementById("flagcolor3-txt").value = country.flagColors[2];
     document.getElementById("song-txt").value = country.song;
     document.getElementById("artist-txt").value = country.artist;
 }
@@ -110,8 +110,6 @@ function getCountryInputsValue() {
         name: nameValue,
         qualified: qualifiedValue,
         runningOrder: runningOrderValue,
-        votes: 0,
-        totalVotes: 0,
         flagColors: [flagColor1Value, flagColor2Value, flagColor3Value],
         artist: artistValue,
         song: songValue
