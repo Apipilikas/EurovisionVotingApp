@@ -3,18 +3,22 @@
 .inputs-area {
     display: grid;
     border-top: 0px;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-areas: "code name"
-                         "origincountry origincountry";
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas: "code name admin"
+                         "origincountry origincountry origincountry";
 }
 
 /* #endregion */
 
 /* #region grid-areas */
 
-#code-cotaniner {
+#code-container {
     grid-template: code;
+}
+
+#admin-container {
+    grid-template: admin;
 }
 
 #name-container {

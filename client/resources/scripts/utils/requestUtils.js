@@ -26,9 +26,13 @@ function IsStatusOK(status) {
     return status == 200 || status == 201 || status == 204;
 }
 
-function sendRequest(method, urlEnding, data = null) {
+function sendRequest(method, urlEnding, data = null, token = null) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
+
+    if (token != null) {
+        headers.append("Authorization", token)
+    }
 
     let jsonData = (data == null) ? null : JSON.stringify(data);
 
@@ -59,22 +63,22 @@ async function getSpecificJudge(code) {
     return new ClientResponse(jsonData, response.status);
 }
 
-async function createJudge(data) {
-    const response = await sendRequest(Method.POST, "judges", data);
+async function createJudge(adminCode, data) {
+    const response = await sendRequest(Method.POST, "judges/", data, adminCode);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
     return new ClientResponse(jsonData, response.status);
 }
 
-async function updateJudge(code, data) {
-    const response = await sendRequest(Method.PUT, "judges/" + code, data);
+async function updateJudge(adminCode, code, data) {
+    const response = await sendRequest(Method.PUT, "judges/" + code, data, adminCode);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
     return new ClientResponse(jsonData, response.status);
 }
 
-async function deleteJudge(code) {
-    const response = await sendRequest(Method.DELETE, "judges/" + code);
+async function deleteJudge(adminCode, code) {
+    const response = await sendRequest(Method.DELETE, "judges/" + code, null, adminCode);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
     return new ClientResponse(jsonData, response.status);

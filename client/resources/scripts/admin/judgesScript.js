@@ -3,6 +3,7 @@ import { fillDetailInputsAreaListener } from "../utils/documentUtils.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { createJudge, deleteJudge, getAllJudges, updateJudge } from "../utils/requestUtils.js";
 
+var loginJudgeCode = "agg";
 var areJudgesLoaded = false;
 var judges = [];
 const inputsArea = adminTemplates.judges.formInputsArea;
@@ -67,17 +68,20 @@ function fillInputs(judge) {
     document.getElementById("code-txt").value = judge.code;
     document.getElementById("name-txt").value = judge.name;
     document.getElementById("origincountry-txt").value = judge.originCountry;
+    document.getElementById("admin-cbx").checked = judge.admin;
 }
 
 function getJudgeInputsValue() {
     const codeValue = document.getElementById("code-txt").value;
     const nameValue = document.getElementById("name-txt").value;
     const originCountryValue = document.getElementById("origincountry-txt").value;
-
+    const adminValue = document.getElementById("admin-cbx").checked;
+    console.log(adminValue);
     let judge = {
         code: codeValue,
         name: nameValue,
-        originCountry: originCountryValue
+        originCountry: originCountryValue,
+        admin: adminValue
     }
 
     return judge;
@@ -100,7 +104,7 @@ function createJudgeFormListener(e) {
 
     try
     {
-        createJudge(judge)
+        createJudge(loginJudgeCode, judge)
         .then(response => {
             if (response.success)  resultBtn.switchToSuccessState();
             else resultBtn.switchToFailureState();
@@ -127,12 +131,12 @@ function modifyBtnListener(e) {
     let modifyBtn = e.target;
     let resultBtn = new ResultButton(modifyBtn);
 
-    let selectedModifiedJudgeCode = e.target.form.querySelector("#name-txt").value;
+    let selectedModifiedJudgeCode = e.target.form.querySelector("#code-txt").value;
     let modifiedJudge = getJudgeInputsValue();
 
     resultBtn.switchToLoadingState();
 
-    updateJudge(selectedModifiedJudgeCode, modifiedJudge)
+    updateJudge(loginJudgeCode, selectedModifiedJudgeCode, modifiedJudge)
     .then(response => {
         if (response.success) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
@@ -144,11 +148,11 @@ function deleteBtnListener(e) {
 
     let deleteBtn = e.target;
     let resultBtn = new ResultButton(deleteBtn);
-    let selectedModifiedJudgeCode = e.target.form.querySelector("#name-txt").value;
+    let selectedModifiedJudgeCode = e.target.form.querySelector("#code-txt").value;
 
     resultBtn.switchToLoadingState();
 
-    deleteJudge(selectedModifiedJudgeCode)
+    deleteJudge(loginJudgeCode, selectedModifiedJudgeCode)
     .then(response => {
         if (response.success) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();

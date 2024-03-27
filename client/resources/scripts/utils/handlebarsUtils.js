@@ -37,25 +37,25 @@ votingTemplates.countries = Handlebars.compile(`
             <p style="background-color: {{this.flagColors.[1]}}; color: {{this.flagColors.[0]}}">{{this.runningOrder}}</p>
             <img src="/client/resources/images/flags/gr.svg" width="55px">
             <div class="country-name-container">
+                <div class="color-container">
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                    <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
+                </div>
                 <p class="country-name" style="color: {{this.flagColors.[0]}}">{{this.name}}</p>
                 <div class="artist-song-container">
                     <p class="song-title">{{this.song}}</p>
                     <p class="artist-name">{{this.artist}}</p>
                 </div>
-            </div>
-            <div class="color-container">
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
-                <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
             </div>
         </div>
         <div class="right-container">
@@ -156,6 +156,11 @@ adminTemplates.judges.formInputsArea = `
 <div class="text-input-container" id="code-container">
     <label for="code-txt">Code name</label>
     <input type="text" id="code-txt" name="code-txt" required>
+</div>
+
+<div class="checkbox-input-container" id="admin-container">
+    <label for="qualified-cbx">Admin</label>
+    <input class="checkbox" type="checkbox" id="admin-cbx" name="admin-cbx">
 </div>
 
 <div class="text-input-container" id="name-container">
