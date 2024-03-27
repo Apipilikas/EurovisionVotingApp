@@ -116,22 +116,22 @@ async function getAllCountries() {
     return new ClientResponse(jsonData, response.status);
 }
 
-async function createCountry(data) {
-    const response = await sendRequest(Method.POST, "countries", data);
+async function createCountry(adminCode, data) {
+    const response = await sendRequest(Method.POST, "countries", data, adminCode);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
     return new ClientResponse(jsonData, response.status);
 }
 
-async function updateCountry(code, data) {
-    const response = await sendRequest(Method.PUT, "countries/" + code, data);
+async function updateCountry(adminCode, code, data) {
+    const response = await sendRequest(Method.PUT, "countries/" + code, data, adminCode);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
     return new ClientResponse(jsonData, response.status);
 }
 
-async function deleteCountry(code) {
-    const response = await sendRequest(Method.DELETE, "countries/" + code);
+async function deleteCountry(adminCode, code) {
+    const response = await sendRequest(Method.DELETE, "countries/" + code, adminCode);
     const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
 
     return new ClientResponse(jsonData, response.status);
