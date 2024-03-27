@@ -3,6 +3,7 @@ import { fillDetailInputsAreaListener } from "../utils/documentUtils.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { createCountry, deleteCountry, getAllCountries, updateCountry } from "../utils/requestUtils.js";
 
+var loginJudgeCode = "agg";
 var areCountriesLoaded = false;
 var countries = [];
 const inputsArea = adminTemplates.countries.formInputsArea;
@@ -134,7 +135,7 @@ function createCountryFormListener(e) {
     let country = getCountryInputsValue();
 
     // TODO: Success / Failure message
-    createCountry(country)
+    createCountry(loginJudgeCode, country)
     .then(response => {
         if (response.success) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
@@ -159,7 +160,7 @@ function modifyBtnListener(e) {
 
     resultBtn.switchToLoadingState();
 
-    updateCountry(selectedModifiedCountryCode, modifiedCountry)
+    updateCountry(loginJudgeCode, selectedModifiedCountryCode, modifiedCountry)
     .then(result => {
         if (result) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
@@ -175,7 +176,7 @@ function deleteBtnListener(e) {
 
     resultBtn.switchToLoadingState();
 
-    deleteCountry(selectedModifiedCountryCode)
+    deleteCountry(loginJudgeCode, selectedModifiedCountryCode)
     .then(result => {
         if (result) resultBtn.switchToSuccessState();
         else resultBtn.switchToFailureState();
