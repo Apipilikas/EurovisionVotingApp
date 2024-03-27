@@ -57,15 +57,15 @@
   transform: translateY(100px);
 }
 
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, hide-animation 5s ease 10.5s;}
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, hide-animation 5s ease 11s;}
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, hide-animation 5s ease 11.5s;}
-.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, hide-animation 5s ease 12s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 1) {animation: color-animation 7s linear infinite, hide-animation 5s ease 10.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 2) {animation: color-animation 7s linear infinite 0.5s, hide-animation 5s ease 11s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 3) {animation: color-animation 7s linear infinite 1s, hide-animation 5s ease 11.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 4) {animation: color-animation 7s linear infinite 1.5s, hide-animation 5s ease 12s;}
 
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 1) {animation: color-animation 7s ease infinite, show-animation 5s ease 0.5s;}
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 2) {animation: color-animation 7s ease infinite 0.5s, show-animation 5s ease 1s;}
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 3) {animation: color-animation 7s ease infinite 1s, show-animation 5s ease 1.5s;}
-.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 4) {animation: color-animation 7s ease infinite 1.5s, show-animation 5s ease 2s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 1) {animation: color-animation 7s linear infinite, show-animation 5s ease 0.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 2) {animation: color-animation 7s linear infinite 0.5s, show-animation 5s ease 1s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 3) {animation: color-animation 7s linear infinite 1s, show-animation 5s ease 1.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 4) {animation: color-animation 7s linear infinite 1.5s, show-animation 5s ease 2s;}
 
 .voting-country-container .color-segment {
   /* animation: color-animation 7s ease infinite, hide-animation 5s ease; */
