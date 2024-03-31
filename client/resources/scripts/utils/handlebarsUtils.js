@@ -273,4 +273,42 @@ generalTemplates.notificationBox = Handlebars.compile(`
 </div>
 `)
 
+generalTemplates.errorBox = Handlebars.compile(`
+<div class="error-box">
+
+    <div class="top-container">
+        <div class="icon-container">
+            <i class="material-icons">error</i>
+            <span>Error</span>
+        </div>
+        <div class="message-container">
+            <h1 class="error-message">{{this.message}}</h1>
+            <p class="error-description">{{this.description}}</p>
+        </div>
+        <span class="close-btn">&times;</span>
+    </div>
+
+    <div class="bottom-container">
+        <details class="error-details-container">
+            <summary>More information</summary>
+            <div class="error-details-content">
+                <p class="error-caption">Stack trace:</p>
+                <p class="error-text">{{this.stackTrace}}</p>
+                <button class="copy-btn">Copy</button>
+                <p class="error-caption">Error type:</p>
+                <p class="error-text">{{this.type}}</p>
+            </div>
+        </details>
+        <details class="error-details-container help-container" open>
+            <summary>Help</summary>
+            <div class="error-details-content">
+                <p class="error-caption">Try the following:</p>
+                <p class="error-text">{{this.help}}</p>
+                <a class="reload-page-link" href="{{this.link}}">Reload Page</a>
+            </div>
+        </details>
+    </div>
+</div>
+`)
+
 export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates, generalTemplates};

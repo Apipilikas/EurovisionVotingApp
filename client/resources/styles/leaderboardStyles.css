@@ -138,6 +138,7 @@ table tr.voting-status-animation:has(> td.closed-voting-status) {
 }
 
 #voting-country-panel-container {
+    display: none;
     z-index: 1;
     position: fixed;
     top: 50%;
