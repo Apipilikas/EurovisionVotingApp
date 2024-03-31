@@ -68,7 +68,7 @@ input[type="radio"] + label:hover {
     overflow-y: auto;
 }
 
-button {
+#connect-btn {
     font-size: 1.2em;
     height: 50px;
     width: 200px;
@@ -79,7 +79,7 @@ button {
     font-family: 'Onest', sans-serif;
 }
 
-button:hover {
+#connect-btn:hover {
     font-weight: 900;
 }
 

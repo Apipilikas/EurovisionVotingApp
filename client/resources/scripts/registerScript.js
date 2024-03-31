@@ -3,15 +3,41 @@
 
 import { clientURL, getAllJudges, getSpecificJudge } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
+import { MyError } from "./utils/errorUtils.js";
+import { ErrorBox } from "./customElements/errorBox.js";
 
 
 
 window.onload = init;
 
 function init() {
-    initBtnLinsteners();
-    initCaptionAnimation();
+    try {
+        initBtnLinsteners();
+    
+        initCaptionAnimation();
+    
+        initJudgeListContainer();
+    }
+    catch (e) {
+        handleError(e);
+    }
+}
 
+function handleError(e) {
+    console.log(e);
+        if (e instanceof MyError) {
+            ErrorBox.show(e);
+        }
+}
+
+//#region Init functions
+
+function initBtnLinsteners() {
+    const connectBtn = document.getElementById("connect-btn");
+    connectBtn.addEventListener("click", connectBtnListener);
+}
+
+function initJudgeListContainer() {
     const judgesContainer = document.getElementById("judges-list-container");
     
     const params = new URLSearchParams(document.location.search);
@@ -29,7 +55,8 @@ function init() {
                 content.judges = [response.jsonData.judge];
                 updateContainer(judgesContainer, content)
             }
-        });
+        })
+        .catch(e => {handleError(e)});
     }
     else {
         getAllJudges()
@@ -38,15 +65,9 @@ function init() {
                 content.judges = response.jsonData.judges;
                 updateContainer(judgesContainer, content)
             }
-        });
+        })
+        .catch(e => {handleError(e)});
     }
-}
-
-//#region Init functions
-
-function initBtnLinsteners() {
-    const connectBtn = document.getElementById("connect-btn");
-    connectBtn.addEventListener("click", connectBtnListener);
 }
 
 function initCaptionAnimation() {
