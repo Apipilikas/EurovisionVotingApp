@@ -20,20 +20,26 @@ export class ErrorBox {
         return errorBox;
     }
 
-    static show(myError, elemementID = "display-box-container") {
-        let errorBox = new ErrorBox(myError.message, myError.stack, myError.type, myError.help, myError.description);
+    static show(myError, elementID = "display-box-container") {
+        let stackTrace = myError.stack;
 
-        errorBox.show(elemementID);
+        if (myError.innerError != null) {
+            stackTrace += "\n Inner Error stack trace \n" + myError.innerError.stack;
+        }
+
+        let errorBox = new ErrorBox(myError.message, stackTrace, myError.type, myError.help, myError.description);
+
+        errorBox.show(elementID);
 
         return errorBox;
     }
 
-    show(elemementID) {
+    show(elementID) {
         blurScreen();
 
         let content = {message : this.message, description : this.description, stackTrace : this.stackTrace, type : this.type, help : this.help, link : window.location.href};
 
-        const errorBoxContainer = document.getElementById(elemementID);
+        const errorBoxContainer = document.getElementById(elementID);
         let errorBoxContent = generalTemplates.errorBox(content);
         errorBoxContainer.innerHTML = errorBoxContent;
 

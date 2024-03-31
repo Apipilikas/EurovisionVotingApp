@@ -1,3 +1,19 @@
+import { FetchError } from "./errorUtils.js";
+
+((Promise) => {
+    const originalThen = Promise.prototype.then;
+    const originalCatch = Promise.prototype.catch;
+  
+    Promise.prototype.then = function (...args) {
+      console.log("Called .then on %o with arguments: %o", this, args);
+      return originalThen.apply(this, args);
+    };
+    Promise.prototype.catch = function (...args) {
+      console.error("Called .catch on %o with arguments: %o", this, args);
+      return originalCatch.apply(this, args);
+    };
+  })(Promise);
+
 const serverURL = {
     p8080: "http://127.0.0.1:8080/",
     p3000: "http://127.0.0.1:3000/",
@@ -26,7 +42,7 @@ function IsStatusOK(status) {
     return status == 200 || status == 201 || status == 204;
 }
 
-function sendRequest(method, urlEnding, data = null, token = null) {
+async function sendRequest(method, urlEnding, data = null, token = null) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -44,44 +60,45 @@ function sendRequest(method, urlEnding, data = null, token = null) {
 
     let url = serverURL.p8080 + serverURL.prefix + urlEnding;
 
-    return fetch(url, requestInit);
+    let response;
+    let jsonDataResponse;
+
+    try {
+        response = await fetch(url, requestInit);
+        if (method != Method.GET) {
+            jsonDataResponse = (IsStatusOK(response.status)) ? null : await response.json();
+        }
+        else {
+            jsonDataResponse = await response.json();
+        }
+    }
+    catch (e) {
+        throw new FetchError("Unable to send request.", undefined, e);
+    }
+
+    return new ClientResponse(jsonDataResponse, response.status);
 }
 
 // #region Judge requests
 
 async function getAllJudges() {
-    const response = await sendRequest(Method.GET, "judges/all");
-    const jsonData = await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.GET, "judges/all");
 }
 
 async function getSpecificJudge(code) {
-    const response = await sendRequest(Method.GET, "judges/" + code);
-    const jsonData = await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.GET, "judges/" + code);
 }
 
 async function createJudge(adminCode, data) {
-    const response = await sendRequest(Method.POST, "judges/", data, adminCode);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.POST, "judges/", data, adminCode);
 }
 
 async function updateJudge(adminCode, code, data) {
-    const response = await sendRequest(Method.PUT, "judges/" + code, data, adminCode);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.PUT, "judges/" + code, data, adminCode);
 }
 
 async function deleteJudge(adminCode, code) {
-    const response = await sendRequest(Method.DELETE, "judges/" + code, null, adminCode);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.DELETE, "judges/" + code, null, adminCode);
 }
 
 // #endregion
@@ -89,61 +106,36 @@ async function deleteJudge(adminCode, code) {
 // #region Country requests
 
 async function getRunningCountryNumber() {
-    const response = await sendRequest(Method.GET, "countries/runningCountry");
-    const jsonData = await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.GET, "countries/runningCountry");
 }
 
 async function getVotingCountryStatuses() {
-    const response = await sendRequest(Method.GET, "countries/votingStatuses/all");
-    const jsonData = await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.GET, "countries/votingStatuses/all");
 }
 
 async function getVotingCountryStatus(countryCode) {
-    const response = await sendRequest(Method.GET, "countries/votingStatuses/" + countryCode);
-    const jsonData = await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.GET, "countries/votingStatuses/" + countryCode);
 }
 
 async function getAllCountries() {
-    const response = await sendRequest(Method.GET, "countries/all");
-    const jsonData = await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.GET, "countries/all");
 }
 
 async function createCountry(adminCode, data) {
-    const response = await sendRequest(Method.POST, "countries", data, adminCode);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.POST, "countries", data, adminCode);
 }
 
 async function updateCountry(adminCode, code, data) {
-    const response = await sendRequest(Method.PUT, "countries/" + code, data, adminCode);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.PUT, "countries/" + code, data, adminCode);
 }
 
 async function deleteCountry(adminCode, code) {
-    const response = await sendRequest(Method.DELETE, "countries/" + code, adminCode);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.DELETE, "countries/" + code, null, adminCode);
 }
 
 async function voteCountry(countryCode, judgeCode, points) {
     let data = { points : points };
-    
-    const response = await sendRequest(Method.PATCH, "countries/vote/" + countryCode + "/" + judgeCode, data);
-    const jsonData = (IsStatusOK(response.status)) ? null : await response.json();
-
-    return new ClientResponse(jsonData, response.status);
+    return sendRequest(Method.PATCH, "countries/vote/" + countryCode + "/" + judgeCode, data);
 }
 
 // #endregion
