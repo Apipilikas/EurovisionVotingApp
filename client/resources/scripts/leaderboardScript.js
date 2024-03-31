@@ -1,5 +1,7 @@
+import { ErrorBox } from "./customElements/errorBox.js";
 import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
-import { initAnnouncementContainer, initLoginJudge, initMenuBtnListener } from "./utils/documentUtils.js";
+import { blurScreen, initAnnouncementContainer, initLoginJudge, initMenuBtnListener, unblurScreen } from "./utils/documentUtils.js";
+import { MyError } from "./utils/errorUtils.js";
 import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
@@ -18,23 +20,31 @@ const StatusMapping = new Map([
 window.onload = init;
 
 function init() {
-    loginJudgeCode = initLoginJudge();
-
-    initLeaderboardContainer();
-
-    initBtnListeners();
-
-    initAnnouncementContainer(announcements, importantAnnouncements);
-
-    initVotingCountryPanelContainer();
+    try {
+        loginJudgeCode = initLoginJudge();
+    
+        initLeaderboardContainer();
+    
+        initBtnListeners();
+    
+        initAnnouncementContainer(announcements, importantAnnouncements);
+    
+        initVotingCountryPanelContainer();
+    }
+    catch (e) {
+        if (e instanceof MyError) {
+            ErrorBox.show(e);
+        }
+        else {
+            ErrorBox.show(e.message, e.stack, "GENERAL_ERROR");
+        }
+    }
 }
 
 //#region Init functions
 
 function initBtnListeners() {
     initMenuBtnListener();
-
-    // NotificationBox.createAndShow(NotificationType.ERROR, "test", "notification-box-container", "HI");
 }
 
 function initLeaderboardContainer() {
@@ -157,9 +167,10 @@ function setTotalVotes(countryCode, totalVotes) {
 }
 
 function closeVotingCountryPanel() {
-    const blurScreen = document.getElementById("blur-screen");
+    const votingCountryPanelContainer = document.getElementById("voting-country-panel-container");
 
-    blurScreen.style.display = "none";
+    votingCountryPanelContainer.style.display = "none";
+    unblurScreen();
 }
 
 //#endregion
@@ -170,7 +181,7 @@ function tableRowListener(e) {
     let tr = e.target.parentNode;
     let countryName = tr.getAttribute("countryname");
     let countryCode = tr.getAttribute("countrycode");
-    const blurScreen = document.getElementById("blur-screen");
+    const votingCountryPanelContainer = document.getElementById("voting-country-panel-container");
     const countryNameCaption = document.getElementById("country-name-caption");
     
     window.VotingCountryPanel = {};
@@ -180,7 +191,8 @@ function tableRowListener(e) {
     let isVotingOpen = tr.querySelector(".open-voting-status") != null;
     if (!isVotingOpen) return;
 
-    blurScreen.style.display = "initial";
+    blurScreen();
+    votingCountryPanelContainer.style.display = "initial";
     countryNameCaption.innerHTML = countryName;
 }
 

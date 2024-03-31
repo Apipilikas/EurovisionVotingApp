@@ -30,7 +30,7 @@ export class NotificationBox {
         this.description = description;
     }
 
-    static show(type, message, description = null, elementID = "notification-box-container") {
+    static show(type, message, description = null, elementID = "display-box-container") {
         let notificationBox = new NotificationBox(type, message, description);
 
         notificationBox.show(elementID);
@@ -48,9 +48,7 @@ export class NotificationBox {
         notificationBoxContainer.innerHTML = notificationBoxContent;
 
         const closeBtn = notificationBoxContainer.querySelector(".close-btn");
-        closeBtn.addEventListener("click", e => {
-            this.close();
-        });
+        closeBtn.addEventListener("click", e => this.close());
     }
 
     close() {

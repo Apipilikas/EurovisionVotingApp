@@ -1,3 +1,5 @@
+import { LoginError } from "./errorUtils.js";
+
 const defaultAnnouncement = "UNITED BY MUSIC";
 
 function fillDetailInputsAreaListener(currentDetail, otherDetail, inputsArea, callbackFunction = null) {
@@ -24,6 +26,20 @@ function areRequiredInputsFilled(inputsArea) {
     return true;
 }
 
+//#region General functions
+
+function blurScreen() {
+    const blurScreen = document.getElementById("blur-screen");
+    blurScreen.style.display = "initial";
+}
+
+function unblurScreen() {
+    const blurScreen = document.getElementById("blur-screen");
+    blurScreen.style.display = "none";
+}
+
+//#endregion
+
 //#region Init link pages url
 
 function initLoginJudge() {
@@ -36,6 +52,9 @@ function initLoginJudge() {
         const leaderboardPage = document.querySelector("a[href='leaderboard.html']");
         votingPage.href += urlParamTag;
         leaderboardPage.href += urlParamTag;
+    }
+    else {
+        throw new LoginError("Judge hasn't connected properly.", null);
     }
 
     return judgeCode;
@@ -119,5 +138,7 @@ export {
     areRequiredInputsFilled,
     initLoginJudge,
     initMenuBtnListener,
-    initAnnouncementContainer
+    initAnnouncementContainer,
+    blurScreen,
+    unblurScreen
 }
