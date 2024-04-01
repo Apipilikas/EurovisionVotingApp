@@ -1,17 +1,17 @@
 import { ErrorBox } from "./customElements/errorBox.js";
 import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
-import { blurScreen, initAnnouncementContainer, initLoginJudge, initMenuBtnListener, unblurScreen } from "./utils/documentUtils.js";
+import { blurScreen, handleError, initAnnouncementContainer, initLoginJudge, initMenuBtnListener, unblurScreen } from "./utils/documentUtils.js";
 import { MyError } from "./utils/errorUtils.js";
 import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
-var loginJudgeCode = "agg";
+var loginJudgeCode = null;
 var runningCountry = 0;
 var totalCountries = 0;
 var announcements = [];
 var importantAnnouncements = [];
-const socket = io(serverURL.p3000);
+const socket = io(serverURL.address);
 const StatusMapping = new Map([
     ["OPEN", "open-voting-status"],
     ["CLOSED", "closed-voting-status"]
@@ -31,14 +31,7 @@ function init() {
     
         initVotingCountryPanelContainer();
     }
-    catch (e) {
-        if (e instanceof MyError) {
-            ErrorBox.show(e);
-        }
-        else {
-            ErrorBox.show(e.message, e.stack, "GENERAL_ERROR");
-        }
-    }
+    catch (e) {handleError(e)}
 }
 
 //#region Init functions
@@ -60,7 +53,8 @@ function initLeaderboardContainer() {
             highlightRunningCountry();
             initTableRowListeners();
         }
-    });
+    })
+    .catch(e => handleError(e));
 }
 
 function initVotesToJudgesAndVotingStatuses(countries, votingStatuses) {

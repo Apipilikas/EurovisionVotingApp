@@ -1,25 +1,28 @@
 import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
-import { initAnnouncementContainer, initLoginJudge } from "./utils/documentUtils.js";
+import { handleError, initAnnouncementContainer, initLoginJudge } from "./utils/documentUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
 import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
-var loginJudgeCode = "agg";
+var loginJudgeCode = null;
 var runningCountry = 0;
 var totalCountries = 0;
 var announcements = [];
 var importantAnnouncements = [];
 var runningCountryCode = null;
-const socket = io(serverURL.p3000);
+const socket = io(serverURL.address);
 
 window.onload = init;
 
 function init() {
-    loginJudgeCode = initLoginJudge();
-
-    initCarousel();
-
-    initAnnouncementContainer(announcements, importantAnnouncements);
+    try {
+        loginJudgeCode = initLoginJudge();
+    
+        initCarousel();
+    
+        initAnnouncementContainer(announcements, importantAnnouncements);
+    }
+    catch (e) {handleError(e)}
 }
 
 //#region Init functions
@@ -33,6 +36,7 @@ function initCarousel() {
         setVotesToCarousel(data.countries);
         setVotingContentToRunningCountry(data.isVotingOpen);
     })
+    .catch(e => handleError(e));
 }
 
 //#endregion

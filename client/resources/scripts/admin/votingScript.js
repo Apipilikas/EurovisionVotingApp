@@ -4,7 +4,7 @@ import { adminTemplates } from "../utils/handlebarsUtils.js";
 
 var runningCountry = 0;
 var totalCountries = 0;
-const socket = io(serverURL.p3000);
+const socket = io(serverURL.address);
 
 window.onload = init;
 
