@@ -20,18 +20,14 @@ export class ErrorBox {
         return errorBox;
     }
 
-    static show(myError, elementID = "display-box-container") {
+    static showMyError(myError, elementID = "display-box-container") {
         let stackTrace = myError.stack;
 
         if (myError.innerError != null) {
             stackTrace += "\n Inner Error stack trace \n" + myError.innerError.stack;
         }
 
-        let errorBox = new ErrorBox(myError.message, stackTrace, myError.type, myError.help, myError.description);
-
-        errorBox.show(elementID);
-
-        return errorBox;
+        return this.show(myError.message, stackTrace, myError.type, myError.help, myError.description, elementID);
     }
 
     show(elementID) {

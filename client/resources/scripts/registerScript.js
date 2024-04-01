@@ -3,8 +3,7 @@
 
 import { clientURL, getAllJudges, getSpecificJudge } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
-import { MyError } from "./utils/errorUtils.js";
-import { ErrorBox } from "./customElements/errorBox.js";
+import { handleError } from "./utils/documentUtils.js";
 
 
 
@@ -18,16 +17,7 @@ function init() {
     
         initJudgeListContainer();
     }
-    catch (e) {
-        handleError(e);
-    }
-}
-
-function handleError(e) {
-    console.log(e);
-        if (e instanceof MyError) {
-            ErrorBox.show(e);
-        }
+    catch (e) {handleError(e)}
 }
 
 //#region Init functions
@@ -56,7 +46,7 @@ function initJudgeListContainer() {
                 updateContainer(judgesContainer, content)
             }
         })
-        .catch(e => {handleError(e)});
+        .catch(e => handleError(e));
     }
     else {
         getAllJudges()
@@ -66,7 +56,7 @@ function initJudgeListContainer() {
                 updateContainer(judgesContainer, content)
             }
         })
-        .catch(e => {handleError(e)});
+        .catch(e => handleError(e));
     }
 }
 

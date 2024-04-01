@@ -1,4 +1,5 @@
-import { LoginError } from "./errorUtils.js";
+import { ErrorBox } from "../customElements/errorBox.js";
+import { LoginError, MyError } from "./errorUtils.js";
 
 const defaultAnnouncement = "UNITED BY MUSIC";
 
@@ -36,6 +37,15 @@ function blurScreen() {
 function unblurScreen() {
     const blurScreen = document.getElementById("blur-screen");
     blurScreen.style.display = "none";
+}
+
+function handleError(e) {
+    if (e instanceof MyError) {
+        ErrorBox.showMyError(e);
+    }
+    else {
+        ErrorBox.show(e.message, e.stack, "GENERAL_ERROR", "Contact Aggelos and reload the page.");
+    }
 }
 
 //#endregion
@@ -140,5 +150,6 @@ export {
     initMenuBtnListener,
     initAnnouncementContainer,
     blurScreen,
-    unblurScreen
+    unblurScreen,
+    handleError
 }

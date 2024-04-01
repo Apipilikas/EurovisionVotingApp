@@ -1,22 +1,7 @@
 import { FetchError } from "./errorUtils.js";
 
-((Promise) => {
-    const originalThen = Promise.prototype.then;
-    const originalCatch = Promise.prototype.catch;
-  
-    Promise.prototype.then = function (...args) {
-      console.log("Called .then on %o with arguments: %o", this, args);
-      return originalThen.apply(this, args);
-    };
-    Promise.prototype.catch = function (...args) {
-      console.error("Called .catch on %o with arguments: %o", this, args);
-      return originalCatch.apply(this, args);
-    };
-  })(Promise);
-
 const serverURL = {
-    p8080: "http://127.0.0.1:8080/",
-    p3000: "http://127.0.0.1:3000/",
+    address: "http://127.0.0.1:8080/",
     prefix : "api/v1/"
 };
 
@@ -58,7 +43,7 @@ async function sendRequest(method, urlEnding, data = null, token = null) {
         body: jsonData
     };
 
-    let url = serverURL.p8080 + serverURL.prefix + urlEnding;
+    let url = serverURL.address + serverURL.prefix + urlEnding;
 
     let response;
     let jsonDataResponse;
