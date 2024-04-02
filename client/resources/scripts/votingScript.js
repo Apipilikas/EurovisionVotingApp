@@ -17,6 +17,8 @@ window.onload = init;
 function init() {
     try {
         loginJudgeCode = initLoginJudge();
+
+        socket.emit("connecting", {judgeCode : loginJudgeCode});
     
         initCarousel();
     
