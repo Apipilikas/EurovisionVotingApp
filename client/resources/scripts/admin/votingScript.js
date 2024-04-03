@@ -1,15 +1,25 @@
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL } from "../utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
+import { handleError, initLoginJudge } from "../utils/documentUtils.js";
 
+var loginJudgeCode = null;
 var runningCountry = 0;
 var totalCountries = 0;
-const socket = io(serverURL.address);
+const socket = io(serverURL.address, {autoConnect: false});
 
 window.onload = init;
 
 function init() {
-    initVotingCountryContainer();
+    try {
+        loginJudgeCode = initLoginJudge(socket);
+
+        initVotingCountryContainer();
+    }
+    catch (e) {
+        handleError(e);
+    }
+
 }
 
 //#region Init functions

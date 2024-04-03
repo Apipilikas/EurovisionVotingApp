@@ -10,15 +10,13 @@ var totalCountries = 0;
 var announcements = [];
 var importantAnnouncements = [];
 var runningCountryCode = null;
-const socket = io(serverURL.address);
+const socket = io(serverURL.address, {autoConnect: false});
 
 window.onload = init;
 
 function init() {
     try {
-        loginJudgeCode = initLoginJudge();
-
-        socket.emit("connecting", {judgeCode : loginJudgeCode});
+        loginJudgeCode = initLoginJudge(socket);
     
         initCarousel();
     
