@@ -11,7 +11,7 @@ var runningCountry = 0;
 var totalCountries = 0;
 var announcements = [];
 var importantAnnouncements = [];
-const socket = io(serverURL.address);
+const socket = io(serverURL.address, {autoConnect: false});
 const StatusMapping = new Map([
     ["OPEN", "open-voting-status"],
     ["CLOSED", "closed-voting-status"]
@@ -21,7 +21,7 @@ window.onload = init;
 
 function init() {
     try {
-        loginJudgeCode = initLoginJudge();
+        loginJudgeCode = initLoginJudge(socket);
     
         initLeaderboardContainer();
     

@@ -52,7 +52,7 @@ function handleError(e) {
 
 //#region Init link pages url
 
-function initLoginJudge() {
+function initLoginJudge(socket) {
     const params = new URLSearchParams(document.location.search);
     let judgeCode = params.get("judgeCode");
 
@@ -62,6 +62,9 @@ function initLoginJudge() {
         const leaderboardPage = document.querySelector("a[href='leaderboard.html']");
         votingPage.href += urlParamTag;
         leaderboardPage.href += urlParamTag;
+
+        socket.connect();
+        socket.emit("connecting", {judgeCode : judgeCode});
     }
     else {
         throw new LoginError("Judge hasn't connected properly.", null);
