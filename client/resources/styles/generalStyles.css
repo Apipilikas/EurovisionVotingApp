@@ -65,6 +65,8 @@
     --info-notification-color: #1b85fd;
     --warning-notification-color: #fdb51b;
     --error-notification-color: #fc3c3c;
+    --green-color: #31cc39;
+    --red-color: #f75252;
 }
 
 /* #region body, html, header, main, footer */

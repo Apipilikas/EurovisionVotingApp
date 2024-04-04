@@ -59,6 +59,26 @@ input[type="radio"] + label:hover {
     color: black;
 }
 
+.judge-content {
+    display: grid;
+    grid-template-columns: 0.5fr 2.5fr;
+}
+
+.judge-content > .online-status-container {
+    width: 20px;
+    height: 20px;
+    margin: auto 0em;
+    border: 2px solid black;
+}
+
+.judge-content > .online-status-container.online {
+    background-color: var(--green-color);
+}
+
+.judge-content > .online-status-container.offline {
+    background-color: var(--red-color);
+}
+
 #judges-list-container {
     margin: 2em 0em;
     height: 80%;
