@@ -12,7 +12,9 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
 registerTemplates.judges = Handlebars.compile(`
 {{#each judges}}
 <input type="radio" id="judge-name-{{this.code}}" name="choose-judge" value="{{this.code}}" {{#ifEquals ../judges.length 1}}checked{{/ifEquals}}>
-<label for="judge-name-{{this.code}}">{{this.name}}</label>
+<label for="judge-name-{{this.code}}">
+    <div class="judge-content"><div class="online-status-container {{#if this.online}}online{{else}}offline{{/if}}"></div>{{this.name}}</div>
+</label>
 {{/each}}
 `)
 
