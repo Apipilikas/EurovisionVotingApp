@@ -16,9 +16,7 @@ function init() {
 
         initVotingCountryContainer();
     }
-    catch (e) {
-        handleError(e);
-    }
+    catch (e) {handleError(e)}
 
 }
 
@@ -35,6 +33,8 @@ function initVotingCountryContainer() {
         content.countries = data.countries;
         content.judges = data.judges;
         
+        initDashboard(data.countries);
+
         countriesListContainer.innerHTML = adminTemplates.voting.votingCountryContainer(content);
         
         initVotesToJudges(data.countries);
@@ -55,12 +55,19 @@ function initBtnLinsteners() {
 
 function initVotesToJudges(countries) {
     for (var country of countries) {
-        if (country.votes == 0) continue; // TO CHANGE
 
         for (var [judgeCode, points] of Object.entries(country.votes)) {
-            console.log(judgeCode)
             setVoteToJudge(judgeCode, country.code, points);
         }
+    }
+}
+
+function initDashboard(countries) {
+    let country = countries.find(el => parseInt(el.runningOrder) == parseInt(runningCountry));
+    if (country != null) {
+        setRunningCountryDashboard(runningCountry, country.name, country.song, country.artist);
+        setTotalVotesDashboard(country.totalVotes);
+        setJudgesDashboard(Object.keys(country.votes).length, 1, 2, countries.length);
     }
 }
 
@@ -127,6 +134,55 @@ function setTotalVotes(countryCode, totalVotes) {
 
 //#endregion
 
+//#region Dashboard functions
+
+function setRunningCountryDashboard(runningOrder, countryName, song, artist) {
+    const runningOrderTag = "admin-db-running-order-txt";
+    const runningCountryNameTag = "admin-db-running-country-name-txt";
+    const songTag = "admin-db-song-txt";
+    const artistTag = "admin-db-artist-txt";
+
+    const runningOrderSpan = document.getElementById(runningOrderTag);
+    const runningCountryCodeSpan = document.getElementById(runningCountryNameTag);
+    const songSpan = document.getElementById(songTag);
+    const artistSpan = document.getElementById(artistTag);
+
+    runningOrderSpan.innerHTML = runningOrder;
+    runningCountryCodeSpan.innerHTML = countryName;
+    songSpan.innerHTML = song;
+    artistSpan.innerHTML = artist;
+}
+
+function setJudgesDashboard(judgesVotedNumber, onlineJudgesNumber, offlineJudgesNumber, totalJudgesNumber = null) {
+    const totalJudgesNoTag = "admin-db-total-judges-no-txt";
+    const judgesVotedNoTag = "judges-voted-no-txt";
+    const onlineJudgesNoTag = "admin-db-online-judges-no-txt";
+    const offlineJudgesNoTag = "admin-db-offline-judges-no-txt";
+
+    if (totalJudgesNumber != null) {
+        const totalJudgesNoSpans = document.getElementsByClassName(totalJudgesNoTag);
+        for (let totalJudgeNoSpan of totalJudgesNoSpans) {
+            totalJudgeNoSpan.innerHTML = totalJudgesNumber;
+        }
+    }
+    const judgesVotedNoSpan = document.getElementById(judgesVotedNoTag);
+    const onlineJudgesNoSpan = document.getElementById(onlineJudgesNoTag);
+    const offlineJudgesNoSpan = document.getElementById(offlineJudgesNoTag);
+
+    judgesVotedNoSpan.innerHTML = judgesVotedNumber;
+    onlineJudgesNoSpan.innerHTML = onlineJudgesNumber;
+    offlineJudgesNoSpan.innerHTML = offlineJudgesNumber;
+}
+
+function setTotalVotesDashboard(totalVotes) {
+    const totalVotesTag = "admin-db-total-votes-txt";
+
+    const totalVotesSpan = document.getElementById(totalVotesTag);
+    totalVotesSpan.innerHTML = totalVotes;
+}
+
+//#endregion
+
 
 //#region Event Listener Functions
 
@@ -153,9 +209,17 @@ socket.on("hi", (arg) => {
     console.log(arg);
 })
 
-socket.on("votes", (voting) => {
+socket.on("votes", (response) => {
+    let voting = response.data.voting;
+
     setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points);
     setTotalVotes(voting.countryCode, voting.totalVotes);
+})
+
+socket.on("nextCountry", (response) => {
+    let nextRunningCountry = response.data.nextRunningCountry.country;
+    console.log(nextRunningCountry)
+    setRunningCountryDashboard(nextRunningCountry.runningOrder, nextRunningCountry.name, nextRunningCountry.song, nextRunningCountry.artist);
 })
 
 //#endregion

@@ -212,19 +212,22 @@ socket.on("hi", (arg) => {
     console.log(arg)
 });
 
-socket.on("nextCountry", (nextRunningCountry) => {
+socket.on("nextCountry", (response) => {
+    let nextRunningCountry = response.data.nextRunningCountry;
+
     moveToNextCountry(nextRunningCountry);
-    importantAnnouncements.push(nextRunningCountry.message.innerHTML);
+    importantAnnouncements.push(response.message.htmlText);
 });
 
-socket.on("votes", (voting) => {
-    console.log(voting);
+socket.on("votes", (response) => {
+    let voting = response.data.voting;
+
     setTotalVotes(voting.countryCode, voting.totalVotes);
-    announcements.push(voting.message.innerHTML);
+    announcements.push(response.message.htmlText);
 });
 
-socket.on("votingStatus", (votingStatus) => {
-    console.log(votingStatus);
+socket.on("votingStatus", (response) => {
+    let votingStatus = response.data.votingStatus;
 
     let isVotingOpen = votingStatus.status == "OPEN";
     if (votingStatus.countries.find(el => el == runningCountryCode) != null) {
