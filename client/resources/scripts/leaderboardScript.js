@@ -232,32 +232,37 @@ socket.on("hi", (arg) => {
     console.log(arg);
 });
 
-socket.on("nextCountry", (nextRunningCountry) => {
+socket.on("nextCountry", (response) => {
+    let nextRunningCountry = response.data.nextRunningCountry;
+
     runningCountry = runningCountry % totalCountries + 1;
 
     if (nextRunningCountry.runningCountry != runningCountry) {
         initLeaderboardContainer()
         return;
     }
-
     highlightRunningCountry();
-    setVotingStatus(nextRunningCountry.runningCountryCode, nextRunningCountry.votingStatus);
-    importantAnnouncements.push(nextRunningCountry.message.innerHTML);
+    setVotingStatus(nextRunningCountry.country.code, nextRunningCountry.votingStatus);
+    importantAnnouncements.push(response.message.htmlText);
 });
 
-socket.on("votes", (voting) => {
+socket.on("votes", (response) => {
+    let voting = response.data.voting;
+
     setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points, false);
     setTotalVotes(voting.countryCode, voting.totalVotes);
-    announcements.push(voting.message.innerHTML);
+    announcements.push(response.message.htmlText);
 });
 
-socket.on("votingStatus", (votingStatus) => {
-    for (var countryCode of votingStatus.countries) {
-        setVotingStatus(countryCode, votingStatus.status);
+socket.on("votingStatus", (response) => {
+    let status = response.data.votingStatus.status;
+
+    for (var countryCode of response.data.votingStatus.countries) {
+        setVotingStatus(countryCode, status);
     }
 
-    votingStatus.messages.forEach(message => {
-        importantAnnouncements.push(message.innerHTML);
+    response.messages.forEach(message => {
+        importantAnnouncements.push(message.htmlText);
     });
 });
 

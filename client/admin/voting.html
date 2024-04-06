@@ -19,7 +19,25 @@
     <body class="no-scrolling">
         <header>
             <div id="header-container">
-                <h1>Eurovision Voting App</h1>
+                <div id="main-logo-container">
+                    <h1>Eurovision Song Contest 2024</h1>
+                    <h2>UNITED BY MUSIC</h2>
+                </div>
+                <div id="header-color-container" class="color-container">
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                </div>
+                <div id="menu-button">
+                        <div></div>
+                </div>
             </div>
             <nav>
                 <ul id="header-navigation-bar">
@@ -33,23 +51,39 @@
 
         <main class="no-scrolling" id="admin-voting-page">
             <div class="upper-container" id="running-order-display-dashboard">
-                <section class="" id="running-country-container">
-                    <h1>Current running country</h1>
-                    <h2>02 GREECE</h2>
-                    <h3>ARTIST</h3>
-                    <h4>SONG</h4>
-                </section>
-                <section class="" id="judges-voted-container">
-                    <h1>Judges voted</h1>
-                    <p><span id="judges-voted-txt">2</span> / <span id="total-judges-txt">5</span></p>
-                    <div id="online-judges-container">
-                        <p>ONLINE <span id="online-judges-txt"></span></p>
-                        <p>OFFLINE <span id="offline-judges-txt"></span></p>
+                <section class="admin-dashboard-container dashboard-running-country-container">
+                    <h1>Running country</h1>
+                    <div class="admin-dashboard-content">
+                        <h2><span id="admin-db-running-order-txt">02</span> <span id="admin-db-running-country-name-txt">GREECE</span></h2>
+                        <div class="dashboard-caption-container song-container">
+                            <h3>SONG</h3>
+                            <p id="admin-db-song-txt">Song name</p>
+                        </div>
+                        <div class="dashboard-caption-container artist-container">
+                            <h3>ARTIST</h3>
+                            <p id="admin-db-artist-txt">Artist caption</p>
+                        </div>
                     </div>
                 </section>
-                <section class="" id="total-voting-points-container">
+                <section class="admin-dashboard-container dashboard-judges-voted-container">
+                    <h1>Judges</h1>
+                    <div class="admin-dashboard-content">
+                        <h2><span id="judges-voted-no-txt">2</span> / <span class="admin-db-total-judges-no-txt">5</span></h2>
+                        <div class="dashboard-caption-container online-container">
+                            <h3>ONLINE</h3>
+                            <p><span id="admin-db-online-judges-no-txt">1</span>/<span class="admin-db-total-judges-no-txt">5</span></p>
+                        </div>
+                        <div class="dashboard-caption-container offline-container">
+                            <h3>OFFLINE</h3>
+                            <p><span id="admin-db-offline-judges-no-txt">1</span>/<span class="admin-db-total-judges-no-txt">5</span></p>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-dashboard-container dashboard-total-voting-points-container">
                     <h1>Total votes</h1>
-                    <h2>30</h2>
+                    <div class="admin-dashboard-content">
+                        <span id="admin-db-total-votes-txt">30</span>
+                    </div>
                 </section>
             </div>
 
@@ -60,7 +94,7 @@
                 </details>
                 <div id="voting-countries-order-list-container"></div>
                 <div class="button-areas">
-                    <button id="previous-country-btn">PREVIOUS COUNTRY</button>
+                    <!-- <button id="previous-country-btn">PREVIOUS COUNTRY</button> -->
                     <button id="next-country-btn">NEXT COUNTRY</button>
                 </div>
             </div>

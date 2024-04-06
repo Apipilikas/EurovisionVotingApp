@@ -189,39 +189,51 @@ adminTemplates.voting = {};
 
 adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
 {{#each countries}}
-<details class="voting-country-container" countrycode="{{this.code}}">
+<details class="admin-voting-country-container" countrycode="{{this.code}}">
     <summary>
-        <p class="running-order-txt">{{this.runningOrder}}</p>
-        <img src="/client/resources/images/flags/gr.svg" width="55px">
-        <p class="code-txt">{{this.code}}</p>
-        <p class="name-txt">{{this.name}}</p>
-        <p class="total-votes-txt">{{this.totalVotes}}</p>
-        <label class="voting-toggle-switch" id="{{this.code}}-voting-toggle">
-            <input type="checkbox" runningorder="{{this.runningOrder}}"  countrycode="{{this.code}}" {{#if this.isVotingOpen}} checked {{/if}}>
-            <span class="slider"></span>
-        </label>
+        <div class="left-container">
+            <p class="running-order-txt">{{this.runningOrder}}</p>
+            <img src="/client/resources/images/flags/gr.svg" width="55px">
+            <p class="code-txt">{{this.code}}</p>
+            <p class="name-txt">{{this.name}}</p>
+        </div>
+        <div class="right-container">
+            <p class="total-votes-txt">{{this.totalVotes}}</p>
+            <label class="voting-toggle-switch" id="{{this.code}}-voting-toggle">
+                <input type="checkbox" runningorder="{{this.runningOrder}}"  countrycode="{{this.code}}" {{#if this.isVotingOpen}} checked {{/if}}>
+                <span class="slider"></span>
+            </label>
+        </div>
     </summary>
-    <div class="voting-country-content">
+    <div class="admin-voting-country-content">
         <table class="voting-country-table" id="voting-{{this.code}}-table">
-        <tr>
-            <th>Judges</th>
-            <th colspan="10">Points</th>
-        </tr>
-        <tr>
-            <th></th>
-            {{#each ../points}}
-            <th>{{this}}</th>
-            {{/each}}
-        </tr>
-        {{#each ../judges}}
-        <tr id="{{../this.code}}-{{this.code}}-row">
-            <th id="judge-{{this.code}}-header">{{this.name}}</th>
-            {{#each ../../points}}
-            <th><input type="radio" id="{{../../this.code}}-{{../this.code}}-point{{this}}" name="{{../../this.code}}-{{../this.code}}-chosen-vote" value="{{this}}"></th>
-            {{/each}}
-            <th><button id="{{../this.code}}-judge-{{this.code}}-update-vote-btn">UPDATE</button></th>
-        </tr>
-        {{/each}}
+            <thead>
+                <tr>
+                    <th rowspan="2">Judges</th>
+                    <th colspan="10">Points</th>
+                </tr>
+                <tr class="points-caption">
+                    {{#each ../points}}
+                    <th class="point-caption">{{this}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each ../judges}}
+                <tr id="{{../this.code}}-{{this.code}}-row">
+                    <th class="judge-name-caption" id="judge-{{this.code}}-header">{{this.name}}</th>
+                    {{#each ../../points}}
+                    <td>
+                        <input type="radio" id="{{../../this.code}}-{{../this.code}}-point{{this}}" name="{{../../this.code}}-{{../this.code}}-chosen-vote" value="{{this}}">
+                        <label for="{{../../this.code}}-{{../this.code}}-point{{this}}">X</label>
+                    </td>
+                    {{/each}}
+                    <td>
+                        <button id="{{../this.code}}-judge-{{this.code}}-update-vote-btn">UPDATE</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
         </table>
     </div>
 </details>
