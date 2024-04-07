@@ -125,6 +125,14 @@ async function voteCountry(countryCode, judgeCode, points) {
 
 // #endregion
 
+//#region Admin requests
+
+async function getAllOnlineJudgeCodes(adminCode) {
+    return sendRequest(Method.GET, "admin/onlineJudges/all", null, adminCode);
+}
+
+//#endregion
+
 export {
     serverURL,
     clientURL,
@@ -140,5 +148,6 @@ export {
     createCountry,
     updateCountry,
     deleteCountry,
-    voteCountry
+    voteCountry,
+    getAllOnlineJudgeCodes
 }

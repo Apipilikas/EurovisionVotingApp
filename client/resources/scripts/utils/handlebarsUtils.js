@@ -220,16 +220,16 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
             </thead>
             <tbody>
                 {{#each ../judges}}
-                <tr id="{{../this.code}}-{{this.code}}-row">
+                <tr id="{{../this.code}}-{{this.code}}-row" judgecode="{{this.code}}" countrycode="{{../this.code}}">
                     <th class="judge-name-caption" id="judge-{{this.code}}-header">{{this.name}}</th>
                     {{#each ../../points}}
                     <td>
                         <input type="radio" id="{{../../this.code}}-{{../this.code}}-point{{this}}" name="{{../../this.code}}-{{../this.code}}-chosen-vote" value="{{this}}">
-                        <label for="{{../../this.code}}-{{../this.code}}-point{{this}}">X</label>
+                        <label for="{{../../this.code}}-{{../this.code}}-point{{this}}"><i class="material-icons">check</i></label>
                     </td>
                     {{/each}}
                     <td>
-                        <button id="{{../this.code}}-judge-{{this.code}}-update-vote-btn">UPDATE</button>
+                        <button id="{{../this.code}}-judge-{{this.code}}-update-vote-btn" class="update-vote-btn">UPDATE</button>
                     </td>
                 </tr>
                 {{/each}}
