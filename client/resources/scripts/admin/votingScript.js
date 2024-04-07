@@ -1,4 +1,4 @@
-import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL } from "../utils/requestUtils.js";
+import { getAllCountries, getAllJudges, getAllOnlineJudgeCodes, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "../utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { handleError, initLoginJudge } from "../utils/documentUtils.js";
@@ -33,7 +33,7 @@ function initVotingCountryContainer() {
         content.countries = data.countries;
         content.judges = data.judges;
         
-        initDashboard(data.countries);
+        initDashboard(data.countries, data.judges.length, data.onlineJudgeCodes.length);
 
         countriesListContainer.innerHTML = adminTemplates.voting.votingCountryContainer(content);
         
@@ -41,6 +41,7 @@ function initVotingCountryContainer() {
 
         initBtnLinsteners();
     })
+    .catch (e => handleError(e));
 }
 
 function initBtnLinsteners() {
@@ -50,6 +51,11 @@ function initBtnLinsteners() {
     const votingToggleSwitches = document.getElementsByClassName("voting-toggle-switch");
     for (var toggleSwitch of votingToggleSwitches) {
         toggleSwitch.addEventListener("change", e => toggleSwitchListener(e));
+    };
+
+    const updateBtns = document.getElementsByClassName("update-vote-btn");
+    for (var updateBtn of updateBtns) {
+        updateBtn.addEventListener("click", e => updateBtnListener(e));
     };
 }
 
@@ -62,13 +68,10 @@ function initVotesToJudges(countries) {
     }
 }
 
-function initDashboard(countries) {
+function initDashboard(countries, judgesNumber, onlineJudgesNumber) {
     let country = countries.find(el => parseInt(el.runningOrder) == parseInt(runningCountry));
-    if (country != null) {
-        setRunningCountryDashboard(runningCountry, country.name, country.song, country.artist);
-        setTotalVotesDashboard(country.totalVotes);
-        setJudgesDashboard(Object.keys(country.votes).length, 1, 2, countries.length);
-    }
+    
+    setDataToDashboard(country, judgesNumber, onlineJudgesNumber);
 }
 
 //#endregion
@@ -80,15 +83,16 @@ async function getInitData() {
     const judgesResponse = await getAllJudges();
     const runningCountryResponse = await getRunningCountryNumber();
     const votingCountryStatusesResponse = await getVotingCountryStatuses();
+    const onlineJudgeCodesResponse = await getAllOnlineJudgeCodes(loginJudgeCode);
 
-    if (countriesResponse.success && judgesResponse.success && runningCountryResponse.success && votingCountryStatusesResponse.success) {
+    if (countriesResponse.success && judgesResponse.success && runningCountryResponse.success && votingCountryStatusesResponse.success && onlineJudgeCodesResponse.success) {
         runningCountry = runningCountryResponse.jsonData.runningCountry;
 
         const fetchedCountries = countriesResponse.jsonData.countries;
         totalCountries = fetchedCountries.length;
         const fetchedVotingCountryStatuses = votingCountryStatusesResponse.jsonData.votingStatuses;
         
-        return {countries : mergeVotingStatusesToCountries(fetchedCountries, fetchedVotingCountryStatuses), judges : judgesResponse.jsonData.judges};
+        return {countries : mergeVotingStatusesToCountries(fetchedCountries, fetchedVotingCountryStatuses), judges : judgesResponse.jsonData.judges, onlineJudgeCodes : onlineJudgeCodesResponse.jsonData.judges};
     }
 
     return null;
@@ -136,6 +140,19 @@ function setTotalVotes(countryCode, totalVotes) {
 
 //#region Dashboard functions
 
+function setDataToDashboard(country, judgesNumber, onlineJudgesNumber) {
+    let offlineJudgesNumber = judgesNumber - onlineJudgesNumber;
+    let judgesVotedNumber = null;
+
+    if (country != null) {
+        judgesVotedNumber = Object.keys(country.votes).length;
+        setRunningCountryDashboard(country.runningOrder, country.name, country.song, country.artist);
+        setTotalVotesDashboard(country.totalVotes);
+    }
+    
+    setJudgesDashboard(judgesVotedNumber, onlineJudgesNumber, offlineJudgesNumber,judgesNumber);
+}
+
 function setRunningCountryDashboard(runningOrder, countryName, song, artist) {
     const runningOrderTag = "admin-db-running-order-txt";
     const runningCountryNameTag = "admin-db-running-country-name-txt";
@@ -169,9 +186,20 @@ function setJudgesDashboard(judgesVotedNumber, onlineJudgesNumber, offlineJudges
     const onlineJudgesNoSpan = document.getElementById(onlineJudgesNoTag);
     const offlineJudgesNoSpan = document.getElementById(offlineJudgesNoTag);
 
-    judgesVotedNoSpan.innerHTML = judgesVotedNumber;
-    onlineJudgesNoSpan.innerHTML = onlineJudgesNumber;
-    offlineJudgesNoSpan.innerHTML = offlineJudgesNumber;
+    if (judgesVotedNoSpan != null) {
+        judgesVotedNoSpan.innerHTML = judgesVotedNumber;
+    }
+
+    if (onlineJudgesNumber != null) {
+        onlineJudgesNoSpan.innerHTML = onlineJudgesNumber;
+    }
+
+    if (offlineJudgesNumber != null) {
+        offlineJudgesNoSpan.innerHTML = offlineJudgesNumber;
+    }
+
+    // TODO: Simplify code by implementing in documentUtils, function -> setInnerJoinByElementID(innerHTMLData, elementID)
+    // If innerHTMLData is null, then dont do anything.
 }
 
 function setTotalVotesDashboard(totalVotes) {
@@ -201,6 +229,21 @@ function nextCountryBtnListener() {
     setVotingStatusToToggleSwitch(runningCountry, votingStatus);
 }
 
+function updateBtnListener(e) {
+    const tableRow = e.target.parentNode.parentNode;
+    const countryCode = tableRow.getAttribute("countrycode");
+    const judgeCode = tableRow.getAttribute("judgecode");
+    const points = tableRow.querySelector("input:checked").value;
+    console.log(points)
+    
+    voteCountry(countryCode, judgeCode, points)
+    .then(response => {
+        if (response.success) {
+            
+        }
+    })
+}
+
 //#endregion
 
 //#region Socket Listeners
@@ -219,7 +262,7 @@ socket.on("votes", (response) => {
 socket.on("nextCountry", (response) => {
     let nextRunningCountry = response.data.nextRunningCountry.country;
     console.log(nextRunningCountry)
-    setRunningCountryDashboard(nextRunningCountry.runningOrder, nextRunningCountry.name, nextRunningCountry.song, nextRunningCountry.artist);
+    setDataToDashboard(nextRunningCountry, null, null);
 })
 
 //#endregion
