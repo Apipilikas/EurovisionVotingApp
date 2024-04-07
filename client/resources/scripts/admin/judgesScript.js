@@ -76,7 +76,7 @@ function getJudgeInputsValue() {
     const nameValue = document.getElementById("name-txt").value;
     const originCountryValue = document.getElementById("origincountry-txt").value;
     const adminValue = document.getElementById("admin-cbx").checked;
-    console.log(adminValue);
+
     let judge = {
         code: codeValue,
         name: nameValue,
@@ -128,19 +128,19 @@ function judgeContainerListener(e) {
 function modifyBtnListener(e) {
     e.preventDefault();
 
-    let modifyBtn = e.target;
-    let resultBtn = new ResultButton(modifyBtn);
-
+    
     let selectedModifiedJudgeCode = e.target.form.querySelector("#code-txt").value;
     let modifiedJudge = getJudgeInputsValue();
+    
+    let modifyBtn = e.target;
+    let resultBtn = new ResultButton(modifyBtn);
+    resultBtn.execute(updateJudge(loginJudgeCode, selectedModifiedJudgeCode, modifiedJudge));
 
-    resultBtn.switchToLoadingState();
-
-    updateJudge(loginJudgeCode, selectedModifiedJudgeCode, modifiedJudge)
-    .then(response => {
-        if (response.success) resultBtn.switchToSuccessState();
-        else resultBtn.switchToFailureState();
-    });
+    // updateJudge(loginJudgeCode, selectedModifiedJudgeCode, modifiedJudge)
+    // .then(response => {
+    //     if (response.success) resultBtn.switchToSuccessState();
+    //     else resultBtn.switchToFailureState();
+    // });
 }
 
 function deleteBtnListener(e) {
