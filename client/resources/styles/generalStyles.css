@@ -452,9 +452,12 @@ details.admin-details-container {
     position:relative;
     padding: 20px 50px;
     /* outline:none; */
+    font-family: 'Onest', sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
     border: none;
     box-shadow: none;
-    --color: #f45e61;
+    --color: white;
     background-image: 
     linear-gradient(var(--color), var(--color)), 
     linear-gradient(var(--color), var(--color)), 
@@ -463,17 +466,18 @@ details.admin-details-container {
 
     background-position: 0 0, 0 0, 0 100%, 0 100%;
     background-size: 3px 0%, 0% 3px, 0% 3px, 3px 0%;
-    background-color:transparent;
+    color: var(--eighth-color);
+    background-color: transparent;
     background-repeat:no-repeat;
     /* transition:0.2s linear; */
     /* animation: animate 1.4s linear infinite 0.2s; */
     
 }
 
-.result-button:hover {
+/* .result-button:hover {
 
     animation: animate-one 1.4s linear 0.2s;
-}
+} */
 
 .result-button-animation {
     animation: animate 1.4s linear infinite 0.2s;
@@ -487,7 +491,7 @@ details.admin-details-container {
     right:0;
     left:0;
     bottom:0;
-    border:3px solid #60daaa;
+    border:3px solid var(--fifth-color);
 }
 
 @keyframes animate {
@@ -547,6 +551,7 @@ details.admin-details-container {
 .rb-status-container {
     display: flex;
     justify-content: center;
+    font-weight: 700;
     opacity: 0;
     width: 0%;
     height: 100%;
@@ -557,6 +562,18 @@ details.admin-details-container {
     z-index: -1;
     transition: 0.5s;
     align-items: center;
+}
+
+.rb-status-container.success {
+    background-color: var(--success-notification-color);
+}
+
+.rb-status-container.loading {
+    background-color: var(--warning-notification-color);
+}
+
+.rb-status-container.failure {
+    background-color: var(--error-notification-color);
 }
 
 .rb-status-transition {
