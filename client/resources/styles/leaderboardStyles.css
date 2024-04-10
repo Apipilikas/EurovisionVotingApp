@@ -24,12 +24,14 @@ table th {
 
 table thead tr {
     background-color: var(--eighth-color);
+    color: var(--forth-color);
 }
 
 table thead th:first-child {
     position: sticky;
     left: 0;
     background-color: var(--eighth-color);
+    color: var(--forth-color);
 }
 
 table tbody tr {
@@ -50,10 +52,26 @@ table tbody tr td:first-child {
     position: sticky;
     left: 0;
     background: linear-gradient(90deg, var(--eighth-color) 20%, var(--forth-color) 100%);
+    color: var(--third-color);
+    font-weight: 900;
 }
 
 table tbody tr.running-country td:first-child {
     background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
+    color: var(--fifth-color);
+}
+
+table tbody tr td.total-votes-txt {
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+}
+
+table tbody tr td.points-txt {
+    color: var(--fifth-color);
+}
+
+table tbody tr td:nth-child(2) {
+    color: var(--third-color);
 }
 
 table tr {
@@ -61,12 +79,14 @@ table tr {
 }
 
 td.open-voting-status {
-    background-color: var(--green-color);
+    font-weight: 900;
+    color: var(--green-color);
     transition: background-color 0.5s ease-out;
 }
 
 td.closed-voting-status {
-    background-color: var(--red-color);
+    font-weight: 900;
+    color: var(--red-color);
     transition: background-color 0.5s ease-out;
 }
 
@@ -82,6 +102,9 @@ table tbody tr:has(td.closed-voting-status) {
     transition: all 1s ease-out;
 }
 
+table tr.voting-status-animation td.total-votes-txt {
+    background-color: transparent;
+}
 
 table tr.voting-status-animation:has(> td.open-voting-status),
 table tr.voting-status-animation:has(> td.closed-voting-status) {
