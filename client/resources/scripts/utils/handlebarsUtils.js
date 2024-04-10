@@ -261,9 +261,9 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
         <td>{{this.runningOrder}}</th>
         <td>{{this.name}}</th>
         {{#each ../judges}}
-        <td id="{{../this.code}}-{{this.code}}-points">0</td>
+        <td class="points-txt" id="{{../this.code}}-{{this.code}}-points">0</td>
         {{/each}}
-        <td id="{{this.code}}-total-votes">{{this.totalVotes}}</td>
+        <td class="total-votes-txt" id="{{this.code}}-total-votes">{{this.totalVotes}}</td>
         <td id="{{this.code}}-voting-status" class="closed-voting-status">CLOSED</td>
     </tr>
     {{/each}}
