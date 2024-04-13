@@ -19,7 +19,6 @@ const MessageMapping = new Map([
 ]);
 
 export class ResultButton {
-    //const animation = "animate 1.4s linear infinite 0.2s";
 
     constructor(button) {
         this.button = button;
@@ -27,7 +26,6 @@ export class ResultButton {
         this.statusContainer = button.querySelector(".rb-status-container");
         this.state = State.Initial;
         this.initialContentMessage = this.contentContainer.textContent;
-        this.animation = "animate 1.4s linear infinite 0.2s";
     }
 
     async execute(promise) {
@@ -90,11 +88,11 @@ export class ResultButton {
     }
 
     startBorderAnimation() {
-        this.button.style.animation = this.animation;
+        this.button.classList.add("result-button-animation");
     }
 
     stopBorderAnimation() {
-        this.button.style.animation = null;
+        this.button.classList.remove("result-button-animation");
     }
 
     showStatusMessage(showAnimation = true) {

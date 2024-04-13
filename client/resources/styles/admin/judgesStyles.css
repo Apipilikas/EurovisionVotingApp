@@ -3,8 +3,8 @@
 .inputs-area {
     display: grid;
     border-top: 0px;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: 1fr 2fr 0.5fr;
+    grid-template-rows: repeat(2, 1fr);
     grid-template-areas: "code name admin"
                          "origincountry origincountry origincountry";
 }
@@ -32,7 +32,22 @@
 /* #endregion */
 
 /* #region judge-container */
+.judge-container {
+    margin: 0.5em;
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+    padding-left: 0.5em;
+}
+
+.judge-container h1 {
+    margin: 0em;
+}
+
+.judge-container h2 {
+    margin: 0em;
+}
+
 .judge-container > * {
-    pointer-events:none
+    pointer-events: none;
 }
 /* #endregion */

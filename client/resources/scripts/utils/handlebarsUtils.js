@@ -75,7 +75,9 @@ votingTemplates.votingContent = Handlebars.compile(`
 <input type="radio" id="point{{this}}" name="choose-vote" value="{{this}}">
 <label for="point{{this}}">{{this}}</label>
 {{/each}}
-<button>VOTE</button>
+<button class="result-button" id="vote-btn">
+<span class="rb-content-container">VOTE</span><span class="rb-status-container"></span>
+</button>
 `);
 
 votingTemplates.votingContent.content = {points: points};
@@ -180,7 +182,7 @@ adminTemplates.judges.judgeContainer = Handlebars.compile(`
 {{#each judges}}
 <div class="judge-container" id="{{this.code}}">
 <h1>{{this.name}}</h1>
-<h2>{{this.judgesOrigin}}</h2>
+<h2>{{this.originCountry}}</h2>
 </div>
 {{/each}}
 `);
