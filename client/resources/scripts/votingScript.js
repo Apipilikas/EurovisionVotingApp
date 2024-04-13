@@ -1,4 +1,5 @@
 import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
+import { ResultButton } from "./customElements/resultButton.js";
 import { handleError, initAnnouncementContainer, initLoginJudge } from "./utils/documentUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
 import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
@@ -122,6 +123,8 @@ function setVotingContentToRunningCountry(isVotingOpen) {
 
     currentRunningCountry.addEventListener("click", e => currentRunningCountryContainerListener(e));
 
+    if (votingCountryContent == null) return;
+
     // Style voting country content
     const rootVariables = document.querySelector(":root");
     rootVariables.style.setProperty("--label-color", flagColor2);
@@ -180,12 +183,12 @@ function voteBtnListener(e) {
         return;
     }
     let points = checkedPoint.value;
-
-    voteCountry(countryCode, loginJudgeCode, points)
+    
+    let resultBtn = new ResultButton(e.target);
+    resultBtn.execute(voteCountry(countryCode, loginJudgeCode, points))
     .then(response => {
         if (response.success) {
             setPersonalVote(countryCode, points);
-            NotificationBox.show(NotificationType.SUCCESS, "You have voted successfully!");
         }
     });
 }

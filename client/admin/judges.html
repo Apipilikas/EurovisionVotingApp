@@ -18,7 +18,25 @@
     <body class="no-scrolling">
         <header>
             <div id="header-container">
-                <h1>Eurovision Voting App</h1>
+                <div id="main-logo-container">
+                    <h1>Eurovision Song Contest 2024</h1>
+                    <h2>UNITED BY MUSIC</h2>
+                </div>
+                <div id="header-color-container" class="color-container">
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                    <div class="color-segment"></div>
+                </div>
+                <div id="menu-button">
+                        <div></div>
+                </div>
             </div>
             <nav>
                 <ul id="header-navigation-bar">
@@ -33,7 +51,7 @@
         <main id="admin-judges-page">
             <details class="admin-details-container" id="create-judge-container">
                 <summary>Create a new judge</summary>
-                <div id="create-judge-content">
+                <div class="admin-details-content" id="create-judge-content">
                     <form id="create-judge-form">
                         <div class="inputs-area"></div>
     
@@ -41,7 +59,7 @@
                             <button class="result-button" type="submit" id="submit-btn">
                                 <span class="rb-content-container">SUBMIT</span><span class="rb-status-container"></span>
                             </button>
-                            <button type="reset" id="reset-btn">CLEAR</button>
+                            <button class="result-button" type="reset" id="reset-btn">CLEAR</button>
                         </div>
                     </form>
                 </div>
@@ -49,7 +67,7 @@
 
             <details class="admin-details-container" id="modify-judges-container">
                 <summary>Modify a judge</summary>
-                <div class="admin-modify-content" id="modify-judges-content">
+                <div class="admin-modify-content admin-details-content" id="modify-judges-content">
                     <div class="admin-modify-list-container" id="modify-judges-list-container"></div>
                     <form class="admin-modify-form" id="modify-judges-form">
                         <div class="inputs-area"></div>
