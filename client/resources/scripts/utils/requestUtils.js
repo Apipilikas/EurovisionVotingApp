@@ -1,11 +1,11 @@
 import { FetchError } from "./errorUtils.js";
 
 const serverURL = {
-    address: "http://127.0.0.1:8080/",
+    address: "http://192.168.1.70:8080/",
     prefix : "api/v1/"
 };
 
-const clientURL = "http://127.0.0.1:5500/";
+const clientURL = "http://192.168.1.70:5500/";
 
 const Method = {
     GET: "GET",
@@ -127,6 +127,26 @@ async function voteCountry(countryCode, judgeCode, points) {
 
 //#region Admin requests
 
+async function resetRunningCountry(adminCode) {
+    return sendRequest(Method.POST, "admin/runningCountry/reset", null, adminCode);
+}
+
+async function resetVotingStatusCache(adminCode) {
+    return sendRequest(Method.POST, "admin/cache/votingStatus/reset", null, adminCode);
+}
+
+async function resetJudgesCache(adminCode) {
+    return sendRequest(Method.POST, "admin/cache/judges/reset", null, adminCode);
+}
+
+async function resetCountriesCache(adminCode) {
+    return sendRequest(Method.POST, "admin/cache/countries/reset", null, adminCode);
+}
+
+async function resetAllCaches(adminCode) {
+    return sendRequest(Method.POST, "admin/cache/reset", null, adminCode);
+}
+
 async function getAllOnlineJudgeCodes(adminCode) {
     return sendRequest(Method.GET, "admin/onlineJudges/all", null, adminCode);
 }
@@ -149,5 +169,10 @@ export {
     updateCountry,
     deleteCountry,
     voteCountry,
+    resetRunningCountry,
+    resetVotingStatusCache,
+    resetJudgesCache,
+    resetCountriesCache,
+    resetAllCaches,
     getAllOnlineJudgeCodes
 }

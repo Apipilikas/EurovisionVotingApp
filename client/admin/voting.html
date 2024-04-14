@@ -18,22 +18,36 @@
 
     <body class="no-scrolling">
         <header>
+            <div id="header-color-container" class="color-container">
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+            </div>
             <div id="header-container">
                 <div id="main-logo-container">
-                    <h1>Eurovision Song Contest 2024</h1>
+                    <!-- <h1>Eurovision Song Contest 2024</h1> -->
+                    <div id="logo-container">
+                        <img src="../resources/images/eurovision-logo.svg">
+                        <p>2024</p>
+                    </div>
                     <h2>UNITED BY MUSIC</h2>
-                </div>
-                <div id="header-color-container" class="color-container">
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
-                    <div class="color-segment"></div>
                 </div>
                 <div id="menu-button">
                         <div></div>
@@ -89,8 +103,43 @@
 
             <div class="lower-container">
                 <details class="admin-details-container">
-                    <summary>Admin preferences</summary>
-                    <div class="voting-settings-content"></div>
+                    <summary>Admin settings</summary>
+                    <div class="admin-details-content" id="admin-settings-content">
+                        <div class="reset-running-country-container button-container">
+                            <label>Reset running country</label>
+                            <button class="result-button" id="reset-running-country-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-voting-statuses-cache-container" class="button-container">
+                            <label>Reset voting status cache</label>
+                            <button class="result-button" id="reset-voting-status-cache-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-judges-cache-container" class="button-container">
+                            <label>Reset judges cache</label>
+                            <button class="result-button" id="reset-judges-cache-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-countries-cache-container" class="button-container">
+                            <label>Reset countries cache</label>
+                            <button class="result-button" id="reset-countries-cache-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-all-caches-container" class="button-container">
+                            <label>Reset all caches</label>
+                            <button class="result-button" id="reset-all-caches-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+                    </div>
                 </details>
                 <div id="voting-countries-order-list-container"></div>
                 <div class="button-areas">
