@@ -1,7 +1,8 @@
-import { getAllCountries, getAllJudges, getAllOnlineJudgeCodes, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "../utils/requestUtils.js";
+import { getAllCountries, getAllJudges, getAllOnlineJudgeCodes, getRunningCountryNumber, getVotingCountryStatuses, resetAllCaches, resetCountriesCache, resetJudgesCache, resetRunningCountry, resetVotingStatusCache, serverURL, voteCountry } from "../utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { handleError, initLoginJudge } from "../utils/documentUtils.js";
+import { ResultButton } from "../customElements/resultButton.js";
 
 var loginJudgeCode = null;
 var runningCountry = 0;
@@ -46,7 +47,19 @@ function initVotingCountryContainer() {
 
 function initBtnLinsteners() {
     const nextCountryBtn = document.getElementById("next-country-btn");
+    const resetRunningCountryBtn = document.getElementById("reset-running-country-btn");
+    const resetVotingStatusCacheBtn = document.getElementById("reset-voting-status-cache-btn");
+    const resetJudgesCacheBtn = document.getElementById("reset-judges-cache-btn");
+    const resetCountriesCacheBtn = document.getElementById("reset-countries-cache-btn");
+    const resetAllCachesBtn = document.getElementById("reset-all-caches-btn");
+
     nextCountryBtn.addEventListener("click", e => nextCountryBtnListener());
+    
+    resetRunningCountryBtn.addEventListener("click", e => resetRunningCountryBtnListener(e));
+    resetVotingStatusCacheBtn.addEventListener("click", e => resetVotingStatusCacheBtnListener(e));
+    resetJudgesCacheBtn.addEventListener("click", e => resetJudgesCacheBtnListener(e));
+    resetCountriesCacheBtn.addEventListener("click", e => resetCountriesCacheBtnListener(e));
+    resetAllCachesBtn.addEventListener("click", e => resetAllCachesBtnListener(e));
 
     const votingToggleSwitches = document.getElementsByClassName("voting-toggle-switch");
     for (var toggleSwitch of votingToggleSwitches) {
@@ -57,6 +70,7 @@ function initBtnLinsteners() {
     for (var updateBtn of updateBtns) {
         updateBtn.addEventListener("click", e => updateBtnListener(e));
     };
+    
 }
 
 function initVotesToJudges(countries) {
@@ -212,7 +226,7 @@ function setTotalVotesDashboard(totalVotes) {
 //#endregion
 
 
-//#region Event Listener Functions
+//#region Event Listener functions
 
 function toggleSwitchListener(e) {
     let countryCode = e.target.getAttribute("countrycode");
@@ -242,6 +256,31 @@ function updateBtnListener(e) {
             
         }
     })
+}
+
+function resetRunningCountryBtnListener(e) {
+    ResultButton.getByElement(e.target)
+    .execute(resetRunningCountry(loginJudgeCode));
+}
+
+function resetVotingStatusCacheBtnListener(e) {
+    ResultButton.getByElement(e.target)
+    .execute(resetVotingStatusCache(loginJudgeCode));
+}
+
+function resetJudgesCacheBtnListener(e) {
+    ResultButton.getByElement(e.target)
+    .execute(resetJudgesCache(loginJudgeCode));
+}
+
+function resetCountriesCacheBtnListener(e) {
+    ResultButton.getByElement(e.target)
+    .execute(resetCountriesCache(loginJudgeCode));
+}
+
+function resetAllCachesBtnListener(e) {
+    ResultButton.getByElement(e.target)
+    .execute(resetAllCaches(loginJudgeCode));
 }
 
 //#endregion

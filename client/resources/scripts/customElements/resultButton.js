@@ -28,7 +28,24 @@ export class ResultButton {
         this.initialContentMessage = this.contentContainer.textContent;
     }
 
+    static getByID(elementID) {
+        let button = document.getElementById(elementID);
+
+        if (!this.isResultBtn(button)) return null;
+        return new ResultButton(button);
+    }
+
+    static getByElement(button) {
+        if(!this.isResultBtn(button)) return null;
+        return new ResultButton(button);
+    }
+
+    static isResultBtn(button) {
+        return button.classList.contains("result-button");
+    }
+
     async execute(promise) {
+        console.log(promise)
         this.switchToLoadingState();
 
         // All the promises return a ClientResponse object (Promise<ClientResponse>).

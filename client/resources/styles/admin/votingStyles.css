@@ -57,6 +57,27 @@
 
 /* #endregion */
 
+/* #region Admin settings container */
+
+#admin-settings-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 0.5em;
+}
+
+#reset-running-country-container {
+    grid-row: 1/2;
+    grid-column: 1/2;
+}
+
+.button-container > button {
+    height: 60px;
+    border: 5px solid var(--third-color);
+}
+
+/* #endregion */
+
 /* #region Admin voting country container / Detail */
 
 .admin-voting-country-container {
@@ -217,3 +238,21 @@ table.voting-country-table tbody button:hover {
 }
 
 /* #endregion */
+
+#next-country-btn {
+    position: fixed;
+    top: 80%;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    padding: 1em;
+    background-color: var(--third-color);
+    color: white;
+    font-family: 'Onest', sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+/* #region Next country button */

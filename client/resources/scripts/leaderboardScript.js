@@ -221,6 +221,8 @@ function highlightRunningCountry() {
         runningCountryTableRow.classList.remove(className)
     }
 
+    if (nextRunningCountryTableRow == null) return;
+
     nextRunningCountryTableRow.classList.add(className);
 }
 

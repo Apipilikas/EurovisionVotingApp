@@ -146,6 +146,7 @@ header {
 
 
 #main-logo-container {
+    flex-basis: 100%;
     z-index: 2;
     margin-left: 0.5em;
 }
@@ -169,13 +170,10 @@ header {
 /* logo container */
 
 #logo-container {
-    margin: 0.5em;
+    width: 250px;
+    padding-top: 0.5em;
     display: flex;
     flex-direction: column;
-}
-
-#logo-container img {
-    width: 250px;
 }
 
 #logo-container p {
@@ -283,12 +281,13 @@ header {
 
 /* #region input containers */
 
-/* Number / Text input */
+/* Number / Text / Checkbox / Button input */
 .text-input-container > label, .number-input-container > label, 
-.color-picker-input-container > label, .checkbox-input-container > label {
+.color-picker-input-container > label, .checkbox-input-container > label,
+.button-container > label {
     padding: 0.5em 0em 0.2em 0em;
     font-weight: 600;
-    color: var(--third-color);
+    color: var(--eighth-color);
 }
 
 .text-input-container, .number-input-container, 
@@ -412,6 +411,22 @@ input[type="color"]:focus {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(36px);
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.button-container > label {
+    margin: auto;
+}
+
+.button-container > button {
+    width: 50%;
+    margin: auto;
 }
 
 /* #endregion */
@@ -626,6 +641,7 @@ details.admin-details-container {
 /* #region live announcements container */
 
 #live-announcement-container {
+    width: 100%;
     display: flex;
     margin-bottom: 1em;
     /* height: 20px; */
@@ -641,15 +657,12 @@ details.admin-details-container {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     height: 50px;
 }
 
 #announcement-content > p {
     padding-left: 0.5em;
-    margin: 1em auto auto auto;
-}
-
-#announcement-content > p {
     animation: announcement-in-animation 1s;
 }
 
@@ -1220,6 +1233,24 @@ details.admin-details-container {
         width: 100%;
         display: flex;
         flex-direction: column;
+    }
+
+    #main-logo-container > h2 {
+        margin: auto;
+    }
+
+    /* Announcement container */
+
+    #live-announcement-container {
+        padding-top: 0.5em;
+        width: 75%;
+        flex-direction: column;
+        margin: auto;
+    }
+
+    #live-announcement-container p {
+        margin: auto;
+        text-align: center;
     }
     
     /* #region Notification box */
