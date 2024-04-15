@@ -30,9 +30,7 @@ export class ResultButton {
 
     static getByID(elementID) {
         let button = document.getElementById(elementID);
-
-        if (!this.isResultBtn(button)) return null;
-        return new ResultButton(button);
+        return this.getByElement(button);
     }
 
     static getByElement(button) {

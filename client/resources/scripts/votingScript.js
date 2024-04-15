@@ -1,6 +1,6 @@
-import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
+import { NotificationBox } from "./boxes/notificationBox.js";
 import { ResultButton } from "./customElements/resultButton.js";
-import { handleError, initAnnouncementContainer, initLoginJudge } from "./utils/documentUtils.js";
+import { handleError, initAnnouncementContainer, initLoginJudge, initMenuBtnListener } from "./utils/documentUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
 import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
@@ -19,6 +19,8 @@ function init() {
     try {
         loginJudgeCode = initLoginJudge(socket);
     
+        initBtnListeners();
+
         initCarousel();
     
         initAnnouncementContainer(announcements, importantAnnouncements);
@@ -27,6 +29,10 @@ function init() {
 }
 
 //#region Init functions
+
+function initBtnListeners() {
+    initMenuBtnListener();
+}
 
 function initCarousel() {
     getInitData()
@@ -179,7 +185,7 @@ function voteBtnListener(e) {
     let checkedPoint = e.target.parentNode.querySelector("input[name='choose-vote']:checked");
     
     if (checkedPoint == null) {
-        NotificationBox.show(NotificationType.WARNING, "You haven't selected a point.");
+        NotificationBox.show(NotificationBox.Type.WARNING, "You haven't selected a point.");
         return;
     }
     let points = checkedPoint.value;

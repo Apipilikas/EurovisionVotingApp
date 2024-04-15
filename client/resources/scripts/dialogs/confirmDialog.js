@@ -33,7 +33,7 @@ export class ConfirmDialog {
         const yesBtn = confirmDialogContainer.querySelector(".yes-btn");
         const noBtn = confirmDialogContainer.querySelector(".no-btn");
 
-        let response = new Promise((resolve) => {
+        return new Promise((resolve) => {
             yesBtn.addEventListener("click", e => {
                 resolve(ConfirmDialog.DialogResult.YES);
                 this.close();
@@ -49,8 +49,6 @@ export class ConfirmDialog {
                 this.close();
             });
         })
-        
-        return response;
     }
 
     close() {
