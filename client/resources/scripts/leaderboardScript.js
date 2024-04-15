@@ -1,7 +1,4 @@
-import { ErrorBox } from "./customElements/errorBox.js";
-import { NotificationBox, NotificationType } from "./customElements/notificationBox.js";
 import { blurScreen, handleError, initAnnouncementContainer, initLoginJudge, initMenuBtnListener, unblurScreen } from "./utils/documentUtils.js";
-import { MyError } from "./utils/errorUtils.js";
 import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
 import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
