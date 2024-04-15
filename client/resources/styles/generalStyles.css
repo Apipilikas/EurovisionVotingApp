@@ -61,10 +61,10 @@
     --sixth-color: #3d47f7;
     --seventh-color: #3f1c71;
     --eighth-color : #1dc1df;
-    --success-notification-color: #57e45e;
-    --info-notification-color: #1b85fd;
-    --warning-notification-color: #fdb51b;
-    --error-notification-color: #fc3c3c;
+    --success-color: #57e45e;
+    --info-color: #1b85fd;
+    --warning-color: #fdb51b;
+    --error-color: #fc3c3c;
     --green-color: #31cc39;
     --red-color: #f75252;
 }
@@ -619,15 +619,15 @@ details.admin-details-container {
 }
 
 .rb-status-container.success {
-    background-color: var(--success-notification-color);
+    background-color: var(--success-color);
 }
 
 .rb-status-container.loading {
-    background-color: var(--warning-notification-color);
+    background-color: var(--warning-color);
 }
 
 .rb-status-container.failure {
-    background-color: var(--error-notification-color);
+    background-color: var(--error-color);
 }
 
 .rb-status-transition {
@@ -769,54 +769,54 @@ details.admin-details-container {
 
 /* Success Notification */
 .notification-box.notification-success {
-    border: 5px solid var(--success-notification-color);
+    border: 5px solid var(--success-color);
 }
 
 .notification-box.notification-success .icon-container {
-    background-color: var(--success-notification-color);
+    background-color: var(--success-color);
 }
 
 .notification-box.notification-success .message-container h1 {
-    border-bottom: 2px solid var(--success-notification-color);
+    border-bottom: 2px solid var(--success-color);
 }
 
 /* Info Notification */
 .notification-box.notification-info {
-    border: 5px solid var(--info-notification-color);
+    border: 5px solid var(--info-color);
 }
 
 .notification-box.notification-info .icon-container {
-    background-color: var(--info-notification-color);
+    background-color: var(--info-color);
 }
 
 .notification-box.notification-info .message-container h1 {
-    border-bottom: 2px solid var(--info-notification-color);
+    border-bottom: 2px solid var(--info-color);
 }
 
 /* Warning Notification */
 .notification-box.notification-warning {
-    border: 5px solid var(--warning-notification-color);
+    border: 5px solid var(--warning-color);
 }
 
 .notification-box.notification-warning .icon-container {
-    background-color: var(--warning-notification-color);
+    background-color: var(--warning-color);
 }
 
 .notification-box.notification-warning .message-container h1 {
-    border-bottom: 2px solid var(--warning-notification-color);
+    border-bottom: 2px solid var(--warning-color);
 }
 
 /* Error notification */
 .notification-box.notification-error {
-    border: 5px solid var(--error-notification-color);
+    border: 5px solid var(--error-color);
 }
 
 .notification-box.notification-error .icon-container {
-    background-color: var(--error-notification-color);
+    background-color: var(--error-color);
 }
 
 .notification-box.notification-error .message-container h1 {
-    border-bottom: 2px solid var(--error-notification-color);
+    border-bottom: 2px solid var(--error-color);
 }
 
 /* Close notification box */
@@ -983,7 +983,7 @@ details.admin-details-container {
     height: 80px;
     background-color: white;
     overflow: hidden;
-    border: 5px solid var(--error-notification-color);
+    border: 5px solid var(--error-color);
     animation: error-box-open-animation 1s ease-in-out 2s, show-error-box-animation 1s ease-in-out;
     animation-fill-mode: forwards; 
 }
@@ -999,7 +999,7 @@ details.admin-details-container {
     display: flex;
     flex-direction: row;
     width: 100%;
-    background-color: var(--error-notification-color)
+    background-color: var(--error-color)
 }
 
 .error-box .bottom-container {
@@ -1070,11 +1070,11 @@ details.admin-details-container {
 .error-box .error-details-container > summary {
     /* width: 100%; */
     font-weight: 700;
-    border-bottom: 2px solid var(--error-notification-color);
+    border-bottom: 2px solid var(--error-color);
 }
 
 .error-box .help-container > summary {
-    border-bottom: 2px solid var(--info-notification-color);
+    border-bottom: 2px solid var(--info-color);
 }
 
 .error-box .error-details-container > summary::-webkit-details-marker {
@@ -1087,11 +1087,11 @@ details.admin-details-container {
 
 .error-box .error-details-container .error-caption {
     margin-top: 0.5em;
-    color: var(--error-notification-color);
+    color: var(--error-color);
 }
 
 .error-box .help-container .error-caption {
-    color: var(--info-notification-color);
+    color: var(--info-color);
 }
 
 .error-box .error-details-container .error-text {
@@ -1103,7 +1103,7 @@ details.admin-details-container {
 /* Copy button */
 .error-box .copy-btn {
     width: 50px;
-    border: 2px solid var(--error-notification-color);
+    border: 2px solid var(--error-color);
 }
 
 /* Close button */
@@ -1185,6 +1185,140 @@ details.admin-details-container {
         width: 0%;
         /* margin: 0em; */
     }
+}
+
+/* #endregion */
+
+/* #region Confirm dialog */
+
+.confirm-dialog {
+    opacity: 1;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 50%;
+    width: 250px;
+    height: 50px;
+    background-color: white;
+    overflow: hidden;
+    border: 5px solid var(--info-color);
+    animation: confirm-dialog-open-animation 1s ease-in-out 2s, show-confirm-dialog-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+/* Close error box */
+.confirm-dialog.close-confirm-dialog {
+    animation: confirm-dialog-close-animation 0.4s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+/* Error box main containers */
+.confirm-dialog .top-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    background-color: var(--info-color)
+}
+
+/* Icon container */
+.confirm-dialog .icon-container {
+    display: flex;
+    height: 50px;
+    width: 250px;
+    /* justify-content: center; */
+}
+
+.confirm-dialog .icon-container i {
+    font-size: 2em;
+    text-align: center;
+    margin: auto 0.5em;
+}
+
+.confirm-dialog .icon-container p {
+    font-weight: 700;
+    margin: auto 0em;
+}
+
+/* Bottom container */
+.confirm-dialog .bottom-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.confirm-dialog .bottom-container .buttons-area {
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    margin: 1em auto;
+}
+
+/* Buttons */
+.confirm-dialog .bottom-container .buttons-area button {
+    padding: 0.5em 2em;
+    /* outline:none; */
+    font-family: 'Onest', sans-serif;
+    border: 4px solid var(--info-color);
+    color: var(--info-color);
+    font-weight: 800;
+    transition: all 0.4s;
+}
+
+.confirm-dialog .bottom-container .buttons-area button:hover {
+    color: black;
+}
+
+.confirm-dialog .buttons-area button.yes-btn {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.confirm-dialog .bottom-container p.confirm-message {
+    /* width: 100%; */
+    margin: auto;
+    font-weight: 700;
+    color: var(--info-color);
+}
+
+@keyframes show-confirm-dialog-animation {
+    0% {
+        bottom: -50%;
+    }
+
+    100% {
+        bottom: 50%;
+    }
+}
+
+@keyframes confirm-dialog-open-animation {
+    0% {
+        height: 50px;
+        width: 250px;
+    }
+    100% {
+        height: 200px;
+        width: 40%;
+    }
+}
+
+@keyframes confirm-dialog-close-animation {
+    0% {
+        height: 200px;
+        width: 40%;
+        opacity: 1;
+    }
+
+    100% {
+        height: 200px;
+        width: 40%;
+        opacity: 0;
+    } 
 }
 
 /* #endregion */
