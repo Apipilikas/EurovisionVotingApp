@@ -45,7 +45,6 @@ export class ResultButton {
     }
 
     async execute(promise) {
-        console.log(promise)
         this.switchToLoadingState();
 
         // All the promises return a ClientResponse object (Promise<ClientResponse>).

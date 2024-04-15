@@ -287,7 +287,7 @@ generalTemplates.notificationBox = Handlebars.compile(`
     </div>
     <span class="close-btn">&times;</span>
 </div>
-`)
+`);
 
 generalTemplates.errorBox = Handlebars.compile(`
 <div class="error-box">
@@ -325,6 +325,25 @@ generalTemplates.errorBox = Handlebars.compile(`
         </details>
     </div>
 </div>
-`)
+`);
+
+generalTemplates.confirmDialog = Handlebars.compile(`
+<div class="confirm-dialog">
+    <div class="top-container">
+        <div class="icon-container">
+            <i class="material-icons">info</i>
+            <p>Confirm your action</p>
+        </div>
+        <span class="close-btn">&times;</span>
+    </div>
+    <div class="bottom-container">
+        <p class="confirm-message">{{this.message}}</h1>
+        <div class="buttons-area">
+            <button class="yes-btn">YES</button>
+            <button class="no-btn">NO</button>
+        </div>
+    </div>
+</div>
+`);
 
 export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates, generalTemplates};

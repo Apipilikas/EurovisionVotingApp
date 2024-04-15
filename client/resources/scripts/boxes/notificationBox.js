@@ -1,6 +1,6 @@
 import { generalTemplates } from "../utils/handlebarsUtils.js";
 
-export const NotificationType = {
+const NotificationType = {
     SUCCESS : "SUCCESS",
     INFO : "INFO",
     WARNING : "WARNING",
@@ -24,6 +24,8 @@ const NotificationIconMapping = new Map([
 const closeNotificationBoxClassName = "close-notification-box";
 
 export class NotificationBox {
+    static Type = NotificationType;
+
     constructor(type, message, description = null) {
         this.type = type;
         this.message = message;
