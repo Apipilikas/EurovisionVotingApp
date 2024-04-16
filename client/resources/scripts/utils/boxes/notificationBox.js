@@ -1,4 +1,4 @@
-import { generalTemplates } from "../utils/handlebarsUtils.js";
+import { generalTemplates } from "../handlebarsUtils.js";
 
 const NotificationType = {
     SUCCESS : "SUCCESS",

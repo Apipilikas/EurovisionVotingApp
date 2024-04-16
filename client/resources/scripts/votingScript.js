@@ -1,5 +1,5 @@
-import { NotificationBox } from "./boxes/notificationBox.js";
-import { ResultButton } from "./customElements/resultButton.js";
+import { NotificationBox } from "./utils/boxes/notificationBox.js";
+import { ResultButton } from "./utils/customElements/resultButton.js";
 import { handleError, initAnnouncementContainer, initLoginJudge, initMenuBtnListener } from "./utils/documentUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
 import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";

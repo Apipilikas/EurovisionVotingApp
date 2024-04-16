@@ -1,5 +1,5 @@
-import { blurScreen, unblurScreen } from "../utils/documentUtils.js";
-import { generalTemplates } from "../utils/handlebarsUtils.js";
+import { blurScreen, unblurScreen } from "../documentUtils.js";
+import { generalTemplates } from "../handlebarsUtils.js";
 
 const closeErrorBoxClassName = "close-error-box";
 

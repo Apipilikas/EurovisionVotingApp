@@ -1,4 +1,4 @@
-import { ErrorBox } from "../boxes/errorBox.js";
+import { ErrorBox } from "./boxes/errorBox.js";
 import { LoginError, MyError } from "./errorUtils.js";
 
 const defaultAnnouncement = "UNITED BY MUSIC";
