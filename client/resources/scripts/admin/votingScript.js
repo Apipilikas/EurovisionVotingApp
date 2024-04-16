@@ -2,7 +2,7 @@ import { getAllCountries, getAllJudges, getAllOnlineJudgeCodes, getRunningCountr
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { handleError, initLoginJudge } from "../utils/documentUtils.js";
-import { ResultButton } from "../customElements/resultButton.js";
+import { ResultButton } from "../utils/customElements/resultButton.js";
 
 var loginJudgeCode = null;
 var runningCountry = 0;

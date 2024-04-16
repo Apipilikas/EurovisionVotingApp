@@ -1,4 +1,4 @@
-import { ResultButton } from "../customElements/resultButton.js";
+import { ResultButton } from "../utils/customElements/resultButton.js";
 import { fillDetailInputsAreaListener } from "../utils/documentUtils.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { createCountry, deleteCountry, getAllCountries, updateCountry } from "../utils/requestUtils.js";
