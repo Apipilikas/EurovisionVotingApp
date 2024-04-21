@@ -239,6 +239,8 @@ table.voting-country-table tbody button:hover {
 
 /* #endregion */
 
+/* #region Next country button */
+
 #next-country-btn {
     position: fixed;
     top: 80%;
@@ -255,4 +257,92 @@ table.voting-country-table tbody button:hover {
     font-size: 1.1em;
 }
 
-/* #region Next country button */
+/* #endregion */
+
+/* #region Reveal winner container */
+
+#reveal-winner-panel-container {
+    display: none;
+    z-index: 5;
+    position: fixed;
+    transform: translateX(-50%);
+    top: 25%;
+    left: 50%;
+    background-color: var(--forth-color);
+    border: 5px solid var(--fifth-color);
+}
+
+#reveal-winner-panel-container > .upper-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#reveal-winner-panel-container > .upper-container > .close-btn {
+    font-size: 1.5em;
+}
+
+#reveal-winner-panel-container > .upper-container > h1 {
+    color: var(--fifth-color);
+    padding: 0.5em;
+}
+
+#reveal-winner-panel-container .button-area {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 1em auto;
+}
+
+#reveal-winner-panel-container .button-area button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    padding: 10px 30px;
+    border: 5px solid var(--fifth-color);
+    /* outline:none; */
+    font-family: 'Onest', sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+#reveal-winner-panel-content {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    overflow: auto;
+}
+
+.reveal-winner-country-container {
+    padding: 1em;
+    margin: 0em auto;
+    width: 60%;
+    background-color: var(--third-color);
+    color: var(--forth-color);
+    font-weight: 800;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.reveal-winner-country-container > input {
+    display: none;
+}
+
+.reveal-winner-country-container:has(> input:checked + label) {
+    border: 5px solid white;
+    color: white;
+}
+
+/* #endregion */
+
+/* #region Reveal winner container */
+
+#reveal-winner-container .result-text {
+    padding: 0.5em;
+    margin: auto;
+    font-weight: 800;
+    font-size: 1.2em;
+    color: var(--third-color);
+}
+
+/* #endregion */

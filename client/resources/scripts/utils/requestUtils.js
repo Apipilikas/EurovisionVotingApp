@@ -1,11 +1,11 @@
 import { FetchError } from "./errorUtils.js";
 
 const serverURL = {
-    address: "http://192.168.1.77:8080/",
+    address: "http://127.0.0.1:8080/",
     prefix : "api/v1/"
 };
 
-const clientURL = "http://192.168.1.77:5500/";
+const clientURL = "http://127.0.0.1:5500/";
 
 const Method = {
     GET: "GET",
@@ -14,6 +14,14 @@ const Method = {
     PATCH: "PATCH",
     DELETE: "DELETE"
 }
+
+//#region Namespaces
+
+var JudgeRequests = {};
+var CountryRequests = {};
+var AdminRequests = {};
+
+//#endregion
 
 class ClientResponse {
     constructor(jsonData, status) {
@@ -66,23 +74,23 @@ async function sendRequest(method, urlEnding, data = null, token = null) {
 
 // #region Judge requests
 
-async function getAllJudges() {
+JudgeRequests.getAllJudges = async function() {
     return sendRequest(Method.GET, "judges/all");
 }
 
-async function getSpecificJudge(code) {
-    return sendRequest(Method.GET, "judges/" + code);
+JudgeRequests.getSpecificJudge = async function(code) {
+    return sendRequest(Method.GET, "judges/specific/" + code);
 }
 
-async function createJudge(adminCode, data) {
+JudgeRequests.createJudge = async function(adminCode, data) {
     return sendRequest(Method.POST, "judges/", data, adminCode);
 }
 
-async function updateJudge(adminCode, code, data) {
+JudgeRequests.updateJudge = async function(adminCode, code, data) {
     return sendRequest(Method.PUT, "judges/" + code, data, adminCode);
 }
 
-async function deleteJudge(adminCode, code) {
+JudgeRequests.deleteJudge = async function(adminCode, code) {
     return sendRequest(Method.DELETE, "judges/" + code, null, adminCode);
 }
 
@@ -90,65 +98,78 @@ async function deleteJudge(adminCode, code) {
 
 // #region Country requests
 
-async function getRunningCountryNumber() {
+CountryRequests.getRunningCountryNumber = async function() {
     return sendRequest(Method.GET, "countries/runningCountry");
 }
 
-async function getVotingCountryStatuses() {
+CountryRequests.getVotingCountryStatuses = async function() {
     return sendRequest(Method.GET, "countries/votingStatuses/all");
 }
 
-async function getVotingCountryStatus(countryCode) {
+CountryRequests.getVotingCountryStatus = async function(countryCode) {
     return sendRequest(Method.GET, "countries/votingStatuses/" + countryCode);
 }
 
-async function getAllCountries() {
+CountryRequests.getAllCountries = async function() {
     return sendRequest(Method.GET, "countries/all");
 }
 
-async function createCountry(adminCode, data) {
+CountryRequests.createCountry = async function(adminCode, data) {
     return sendRequest(Method.POST, "countries", data, adminCode);
 }
 
-async function updateCountry(adminCode, code, data) {
+CountryRequests.updateCountry = async function(adminCode, code, data) {
     return sendRequest(Method.PUT, "countries/" + code, data, adminCode);
 }
 
-async function deleteCountry(adminCode, code) {
+CountryRequests.deleteCountry = async function(adminCode, code) {
     return sendRequest(Method.DELETE, "countries/" + code, null, adminCode);
 }
 
-async function voteCountry(countryCode, judgeCode, points) {
+CountryRequests.voteCountry = async function(countryCode, judgeCode, points) {
     let data = { points : points };
     return sendRequest(Method.PATCH, "countries/vote/" + countryCode + "/" + judgeCode, data);
+}
+
+CountryRequests.getWinnerCountry = async function() {
+    return sendRequest(Method.GET, "countries/winnerCountry");
 }
 
 // #endregion
 
 //#region Admin requests
 
-async function resetRunningCountry(adminCode) {
+AdminRequests.resetRunningCountry = async function(adminCode) {
     return sendRequest(Method.POST, "admin/runningCountry/reset", null, adminCode);
 }
 
-async function resetVotingStatusCache(adminCode) {
+AdminRequests.resetVotingStatusCache = async function(adminCode) {
     return sendRequest(Method.POST, "admin/cache/votingStatus/reset", null, adminCode);
 }
 
-async function resetJudgesCache(adminCode) {
+AdminRequests.resetJudgesCache = async function(adminCode) {
     return sendRequest(Method.POST, "admin/cache/judges/reset", null, adminCode);
 }
 
-async function resetCountriesCache(adminCode) {
+AdminRequests.resetCountriesCache = async function(adminCode) {
     return sendRequest(Method.POST, "admin/cache/countries/reset", null, adminCode);
 }
 
-async function resetAllCaches(adminCode) {
+AdminRequests.resetAllCaches = async function(adminCode) {
     return sendRequest(Method.POST, "admin/cache/reset", null, adminCode);
 }
 
-async function getAllOnlineJudgeCodes(adminCode) {
+AdminRequests.getAllOnlineJudgeCodes =  async function(adminCode) {
     return sendRequest(Method.GET, "admin/onlineJudges/all", null, adminCode);
+}
+
+AdminRequests.setWinnerCountry = async function(adminCode, countryCode) {
+    let data = {code : countryCode}
+    return sendRequest(Method.POST, "admin/winnerCountry", data, adminCode);
+}
+
+AdminRequests.clearWinnerCountry = async function(adminCode) {
+    return sendRequest(Method.POST, "admin/winnerCountry/clear", null, adminCode);
 }
 
 //#endregion
@@ -156,23 +177,7 @@ async function getAllOnlineJudgeCodes(adminCode) {
 export {
     serverURL,
     clientURL,
-    getAllJudges,
-    getSpecificJudge,
-    createJudge,
-    updateJudge,
-    deleteJudge,
-    getRunningCountryNumber,
-    getVotingCountryStatuses,
-    getVotingCountryStatus,
-    getAllCountries,
-    createCountry,
-    updateCountry,
-    deleteCountry,
-    voteCountry,
-    resetRunningCountry,
-    resetVotingStatusCache,
-    resetJudgesCache,
-    resetCountriesCache,
-    resetAllCaches,
-    getAllOnlineJudgeCodes
+    JudgeRequests,
+    CountryRequests,
+    AdminRequests
 }

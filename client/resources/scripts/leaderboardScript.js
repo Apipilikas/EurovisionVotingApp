@@ -1,13 +1,14 @@
-import { blurScreen, handleError, initAnnouncementContainer, initLoginJudge, initMenuBtnListener, unblurScreen } from "./utils/documentUtils.js";
+import { AnnouncementHelper, AnnouncementUtils } from "./utils/announcementUtils.js";
+import { DocumentUtils } from "./utils/document/documentUtils.js";
 import { leaderboardTemplates, votingTemplates } from "./utils/handlebarsUtils.js";
-import { getAllCountries, getAllJudges, getRunningCountryNumber, getVotingCountryStatuses, serverURL, voteCountry } from "./utils/requestUtils.js";
+import { InitUtils } from "./utils/initUtils.js";
+import { serverURL, CountryRequests, JudgeRequests } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
-var loginJudgeCode = null;
+var loginJudge = null;
 var runningCountry = 0;
 var totalCountries = 0;
-var announcements = [];
-var importantAnnouncements = [];
+var announcementHelper = new AnnouncementHelper();
 const socket = io(serverURL.address, {autoConnect: false});
 const StatusMapping = new Map([
     ["OPEN", "open-voting-status"],
@@ -16,35 +17,33 @@ const StatusMapping = new Map([
 
 window.onload = init;
 
-function init() {
+async function init() {
     try {
-        loginJudgeCode = initLoginJudge(socket);
+        loginJudge = await InitUtils.initLoginJudge(socket).then(response => {return response});
     
         initLeaderboardContainer();
     
         initBtnListeners();
     
-        initAnnouncementContainer(announcements, importantAnnouncements);
+        AnnouncementUtils.initAnnouncementContainer(announcementHelper);
     
         initVotingCountryPanelContainer();
     }
-    catch (e) {handleError(e)}
+    catch (e) {DocumentUtils.handleError(e)}
 }
 
 //#region Init functions
 
 function initBtnListeners() {
-    initMenuBtnListener();
+    InitUtils.initMenuBtnListener();
 }
 
 function initLeaderboardContainer() {
     getInitData()
     .then(data => {
         if (data != null) {
-            const votingLeaderboardContainer = document.getElementById("voting-leaderboard-container");
-
             var content = leaderboardTemplates.votingLeaderboardContainer(data);
-            votingLeaderboardContainer.innerHTML = content;
+            DocumentUtils.setInnerHTML("#voting-leaderboard-container", content);
 
             initVotesToJudgesAndVotingStatuses(data.countries, data.votingStatuses);
             highlightRunningCountry();
@@ -68,11 +67,7 @@ function initVotesToJudgesAndVotingStatuses(countries, votingStatuses) {
 }
 
 function initTableRowListeners() {
-    const leaderboardTableRows = document.querySelectorAll("tbody tr");
-
-    leaderboardTableRows.forEach(tr => {
-        tr.addEventListener("click", e => tableRowListener(e));
-    });
+    DocumentUtils.addClickEventListener("tbody tr ALL", tableRowListener);
 }
 
 function initVotingCountryPanelContainer() {
@@ -91,10 +86,10 @@ function initVotingCountryPanelContainer() {
 //#region General functions
 
 async function getInitData() {
-    const runningCountryResponse = await getRunningCountryNumber();
-    const countriesResponse = await getAllCountries();
-    const judgesResponse = await getAllJudges();
-    const votingStatusesResponse = await getVotingCountryStatuses();
+    const runningCountryResponse = await CountryRequests.getRunningCountryNumber();
+    const countriesResponse = await CountryRequests.getAllCountries();
+    const judgesResponse = await JudgeRequests.getAllJudges();
+    const votingStatusesResponse = await CountryRequests.getVotingCountryStatuses();
 
     if (runningCountryResponse.success && countriesResponse.success &&
         judgesResponse.success && votingStatusesResponse.success) {
@@ -149,19 +144,14 @@ function setVotingStatus(countryCode, votingStatus) {
 }
 
 function setTotalVotes(countryCode, totalVotes) {
-    const tag = countryCode + "-total-votes";
-    const totalVotesCell = document.getElementById(tag);
-
-    if (totalVotesCell == null) return;
-
-    totalVotesCell.innerHTML = totalVotes;
+    const tag = "#" + countryCode + "-total-votes";
+    DocumentUtils.setInnerHTML(tag, totalVotes);
 }
 
 function closeVotingCountryPanel() {
     const votingCountryPanelContainer = document.getElementById("voting-country-panel-container");
-
     votingCountryPanelContainer.style.display = "none";
-    unblurScreen();
+    DocumentUtils.unblurScreen();
 }
 
 //#endregion
@@ -182,7 +172,7 @@ function tableRowListener(e) {
     let isVotingOpen = tr.querySelector(".open-voting-status") != null;
     if (!isVotingOpen) return;
 
-    blurScreen();
+    DocumentUtils.blurScreen();
     votingCountryPanelContainer.style.display = "initial";
     countryNameCaption.innerHTML = countryName;
 }
@@ -194,8 +184,8 @@ function closeVotingCountryPanelBtnListener() {
 function voteBtnListener(e) {
     let countryCode = VotingCountryPanel.countryCode;
     let points = e.target.parentNode.querySelector("input[name='choose-vote']:checked").value;
-
-    voteCountry(countryCode, loginJudgeCode, points)
+    console.log(points)
+    CountryRequests.voteCountry(countryCode, loginJudge.code, points)
     .then(response => {
         if (response.success) {
             closeVotingCountryPanel();
@@ -242,7 +232,8 @@ socket.on("nextCountry", (response) => {
     }
     highlightRunningCountry();
     setVotingStatus(nextRunningCountry.country.code, nextRunningCountry.votingStatus);
-    importantAnnouncements.push(response.message.htmlText);
+    let htmlText = response.message.htmlText;
+    announcementHelper.addAnnouncement(AnnouncementHelper.Priority.HIGH, htmlText);
 });
 
 socket.on("votes", (response) => {
@@ -250,7 +241,8 @@ socket.on("votes", (response) => {
 
     setVoteToJudge(voting.judgeCode, voting.countryCode, voting.points, false);
     setTotalVotes(voting.countryCode, voting.totalVotes);
-    announcements.push(response.message.htmlText);
+    let htmlText = response.message.htmlText;
+    announcementHelper.addAnnouncement(AnnouncementHelper.Priority.MEDIUM, htmlText);
 });
 
 socket.on("votingStatus", (response) => {

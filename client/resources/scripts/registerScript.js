@@ -1,9 +1,9 @@
 // to get arguments from url => index.html?userID=test&userName=name
 // const params = new URLSearchParams(document.location.search);
 
-import { clientURL, getAllJudges, getSpecificJudge } from "./utils/requestUtils.js";
+import { clientURL, JudgeRequests } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
-import { handleError } from "./utils/documentUtils.js";
+import { DocumentUtils } from "./utils/document/documentUtils.js";
 
 
 
@@ -17,19 +17,16 @@ function init() {
     
         initJudgeListContainer();
     }
-    catch (e) {handleError(e)}
+    catch (e) {DocumentUtils.handleError(e)}
 }
 
 //#region Init functions
 
 function initBtnLinsteners() {
-    const connectBtn = document.getElementById("connect-btn");
-    connectBtn.addEventListener("click", connectBtnListener);
+    DocumentUtils.addClickEventListener("#connect-btn", connectBtnListener);
 }
 
 function initJudgeListContainer() {
-    const judgesContainer = document.getElementById("judges-list-container");
-    
     const params = new URLSearchParams(document.location.search);
     let judgeCode = params.get("judgeCode");
 
@@ -38,25 +35,25 @@ function initJudgeListContainer() {
     }
     
     if (judgeCode != null) {
-        getSpecificJudge(judgeCode)
+        JudgeRequests.getSpecificJudge(judgeCode)
         .then(response => {
             console.log(response)
             if (response.success) {
                 content.judges = [response.jsonData.judge];
-                updateContainer(judgesContainer, content)
+                updateContainer(content);
             }
         })
-        .catch(e => handleError(e));
+        .catch(e => DocumentUtils.handleError(e));
     }
     else {
-        getAllJudges()
+        JudgeRequests.getAllJudges()
         .then(response => {
             if (response.success) {
                 content.judges = response.jsonData.judges;
-                updateContainer(judgesContainer, content)
+                updateContainer(content);
             }
         })
-        .catch(e => handleError(e));
+        .catch(e => DocumentUtils.handleError(e));
     }
 }
 
@@ -95,9 +92,9 @@ function initCaptionAnimation() {
 
 //#region General functions
 
-function updateContainer(container, content) {
+function updateContainer(content) {
     let judgesContent = registerTemplates.judges(content);
-    container.innerHTML = judgesContent;
+    DocumentUtils.setInnerHTML("#judges-list-container", judgesContent);
 }
 
 //#endregion
@@ -105,10 +102,9 @@ function updateContainer(container, content) {
 //#region Event linstener functions
 
 function connectBtnListener(e) {
-    const checkedRadioInput = document.querySelector("input[type=radio]:checked");
+    let judgeCode = DocumentUtils.getElementAttribute("input[type=radio]:checked", "value");
 
-    if (checkedRadioInput != null) {
-        let judgeCode = checkedRadioInput.value;
+    if (judgeCode != null) {
         window.location.replace(clientURL + "client/voting.html?judgeCode=" + judgeCode);
     }
 }
