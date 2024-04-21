@@ -1,17 +1,23 @@
 import { ResultButton } from "../utils/customElements/resultButton.js";
-import { fillDetailInputsAreaListener } from "../utils/documentUtils.js";
+import { DocumentUtils } from "../utils/document/documentUtils.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
-import { createJudge, deleteJudge, getAllJudges, updateJudge } from "../utils/requestUtils.js";
+import { InitUtils } from "../utils/initUtils.js";
+import { JudgeRequests } from "../utils/requestUtils.js";
 
-var loginJudgeCode = "agg";
+var loginJudge = null;
 var areJudgesLoaded = false;
 var judges = [];
 const inputsArea = adminTemplates.judges.formInputsArea;
 
 window.onload = init;
 
-function init() {
-    initBtnListeners();
+async function init() {
+    try {
+        loginJudge = await InitUtils.initLoginJudge(null).then(response => {return response});
+
+        initBtnListeners();
+    }
+    catch (e) {DocumentUtils.handleError(e)}
 }
 
 //#region Init functions
@@ -19,29 +25,23 @@ function init() {
 function initBtnListeners() {
     const createJudgeContainer = document.getElementById("create-judge-container");
     const modifyJudgesContainer = document.getElementById("modify-judges-container");
-    
-    const createJudgeForm = document.getElementById("create-judge-form");
-    const modifyJudgesListContainer = document.getElementById("modify-judges-list-container");
 
-    const modifyBtn = document.getElementById("modify-btn");
-    const deleteBtn = document.getElementById("delete-btn");
-
-    createJudgeContainer.addEventListener("click", e => fillDetailInputsAreaListener(createJudgeContainer,
+    createJudgeContainer.addEventListener("click", e => DocumentUtils.fillDetailInputsAreaListener(createJudgeContainer,
                                                                                        modifyJudgesContainer,
                                                                                        inputsArea));
 
-    modifyJudgesContainer.addEventListener("click", e => fillDetailInputsAreaListener(modifyJudgesContainer,
+    modifyJudgesContainer.addEventListener("click", e => DocumentUtils.fillDetailInputsAreaListener(modifyJudgesContainer,
                                                                                          createJudgeContainer,
                                                                                          inputsArea,
                                                                                          loadJudges()));
 
-    createJudgeForm.addEventListener("submit", e => createJudgeFormListener(e));
+    // createJudgeForm.addEventListener("submit", e => createJudgeFormListener(e));
+    DocumentUtils.addSubmitEventListener("#create-judge-form", createJudgeFormListener);
 
-    modifyJudgesListContainer.addEventListener("click", e => judgeContainerListener(e));
-
-    modifyBtn.addEventListener("click", e => modifyBtnListener(e));
-
-    deleteBtn.addEventListener("click", e => deleteBtnListener(e));
+    // modifyJudgesListContainer.addEventListener("click", e => judgeContainerListener(e));
+    DocumentUtils.addClickEventListener("#modify-judges-list-container", judgeContainerListener);
+    DocumentUtils.addClickEventListener("#modify-btn", modifyBtnListener);
+    DocumentUtils.addClickEventListener("#delete-btn", deleteBtnListener);
 }
 
 //#endregion
@@ -50,7 +50,7 @@ function initBtnListeners() {
 
 function loadJudges() {
     if (!areJudgesLoaded) {
-        getAllJudges()
+        JudgeRequests.getAllJudges()
         .then(response => {
 
             if (response.success) {
@@ -65,17 +65,19 @@ function loadJudges() {
 }
 
 function fillInputs(judge) {
-    document.getElementById("code-txt").value = judge.code;
-    document.getElementById("name-txt").value = judge.name;
-    document.getElementById("origincountry-txt").value = judge.originCountry;
-    document.getElementById("admin-cbx").checked = judge.admin;
+    const attributeName = "value";
+    DocumentUtils.setElementAttribute("#code-txt", attributeName, judge.code);
+    DocumentUtils.setElementAttribute("#name-txt", attributeName, judge.name);
+    DocumentUtils.setElementAttribute("#origincountry-txt", attributeName, judge.originCountry);
+    DocumentUtils.setElementAttribute("#admin-cbx", "checked", judge.admin);
 }
 
 function getJudgeInputsValue() {
-    const codeValue = document.getElementById("code-txt").value;
-    const nameValue = document.getElementById("name-txt").value;
-    const originCountryValue = document.getElementById("origincountry-txt").value;
-    const adminValue = document.getElementById("admin-cbx").checked;
+    const attributeName = "value";
+    const codeValue = DocumentUtils.getElementAttribute("#code-txt", attributeName);
+    const nameValue = DocumentUtils.getElementAttribute("#name-txt", attributeName);
+    const originCountryValue = DocumentUtils.getElementAttribute("#origincountry-txt", attributeName);
+    const adminValue = DocumentUtils.getElementAttribute("#admin-cbx", "checked");
 
     let judge = {
         code: codeValue,
@@ -95,25 +97,12 @@ function createJudgeFormListener(e) {
     e.preventDefault();
 
     let submitBtn = e.target.querySelector("#submit-btn");
-    let resultBtn = new ResultButton(submitBtn);
 
     // TODO: Add validation checks and required fields
     let judge = getJudgeInputsValue();
 
-    resultBtn.switchToLoadingState();
-
-    try
-    {
-        createJudge(loginJudgeCode, judge)
-        .then(response => {
-            if (response.success)  resultBtn.switchToSuccessState();
-            else resultBtn.switchToFailureState();
-        });
-    }
-    catch (error)
-    {
-        resultBtn.switchToFailureState();
-    }
+    ResultButton.getByElement(submitBtn)
+    .execute(JudgeRequests.createJudge(loginJudge.code, judge));
 }
 
 function judgeContainerListener(e) {
@@ -128,35 +117,22 @@ function judgeContainerListener(e) {
 function modifyBtnListener(e) {
     e.preventDefault();
 
-    
     let selectedModifiedJudgeCode = e.target.form.querySelector("#code-txt").value;
     let modifiedJudge = getJudgeInputsValue();
     
     let modifyBtn = e.target;
-    let resultBtn = new ResultButton(modifyBtn);
-    resultBtn.execute(updateJudge(loginJudgeCode, selectedModifiedJudgeCode, modifiedJudge));
-
-    // updateJudge(loginJudgeCode, selectedModifiedJudgeCode, modifiedJudge)
-    // .then(response => {
-    //     if (response.success) resultBtn.switchToSuccessState();
-    //     else resultBtn.switchToFailureState();
-    // });
+    ResultButton.getByElement(modifyBtn)
+    .execute(JudgeRequests.updateJudge(loginJudge.code, selectedModifiedJudgeCode, modifiedJudge));
 }
 
 function deleteBtnListener(e) {
     e.preventDefault();
 
     let deleteBtn = e.target;
-    let resultBtn = new ResultButton(deleteBtn);
     let selectedModifiedJudgeCode = e.target.form.querySelector("#code-txt").value;
 
-    resultBtn.switchToLoadingState();
-
-    deleteJudge(loginJudgeCode, selectedModifiedJudgeCode)
-    .then(response => {
-        if (response.success) resultBtn.switchToSuccessState();
-        else resultBtn.switchToFailureState();
-    });
+    ResultButton.getByElement(deleteBtn)
+    .execute(JudgeRequests.deleteJudge(loginJudge.code, selectedModifiedJudgeCode));
 }
 
 //#endregion

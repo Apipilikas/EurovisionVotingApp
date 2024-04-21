@@ -244,6 +244,15 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
 
 adminTemplates.voting.votingCountryContainer.content = {points : points, countries : null, judges : null};
 
+adminTemplates.voting.revealWinnerBoxContainerContent = Handlebars.compile(`
+{{#each countries}}
+<div class="reveal-winner-country-container">
+    <input type="radio" id="{{this.code}}-radio" name="reveal-winner" value="{{this.code}}"/>
+    <label for="{{this.code}}-radio"><span class="country-code-txt">{{this.code}}</span> <span class="country-name-txt">{{this.name}}</span></label>
+</div>
+{{/each}}
+`);
+
 leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
 <table id="voting-leaderboard-table">
     <thead>

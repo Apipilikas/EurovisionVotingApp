@@ -1,4 +1,4 @@
-import { blurScreen, unblurScreen } from "../documentUtils.js";
+import { DocumentUtils } from "../document/documentUtils.js";
 import { generalTemplates } from "../handlebarsUtils.js";
 
 const closeErrorBoxClassName = "close-error-box";
@@ -31,7 +31,7 @@ export class ErrorBox {
     }
 
     show(elementID) {
-        blurScreen();
+        DocumentUtils.blurScreen();
 
         let content = {message : this.message, description : this.description, stackTrace : this.stackTrace, type : this.type, help : this.help, link : window.location.href};
 
@@ -49,7 +49,7 @@ export class ErrorBox {
     }
 
     close() {
-        unblurScreen();
+        DocumentUtils.unblurScreen();
 
         const errorBox = document.querySelector(".error-box");
         errorBox.classList.add(closeErrorBoxClassName);

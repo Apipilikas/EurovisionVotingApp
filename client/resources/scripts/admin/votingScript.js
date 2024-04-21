@@ -1,29 +1,30 @@
-import { getAllCountries, getAllJudges, getAllOnlineJudgeCodes, getRunningCountryNumber, getVotingCountryStatuses, resetAllCaches, resetCountriesCache, resetJudgesCache, resetRunningCountry, resetVotingStatusCache, serverURL, voteCountry } from "../utils/requestUtils.js";
+import { serverURL, CountryRequests, JudgeRequests, AdminRequests } from "../utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { adminTemplates } from "../utils/handlebarsUtils.js";
-import { handleError, initLoginJudge } from "../utils/documentUtils.js";
+import { DocumentUtils } from "../utils/document/documentUtils.js";
 import { ResultButton } from "../utils/customElements/resultButton.js";
+import { InitUtils } from "../utils/initUtils.js";
 
-var loginJudgeCode = null;
+var loginJudge = null;
 var runningCountry = 0;
 var totalCountries = 0;
 const socket = io(serverURL.address, {autoConnect: false});
 
 window.onload = init;
 
-function init() {
+async function init() {
     try {
-        loginJudgeCode = initLoginJudge(socket);
-
-        initVotingCountryContainer();
+        loginJudge = await InitUtils.initLoginJudge(socket).then(response => { return response });
+        
+        initContainers();
     }
-    catch (e) {handleError(e)}
+    catch (e) {DocumentUtils.handleError(e)}
 
 }
 
 //#region Init functions
 
-function initVotingCountryContainer() {
+function initContainers() {
     const countriesListContainer = document.getElementById("voting-countries-order-list-container");
 
     getInitData()
@@ -40,42 +41,38 @@ function initVotingCountryContainer() {
         
         initVotesToJudges(data.countries);
 
+        setRevealWinnerResultText(data.winnerCountry?.code);
+
+        initRevealWinnerPanelContainer(data.countries);
+
         initBtnLinsteners();
     })
-    .catch (e => handleError(e));
+    .catch (e => DocumentUtils.handleError(e));
 }
 
 function initBtnLinsteners() {
-    const nextCountryBtn = document.getElementById("next-country-btn");
-    const resetRunningCountryBtn = document.getElementById("reset-running-country-btn");
-    const resetVotingStatusCacheBtn = document.getElementById("reset-voting-status-cache-btn");
-    const resetJudgesCacheBtn = document.getElementById("reset-judges-cache-btn");
-    const resetCountriesCacheBtn = document.getElementById("reset-countries-cache-btn");
-    const resetAllCachesBtn = document.getElementById("reset-all-caches-btn");
+    // next country button
+    DocumentUtils.addClickEventListener("#next-country-btn", nextCountryBtnListener);
 
-    nextCountryBtn.addEventListener("click", e => nextCountryBtnListener());
-    
-    resetRunningCountryBtn.addEventListener("click", e => resetRunningCountryBtnListener(e));
-    resetVotingStatusCacheBtn.addEventListener("click", e => resetVotingStatusCacheBtnListener(e));
-    resetJudgesCacheBtn.addEventListener("click", e => resetJudgesCacheBtnListener(e));
-    resetCountriesCacheBtn.addEventListener("click", e => resetCountriesCacheBtnListener(e));
-    resetAllCachesBtn.addEventListener("click", e => resetAllCachesBtnListener(e));
+    // Admin settings buttons
+    DocumentUtils.addClickEventListener("#reset-running-country-btn", resetRunningCountryBtnListener);
+    DocumentUtils.addClickEventListener("#reset-voting-status-cache-btn", resetVotingStatusCacheBtnListener);
+    DocumentUtils.addClickEventListener("#reset-judges-cache-btn", resetJudgesCacheBtnListener);
+    DocumentUtils.addClickEventListener("#reset-countries-cache-btn", resetCountriesCacheBtnListener);
+    DocumentUtils.addClickEventListener("#reset-all-caches-btn", resetAllCachesBtnListener);
 
-    const votingToggleSwitches = document.getElementsByClassName("voting-toggle-switch");
-    for (var toggleSwitch of votingToggleSwitches) {
-        toggleSwitch.addEventListener("change", e => toggleSwitchListener(e));
-    };
+    // Toggle switches
+    DocumentUtils.addClickEventListener(".voting-toggle-switch", toggleSwitchListener);
 
-    const updateBtns = document.getElementsByClassName("update-vote-btn");
-    for (var updateBtn of updateBtns) {
-        updateBtn.addEventListener("click", e => updateBtnListener(e));
-    };
-    
+    // Update vote buttons
+    DocumentUtils.addClickEventListener(".update-vote-btn", updateBtnListener);
+
+    // Init menu button
+    InitUtils.initMenuBtnListener();
 }
 
 function initVotesToJudges(countries) {
     for (var country of countries) {
-
         for (var [judgeCode, points] of Object.entries(country.votes)) {
             setVoteToJudge(judgeCode, country.code, points);
         }
@@ -88,25 +85,35 @@ function initDashboard(countries, judgesNumber, onlineJudgesNumber) {
     setDataToDashboard(country, judgesNumber, onlineJudgesNumber);
 }
 
+function initRevealWinnerPanelContainer(countries) {
+    let content = adminTemplates.voting.revealWinnerBoxContainerContent({countries : countries});
+    DocumentUtils.setInnerHTML("#reveal-winner-panel-content", content);
+    DocumentUtils.addClickEventListener("#reveal-winner-panel-container .close-btn", closeRevealWinnerPanelContainerBtnListener);
+    DocumentUtils.addClickEventListener("#reveal-winner-panel-container .ok-btn", closeRevealWinnerPanelContainerBtnListener);
+    DocumentUtils.addClickEventListener("#reveal-winner-panel-container .clear-btn", clearWinnerCountryBtnListener)
+    DocumentUtils.addClickEventListener("#reveal-winner-btn", openRevealWinnerPanelContainer);
+}
+
 //#endregion
 
 //#region General functions
 
 async function getInitData() {
-    const countriesResponse = await getAllCountries();
-    const judgesResponse = await getAllJudges();
-    const runningCountryResponse = await getRunningCountryNumber();
-    const votingCountryStatusesResponse = await getVotingCountryStatuses();
-    const onlineJudgeCodesResponse = await getAllOnlineJudgeCodes(loginJudgeCode);
+    const countriesResponse = await CountryRequests.getAllCountries();
+    const judgesResponse = await JudgeRequests.getAllJudges();
+    const runningCountryResponse = await CountryRequests.getRunningCountryNumber();
+    const votingCountryStatusesResponse = await CountryRequests.getVotingCountryStatuses();
+    const onlineJudgeCodesResponse = await AdminRequests.getAllOnlineJudgeCodes(loginJudge.code);
+    const winnerCountryResponse = await CountryRequests.getWinnerCountry();
 
-    if (countriesResponse.success && judgesResponse.success && runningCountryResponse.success && votingCountryStatusesResponse.success && onlineJudgeCodesResponse.success) {
+    if (countriesResponse.success && judgesResponse.success && runningCountryResponse.success && votingCountryStatusesResponse.success && onlineJudgeCodesResponse.success && winnerCountryResponse.success) {
         runningCountry = runningCountryResponse.jsonData.runningCountry;
 
         const fetchedCountries = countriesResponse.jsonData.countries;
         totalCountries = fetchedCountries.length;
         const fetchedVotingCountryStatuses = votingCountryStatusesResponse.jsonData.votingStatuses;
         
-        return {countries : mergeVotingStatusesToCountries(fetchedCountries, fetchedVotingCountryStatuses), judges : judgesResponse.jsonData.judges, onlineJudgeCodes : onlineJudgeCodesResponse.jsonData.judges};
+        return {countries : mergeVotingStatusesToCountries(fetchedCountries, fetchedVotingCountryStatuses), judges : judgesResponse.jsonData.judges, onlineJudgeCodes : onlineJudgeCodesResponse.jsonData.judges, winnerCountry : winnerCountryResponse.jsonData.country};
     }
 
     return null;
@@ -129,9 +136,7 @@ function mergeVotingStatusesToCountries(countries, votingStatuses) {
 }
 
 function setVotingStatusToToggleSwitch(runningOrder, votingStatus) {
-    const votingStatusToggleSwitch = document.querySelector('input[runningorder="' + runningOrder + '"]');
-    
-    if (votingStatusToggleSwitch != null) votingStatusToggleSwitch.checked = votingStatus == "OPEN";
+    DocumentUtils.setElementAttribute('input[runningorder="' + runningOrder + '"]', "checked", votingStatus == "OPEN");
 }
 
 function setVoteToJudge(judgeCode, countryCode, points) {
@@ -150,6 +155,26 @@ function setTotalVotes(countryCode, totalVotes) {
     votingCountryDetail.querySelector(".total-votes-txt").innerHTML = totalVotes;
 }
 
+function openRevealWinnerPanelContainer() {
+    DocumentUtils.blurScreen();
+    const revealWinnerPanelContainer = document.getElementById("reveal-winner-panel-container");
+    revealWinnerPanelContainer.style.display = "initial";
+}
+
+function closeRevealWinnerPanelContainer() {
+    DocumentUtils.unblurScreen();
+    const revealWinnerPanelContainer = document.getElementById("reveal-winner-panel-container");
+    revealWinnerPanelContainer.style.display = "none";
+}
+
+function getWinnerCountryCode() {
+    return DocumentUtils.getElementAttribute("input[name='reveal-winner']:checked", "value");
+}
+
+function setRevealWinnerResultText(winnerCountryCode) {
+    DocumentUtils.setInnerHTML("#reveal-winner-container .result-text", winnerCountryCode);
+}
+
 //#endregion
 
 //#region Dashboard functions
@@ -157,7 +182,6 @@ function setTotalVotes(countryCode, totalVotes) {
 function setDataToDashboard(country, judgesNumber, onlineJudgesNumber) {
     let offlineJudgesNumber = judgesNumber - onlineJudgesNumber;
     let judgesVotedNumber = null;
-
     if (country != null) {
         judgesVotedNumber = Object.keys(country.votes).length;
         setRunningCountryDashboard(country.runningOrder, country.name, country.song, country.artist);
@@ -168,63 +192,24 @@ function setDataToDashboard(country, judgesNumber, onlineJudgesNumber) {
 }
 
 function setRunningCountryDashboard(runningOrder, countryName, song, artist) {
-    const runningOrderTag = "admin-db-running-order-txt";
-    const runningCountryNameTag = "admin-db-running-country-name-txt";
-    const songTag = "admin-db-song-txt";
-    const artistTag = "admin-db-artist-txt";
-
-    const runningOrderSpan = document.getElementById(runningOrderTag);
-    const runningCountryCodeSpan = document.getElementById(runningCountryNameTag);
-    const songSpan = document.getElementById(songTag);
-    const artistSpan = document.getElementById(artistTag);
-
-    runningOrderSpan.innerHTML = runningOrder;
-    runningCountryCodeSpan.innerHTML = countryName;
-    songSpan.innerHTML = song;
-    artistSpan.innerHTML = artist;
+    DocumentUtils.setInnerHTML("#admin-db-running-order-txt", runningOrder);
+    DocumentUtils.setInnerHTML("#admin-db-running-country-name-txt", countryName);
+    DocumentUtils.setInnerHTML("#admin-db-song-txt", song);
+    DocumentUtils.setInnerHTML("#admin-db-artist-txt", artist);
 }
 
 function setJudgesDashboard(judgesVotedNumber, onlineJudgesNumber, offlineJudgesNumber, totalJudgesNumber = null) {
-    const totalJudgesNoTag = "admin-db-total-judges-no-txt";
-    const judgesVotedNoTag = "judges-voted-no-txt";
-    const onlineJudgesNoTag = "admin-db-online-judges-no-txt";
-    const offlineJudgesNoTag = "admin-db-offline-judges-no-txt";
-
-    if (totalJudgesNumber != null) {
-        const totalJudgesNoSpans = document.getElementsByClassName(totalJudgesNoTag);
-        for (let totalJudgeNoSpan of totalJudgesNoSpans) {
-            totalJudgeNoSpan.innerHTML = totalJudgesNumber;
-        }
-    }
-    const judgesVotedNoSpan = document.getElementById(judgesVotedNoTag);
-    const onlineJudgesNoSpan = document.getElementById(onlineJudgesNoTag);
-    const offlineJudgesNoSpan = document.getElementById(offlineJudgesNoTag);
-
-    if (judgesVotedNoSpan != null) {
-        judgesVotedNoSpan.innerHTML = judgesVotedNumber;
-    }
-
-    if (onlineJudgesNumber != null) {
-        onlineJudgesNoSpan.innerHTML = onlineJudgesNumber;
-    }
-
-    if (offlineJudgesNumber != null) {
-        offlineJudgesNoSpan.innerHTML = offlineJudgesNumber;
-    }
-
-    // TODO: Simplify code by implementing in documentUtils, function -> setInnerJoinByElementID(innerHTMLData, elementID)
-    // If innerHTMLData is null, then dont do anything.
+    DocumentUtils.setInnerHTML(".admin-db-total-judges-no-txt", totalJudgesNumber);
+    DocumentUtils.setInnerHTML("#judges-voted-no-txt", judgesVotedNumber);
+    DocumentUtils.setInnerHTML("#admin-db-online-judges-no-txt", onlineJudgesNumber);
+    DocumentUtils.setInnerHTML("#admin-db-offline-judges-no-txt", offlineJudgesNumber);
 }
 
 function setTotalVotesDashboard(totalVotes) {
-    const totalVotesTag = "admin-db-total-votes-txt";
-
-    const totalVotesSpan = document.getElementById(totalVotesTag);
-    totalVotesSpan.innerHTML = totalVotes;
+    DocumentUtils.setInnerHTML("#admin-db-total-votes-txt", totalVotes);
 }
 
 //#endregion
-
 
 //#region Event Listener functions
 
@@ -248,9 +233,8 @@ function updateBtnListener(e) {
     const countryCode = tableRow.getAttribute("countrycode");
     const judgeCode = tableRow.getAttribute("judgecode");
     const points = tableRow.querySelector("input:checked").value;
-    console.log(points)
     
-    voteCountry(countryCode, judgeCode, points)
+    CountryRequests.voteCountry(countryCode, judgeCode, points)
     .then(response => {
         if (response.success) {
             
@@ -260,27 +244,48 @@ function updateBtnListener(e) {
 
 function resetRunningCountryBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(resetRunningCountry(loginJudgeCode));
+    .execute(AdminRequests.resetRunningCountry(loginJudge.code));
 }
 
 function resetVotingStatusCacheBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(resetVotingStatusCache(loginJudgeCode));
+    .execute(AdminRequests.resetVotingStatusCache(loginJudge.code));
 }
 
 function resetJudgesCacheBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(resetJudgesCache(loginJudgeCode));
+    .execute(AdminRequests.resetJudgesCache(loginJudge.code));
 }
 
 function resetCountriesCacheBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(resetCountriesCache(loginJudgeCode));
+    .execute(AdminRequests.resetCountriesCache(loginJudge.code));
 }
 
 function resetAllCachesBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(resetAllCaches(loginJudgeCode));
+    .execute(AdminRequests.resetAllCaches(loginJudge.code));
+}
+
+function closeRevealWinnerPanelContainerBtnListener(e) {
+    closeRevealWinnerPanelContainer();
+
+    if (e.target.classList.contains("close-btn")) return;
+    
+    let winnerCountryCode = getWinnerCountryCode();
+    setRevealWinnerResultText(winnerCountryCode);
+
+    AdminRequests.setWinnerCountry(loginJudge.code, winnerCountryCode);
+}
+
+function clearWinnerCountryBtnListener(e) {
+    AdminRequests.clearWinnerCountry(loginJudge.code)
+    .then(response => {
+        if (response.success) {
+            closeRevealWinnerPanelContainer();
+            setRevealWinnerResultText("NONE");
+        }
+    })
 }
 
 //#endregion

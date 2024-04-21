@@ -1,4 +1,4 @@
-import { blurScreen, unblurScreen } from "../documentUtils.js";
+import { DocumentUtils } from "../documentUtils.js";
 import { generalTemplates } from "../handlebarsUtils.js";
 
 const closeConfirmDialogClassName = "close-confirm-dialog";
@@ -21,7 +21,7 @@ export class ConfirmDialog {
     }
 
     show(elementID) {
-        blurScreen();
+        DocumentUtils.blurScreen();
 
         let content = {message : this.message};
 
@@ -52,7 +52,7 @@ export class ConfirmDialog {
     }
 
     close() {
-        unblurScreen();
+        DocumentUtils.unblurScreen();
 
         const confirmDialog = document.querySelector(".confirm-dialog");
         confirmDialog.classList.add(closeConfirmDialogClassName);

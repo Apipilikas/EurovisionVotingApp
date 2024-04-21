@@ -1,37 +1,38 @@
+import { AnnouncementHelper, AnnouncementUtils } from "./utils/announcementUtils.js";
 import { NotificationBox } from "./utils/boxes/notificationBox.js";
 import { ResultButton } from "./utils/customElements/resultButton.js";
-import { handleError, initAnnouncementContainer, initLoginJudge, initMenuBtnListener } from "./utils/documentUtils.js";
+import { DocumentUtils } from "./utils/document/documentUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
-import { getAllCountries, getRunningCountryNumber, serverURL, voteCountry } from "./utils/requestUtils.js";
+import { InitUtils } from "./utils/initUtils.js";
+import { serverURL, CountryRequests } from "./utils/requestUtils.js";
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
 
-var loginJudgeCode = null;
+var loginJudge = null;
 var runningCountry = 0;
 var totalCountries = 0;
-var announcements = [];
-var importantAnnouncements = [];
+var announcementHelper = new AnnouncementHelper();
 var runningCountryCode = null;
 const socket = io(serverURL.address, {autoConnect: false});
 
 window.onload = init;
 
-function init() {
+async function init() {
     try {
-        loginJudgeCode = initLoginJudge(socket);
+        loginJudge = await InitUtils.initLoginJudge(socket).then(response => {return response});
     
         initBtnListeners();
 
         initCarousel();
     
-        initAnnouncementContainer(announcements, importantAnnouncements);
+        AnnouncementUtils.initAnnouncementContainer(announcementHelper);
     }
-    catch (e) {handleError(e)}
+    catch (e) {DocumentUtils.handleError(e)}
 }
 
 //#region Init functions
 
 function initBtnListeners() {
-    initMenuBtnListener();
+    InitUtils.initMenuBtnListener();
 }
 
 function initCarousel() {
@@ -43,7 +44,7 @@ function initCarousel() {
         setVotesToCarousel(data.countries);
         setVotingContentToRunningCountry(data.isVotingOpen);
     })
-    .catch(e => handleError(e));
+    .catch(e => DocumentUtils.handleError(e));
 }
 
 //#endregion
@@ -51,8 +52,8 @@ function initCarousel() {
 //#region General functions
 
 async function getInitData() {
-    const runningCountryResponse = await getRunningCountryNumber(); 
-    const countriesResponse = await getAllCountries();
+    const runningCountryResponse = await CountryRequests.getRunningCountryNumber(); 
+    const countriesResponse = await CountryRequests.getAllCountries();
 
     if (runningCountryResponse.success && countriesResponse.success) {
         runningCountry = runningCountryResponse.jsonData.runningCountry;
@@ -81,11 +82,8 @@ function setCountriesToCarousel(countries)
     // Add empty country containers [only for runningOrder = 1 - 3]
     for (var i = 0; i < 4 - runningCountry; i++) emptyCountries.push({});
 
-    const countriesCarouselContainer = document.getElementById("countries-carousel-container");
-    const countriesData = {countries : countries, emptyCountries : emptyCountries};
-
-    let content = votingTemplates.countries(countriesData);
-    countriesCarouselContainer.innerHTML = content;
+    let content = votingTemplates.countries({countries : countries, emptyCountries : emptyCountries});
+    DocumentUtils.setInnerHTML("#countries-carousel-container", content);
 }
 
 function moveToNextCountry(nextRunningCountry) {
@@ -154,15 +152,12 @@ function setVotingContentToRunningCountry(isVotingOpen) {
 }
 
 function setTotalVotes(countryCode, totalVotes) {
-    const votingCountryDetail = document.querySelector("details[countrycode=" + countryCode +"]");
-    if (votingCountryDetail == null) return;
-
-    votingCountryDetail.querySelector(".total-votes").innerHTML = totalVotes;
+    DocumentUtils.setInnerHTML("details[countrycode=" + countryCode +"] .total-votes", totalVotes);
 }
 
 function setVotesToCarousel(countries) {
     for (var country of countries) {
-        let points = country.votes[loginJudgeCode];
+        let points = country.votes[loginJudge.code];
 
         if (points == null) continue;
         setPersonalVote(country.code, points);
@@ -170,10 +165,7 @@ function setVotesToCarousel(countries) {
 }
 
 function setPersonalVote(countryCode, points) {
-    const votingCountryDetail = document.querySelector("details[countrycode=" + countryCode +"]");
-    if (votingCountryDetail == null) return;
-
-    votingCountryDetail.querySelector(".personal-vote").innerHTML = points;
+    DocumentUtils.setInnerHTML("details[countrycode=" + countryCode +"] .personal-vote", points);
 }
 
 //#endregion
@@ -191,7 +183,7 @@ function voteBtnListener(e) {
     let points = checkedPoint.value;
     
     let resultBtn = new ResultButton(e.target);
-    resultBtn.execute(voteCountry(countryCode, loginJudgeCode, points))
+    resultBtn.execute(CountryRequests.voteCountry(countryCode, loginJudge.code, points))
     .then(response => {
         if (response.success) {
             setPersonalVote(countryCode, points);
@@ -225,14 +217,16 @@ socket.on("nextCountry", (response) => {
     let nextRunningCountry = response.data.nextRunningCountry;
 
     moveToNextCountry(nextRunningCountry);
-    importantAnnouncements.push(response.message.htmlText);
+    let htmlText = response.message.htmlText
+    announcementHelper.addAnnouncement(AnnouncementHelper.Priority.HIGH, htmlText);
 });
 
 socket.on("votes", (response) => {
     let voting = response.data.voting;
 
     setTotalVotes(voting.countryCode, voting.totalVotes);
-    announcements.push(response.message.htmlText);
+    let htmlText = response.message.htmlText;
+    announcementHelper.addAnnouncement(AnnouncementHelper.Priority.MEDIUM, htmlText);
 });
 
 socket.on("votingStatus", (response) => {
