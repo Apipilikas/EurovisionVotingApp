@@ -12,30 +12,30 @@ export class ErrorBox {
         this.description = description;
     }
 
-    static show(message, stackTrace, type, help = null, description = null, elementID = "display-box-container") {
+    static show(message, stackTrace, type, help = null, description = null) {
         let errorBox = new ErrorBox(message, stackTrace, type, help, description);
 
-        errorBox.show(elementID);
+        errorBox.show();
 
         return errorBox;
     }
 
-    static showMyError(myError, elementID = "display-box-container") {
+    static showMyError(myError) {
         let stackTrace = myError.stack;
 
         if (myError.innerError != null) {
             stackTrace += "\n Inner Error stack trace \n" + myError.innerError.stack;
         }
 
-        return this.show(myError.message, stackTrace, myError.type, myError.help, myError.description, elementID);
+        return this.show(myError.message, stackTrace, myError.type, myError.help, myError.description);
     }
 
-    show(elementID) {
+    show() {
         DocumentUtils.blurScreen();
 
         let content = {message : this.message, description : this.description, stackTrace : this.stackTrace, type : this.type, help : this.help, link : window.location.href};
 
-        const errorBoxContainer = document.getElementById(elementID);
+        const errorBoxContainer = DocumentUtils.getDisplayBoxContainer();
         let errorBoxContent = generalTemplates.errorBox(content);
         errorBoxContainer.innerHTML = errorBoxContent;
 

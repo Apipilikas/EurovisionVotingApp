@@ -1,4 +1,4 @@
-import { DocumentUtils } from "../documentUtils.js";
+import { DocumentUtils } from "../document/documentUtils.js";
 import { generalTemplates } from "../handlebarsUtils.js";
 
 const closeConfirmDialogClassName = "close-confirm-dialog";
@@ -14,18 +14,18 @@ export class ConfirmDialog {
         this.message = message;
     }
 
-    static show(message, elementID = "display-box-container") {
+    static show(message) {
         let confirmDialog = new ConfirmDialog(message);
 
-        return confirmDialog.show(elementID);
+        return confirmDialog.show();
     }
 
-    show(elementID) {
+    show() {
         DocumentUtils.blurScreen();
 
         let content = {message : this.message};
 
-        const confirmDialogContainer = document.getElementById(elementID);
+        const confirmDialogContainer = DocumentUtils.getDisplayBoxContainer();
         let confirmDialogContent = generalTemplates.confirmDialog(content);
         confirmDialogContainer.innerHTML = confirmDialogContent;
 

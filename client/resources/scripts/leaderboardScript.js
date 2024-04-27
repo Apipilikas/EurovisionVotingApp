@@ -71,14 +71,10 @@ function initTableRowListeners() {
 }
 
 function initVotingCountryPanelContainer() {
-    const votingCountryPanelContent = document.getElementById("voting-country-panel-content");
-    const closeBtn = document.getElementById("close-voting-country-panel-btn");
     let content = votingTemplates.votingContent(votingTemplates.votingContent.content);
-    votingCountryPanelContent.innerHTML = content;
-    
-    const votingCountryPanelBtn = votingCountryPanelContent.querySelector("button");
-    votingCountryPanelBtn.addEventListener("click", e => voteBtnListener(e));
-    closeBtn.addEventListener("click", e => closeVotingCountryPanelBtnListener());
+    DocumentUtils.setInnerHTML("#voting-country-panel-content", content);
+    DocumentUtils.addClickEventListener("#close-voting-country-panel-btn", closeVotingCountryPanelBtnListener);
+    DocumentUtils.addClickEventListener("#voting-country-panel-content button", voteBtnListener);
 }
 
 //#endregion
@@ -177,7 +173,7 @@ function tableRowListener(e) {
     countryNameCaption.innerHTML = countryName;
 }
 
-function closeVotingCountryPanelBtnListener() {
+function closeVotingCountryPanelBtnListener(e) {
     closeVotingCountryPanel();
 }
 
@@ -253,8 +249,12 @@ socket.on("votingStatus", (response) => {
     }
 
     response.messages.forEach(message => {
-        importantAnnouncements.push(message.htmlText);
+        announcementHelper.addAnnouncement(AnnouncementHelper.Priority.MEDIUM, message.htmlText);
     });
+});
+
+socket.on("general", (response) => {
+    DocumentUtils.handleGeneralSocketEvent(response);
 });
 
 //#endregion

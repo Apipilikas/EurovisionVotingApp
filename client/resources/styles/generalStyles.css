@@ -1192,9 +1192,9 @@ details.admin-details-container {
 
 /* #endregion */
 
-/* #region Confirm dialog */
+/* #region Confirm / Message dialog */
 
-.confirm-dialog {
+.confirm-dialog, .message-dialog {
     opacity: 1;
     z-index: 4;
     display: flex;
@@ -1208,72 +1208,123 @@ details.admin-details-container {
     height: 50px;
     background-color: white;
     overflow: hidden;
-    border: 5px solid var(--info-color);
-    animation: confirm-dialog-open-animation 1s ease-in-out 2s, show-confirm-dialog-animation 1s ease-in-out;
+    animation: dialog-open-animation 1s ease-in-out 2s, show-dialog-animation 1s ease-in-out;
     animation-fill-mode: forwards; 
+}
+
+.confirm-dialog, .message-dialog.info {
+    border: 5px solid var(--info-color);
+}
+
+.message-dialog.warning {
+    border: 5px solid var(--warning-color);
 }
 
 /* Close error box */
-.confirm-dialog.close-confirm-dialog {
-    animation: confirm-dialog-close-animation 0.4s ease-in-out;
+.confirm-dialog.close-confirm-dialog,
+.message-dialog.close-message-dialog  {
+    animation: dialog-close-animation 0.4s ease-in-out;
     animation-fill-mode: forwards; 
 }
 
-/* Error box main containers */
-.confirm-dialog .top-container {
+/* Confirm / Message dialogs main containers */
+.confirm-dialog .top-container,
+.message-dialog .top-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    background-color: var(--info-color)
 }
 
+.confirm-dialog .top-container .close-btn,
+.message-dialog .top-container .close-btn {
+    font-size: 1.5em;
+    margin: auto 0em;
+}
+
+.confirm-dialog .top-container,
+.message-dialog.info .top-container {
+    background-color: var(--info-color);
+}
+
+.message-dialog.warning .top-container {
+    background-color: var(--warning-color);
+} 
+
 /* Icon container */
-.confirm-dialog .icon-container {
+.confirm-dialog .icon-container,
+.message-dialog .icon-container {
     display: flex;
     height: 50px;
     width: 250px;
+    color: white;
     /* justify-content: center; */
 }
 
-.confirm-dialog .icon-container i {
+.confirm-dialog .icon-container i,
+.message-dialog .icon-container i {
     font-size: 2em;
     text-align: center;
     margin: auto 0.5em;
 }
 
-.confirm-dialog .icon-container p {
+.confirm-dialog .icon-container p,
+.message-dialog .icon-container p  {
     font-weight: 700;
     margin: auto 0em;
 }
 
 /* Bottom container */
-.confirm-dialog .bottom-container {
+.confirm-dialog .bottom-container,
+.message-dialog .bottom-container {
+    overflow: hidden;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin: auto 1em;
 }
 
-.confirm-dialog .bottom-container .buttons-area {
-    width: 80%;
+.confirm-dialog .bottom-container .buttons-area,
+.message-dialog .bottom-container .buttons-area {
+    width: 100%;
     display: flex;
     justify-content: space-around;
-    margin: 1em auto;
+    padding: 0.5em 0em 0.5em 0em;
+}
+
+.confirm-dialog .bottom-container .buttons-area,
+.message-dialog.info .bottom-container .buttons-area {
+    border-top: 2px solid var(--info-color);
+}
+
+.message-dialog.warning .bottom-container .buttons-area {
+    border-top: 2px solid var(--warning-color);
 }
 
 /* Buttons */
-.confirm-dialog .bottom-container .buttons-area button {
+.confirm-dialog .bottom-container .buttons-area button,
+.message-dialog .bottom-container .buttons-area button {
     padding: 0.5em 2em;
     /* outline:none; */
     font-family: 'Onest', sans-serif;
-    border: 4px solid var(--info-color);
-    color: var(--info-color);
     font-weight: 800;
     transition: all 0.4s;
 }
 
-.confirm-dialog .bottom-container .buttons-area button:hover {
+.confirm-dialog .bottom-container .buttons-area button,
+.message-dialog.info .bottom-container .buttons-area button {
+    border: 4px solid var(--info-color);
+    color: var(--info-color);
+}
+
+.message-dialog.warning .bottom-container .buttons-area button {
+    border: 4px solid var(--warning-color);
+    color: var(--warning-color);
+}
+
+.confirm-dialog .bottom-container .buttons-area button:hover,
+.message-dialog .bottom-container .buttons-area button:hover {
     color: black;
 }
 
@@ -1282,14 +1333,69 @@ details.admin-details-container {
     color: white;
 }
 
-.confirm-dialog .bottom-container p.confirm-message {
-    /* width: 100%; */
+.confirm-dialog .bottom-container p.confirm-message,
+.message-dialog .bottom-container p.message {
+    display: flex;
+    overflow: hidden;
+    text-align: center;
+    padding: 0.5em 0em 0.5em 0em;
     margin: auto;
     font-weight: 700;
+}
+
+.confirm-dialog .bottom-container p.confirm-message,
+.message-dialog.info .bottom-container p.message {
     color: var(--info-color);
 }
 
-@keyframes show-confirm-dialog-animation {
+.message-dialog.warning .bottom-container p.message {
+    color: var(--warning-color);
+}
+
+/* Message dialog timer container */
+.message-dialog .right-container {
+    display: flex;
+    overflow: hidden;
+    opacity: 0;
+    width: 0;
+    animation: timer-fadein-animation 2s ease-in 2s;
+    animation-fill-mode: forwards; 
+}
+
+.message-dialog .right-container .timer-container {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.message-dialog .right-container .timer-container p {
+    margin: auto;
+    font-size: .7em;
+    text-align: center;
+}
+
+.message-dialog .right-container .timer-container p.timer-caption {
+    padding: 0em 1em;
+}
+
+.message-dialog .right-container .timer-container p.timer-txt {
+    font-weight: 700;
+    font-size: .9em;
+}
+
+@keyframes timer-fadein-animation {
+    0% {
+        opacity: 0;
+        width: 0;
+    }
+    100% {
+        opacity: 1.0;
+        width: initial;
+    }
+}
+
+@keyframes show-dialog-animation {
     0% {
         bottom: -50%;
     }
@@ -1299,7 +1405,7 @@ details.admin-details-container {
     }
 }
 
-@keyframes confirm-dialog-open-animation {
+@keyframes dialog-open-animation {
     0% {
         height: 50px;
         width: 250px;
@@ -1310,7 +1416,7 @@ details.admin-details-container {
     }
 }
 
-@keyframes confirm-dialog-close-animation {
+@keyframes dialog-close-animation {
     0% {
         height: 200px;
         width: 80%;
@@ -1500,7 +1606,7 @@ details.admin-details-container {
     /* #endregion */
 
     /* #region Confirm dialog */
-    @keyframes confirm-dialog-open-animation {
+    @keyframes dialog-open-animation {
         0% {
             height: 50px;
             width: 250px;
@@ -1511,7 +1617,7 @@ details.admin-details-container {
         }
     }
     
-    @keyframes confirm-dialog-close-animation {
+    @keyframes dialog-close-animation {
         0% {
             height: 200px;
             width: 40%;
