@@ -355,4 +355,28 @@ generalTemplates.confirmDialog = Handlebars.compile(`
 </div>
 `);
 
+generalTemplates.messageDialog = Handlebars.compile(`
+<div class="message-dialog {{this.className}}">
+    <div class="top-container">
+        <div class="icon-container">
+            <i class="material-icons">{{this.icon}}</i>
+            <p>{{this.caption}}</p>
+        </div>
+        <div class="right-container">
+            <div class="timer-container">
+                <p class="timer-caption">Reloading after</p>
+                <p class="timer-txt"><span class="timer-seconds-txt">5</span> s</p>
+            </div>
+            <span class="close-btn">&times;</span>
+        </div>
+    </div>
+    <div class="bottom-container">
+        <p class="message">{{this.message}}</p>
+        <div class="buttons-area">
+            <button class="ok-btn">OK</button>
+        </div>
+    </div>
+</div>
+`)
+
 export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates, generalTemplates};

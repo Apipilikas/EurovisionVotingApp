@@ -45,6 +45,8 @@ function initContainers() {
 
         initRevealWinnerPanelContainer(data.countries);
 
+        initInformJudgePanelContainer();
+
         initBtnLinsteners();
     })
     .catch (e => DocumentUtils.handleError(e));
@@ -60,6 +62,7 @@ function initBtnLinsteners() {
     DocumentUtils.addClickEventListener("#reset-judges-cache-btn", resetJudgesCacheBtnListener);
     DocumentUtils.addClickEventListener("#reset-countries-cache-btn", resetCountriesCacheBtnListener);
     DocumentUtils.addClickEventListener("#reset-all-caches-btn", resetAllCachesBtnListener);
+    DocumentUtils.addClickEventListener("#inform-judge-btn", openInformJudgePanelContainer);
 
     // Toggle switches
     DocumentUtils.addClickEventListener(".voting-toggle-switch", toggleSwitchListener);
@@ -92,6 +95,12 @@ function initRevealWinnerPanelContainer(countries) {
     DocumentUtils.addClickEventListener("#reveal-winner-panel-container .ok-btn", closeRevealWinnerPanelContainerBtnListener);
     DocumentUtils.addClickEventListener("#reveal-winner-panel-container .clear-btn", clearWinnerCountryBtnListener)
     DocumentUtils.addClickEventListener("#reveal-winner-btn", openRevealWinnerPanelContainer);
+}
+
+function initInformJudgePanelContainer() {
+    DocumentUtils.addClickEventListener("#inform-judge-panel-container .close-btn", closeInformJudgePanelContainerBtnListener);
+    DocumentUtils.addClickEventListener("#inform-judge-panel-container .inform-btn", informJudgePanelContainerBtnListener);
+    DocumentUtils.addClickEventListener("#inform-judge-panel-container .warn-btn", informJudgePanelContainerBtnListener);
 }
 
 //#endregion
@@ -155,6 +164,7 @@ function setTotalVotes(countryCode, totalVotes) {
     votingCountryDetail.querySelector(".total-votes-txt").innerHTML = totalVotes;
 }
 
+// Reveal Winner container
 function openRevealWinnerPanelContainer() {
     DocumentUtils.blurScreen();
     const revealWinnerPanelContainer = document.getElementById("reveal-winner-panel-container");
@@ -173,6 +183,23 @@ function getWinnerCountryCode() {
 
 function setRevealWinnerResultText(winnerCountryCode) {
     DocumentUtils.setInnerHTML("#reveal-winner-container .result-text", winnerCountryCode);
+}
+
+// Inform judge container
+function openInformJudgePanelContainer() {
+    DocumentUtils.blurScreen();
+    const informJudgePanelContainer = document.getElementById("inform-judge-panel-container");
+    informJudgePanelContainer.style.display = "initial";
+}
+
+function closeInformJudgePanelContainer() {
+    DocumentUtils.unblurScreen();
+    const informJudgePanelContainer = document.getElementById("inform-judge-panel-container");
+    informJudgePanelContainer.style.display = "none";
+}
+
+function emitInformMessageToJudge(code, message) {
+    socket.emit("general", {code : code, message : message});
 }
 
 //#endregion
@@ -244,29 +271,55 @@ function updateBtnListener(e) {
 
 function resetRunningCountryBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(AdminRequests.resetRunningCountry(loginJudge.code));
+    .execute(AdminRequests.resetRunningCountry(loginJudge.code))
+    .then(response => {
+        if (response.success) {
+            emitInformMessageToJudge("RESET_CACHE", "Running order has been resetted.");
+        }
+    });
 }
 
 function resetVotingStatusCacheBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(AdminRequests.resetVotingStatusCache(loginJudge.code));
+    .execute(AdminRequests.resetVotingStatusCache(loginJudge.code))
+    .then(response => {
+        if (response.success) {
+            emitInformMessageToJudge("RESET_CACHE", "Voting statuses have been resetted.");
+        }
+    });
 }
 
 function resetJudgesCacheBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(AdminRequests.resetJudgesCache(loginJudge.code));
+    .execute(AdminRequests.resetJudgesCache(loginJudge.code))
+    .then(response => {
+        if (response.success) {
+            emitInformMessageToJudge("RESET_CACHE", "Judges cache has been resetted.");
+        }
+    });
 }
 
 function resetCountriesCacheBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(AdminRequests.resetCountriesCache(loginJudge.code));
+    .execute(AdminRequests.resetCountriesCache(loginJudge.code))
+    .then(response => {
+        if (response.success) {
+            emitInformMessageToJudge("RESET_CACHE", "Countries cache has been resetted.");
+        }
+    });
 }
 
 function resetAllCachesBtnListener(e) {
     ResultButton.getByElement(e.target)
-    .execute(AdminRequests.resetAllCaches(loginJudge.code));
+    .execute(AdminRequests.resetAllCaches(loginJudge.code))
+    .then(response => {
+        if (response.success) {
+            emitInformMessageToJudge("RESET_CACHE", "All caches have been resetted.");
+        }
+    });
 }
 
+// Reveal Winner panel listeners
 function closeRevealWinnerPanelContainerBtnListener(e) {
     closeRevealWinnerPanelContainer();
 
@@ -286,6 +339,26 @@ function clearWinnerCountryBtnListener(e) {
             setRevealWinnerResultText("NONE");
         }
     })
+}
+
+// Inform judge panel listeners
+function informJudgePanelContainerBtnListener(e) {
+    let textAreaValue = DocumentUtils.getElementAttribute("#inform-judge-panel-container textarea", "value");
+    let code = "WARNING";
+
+    if (e.target.className == "inform-btn") {
+        code = "INFORM";
+    }
+
+    code += "_MESSAGE"
+
+    emitInformMessageToJudge(code, textAreaValue);
+
+    closeInformJudgePanelContainer();
+}
+
+function closeInformJudgePanelContainerBtnListener(e) {
+    closeInformJudgePanelContainer();
 }
 
 //#endregion

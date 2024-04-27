@@ -335,14 +335,66 @@ table.voting-country-table tbody button:hover {
 
 /* #endregion */
 
-/* #region Reveal winner container */
-
 #reveal-winner-container .result-text {
     padding: 0.5em;
     margin: auto;
     font-weight: 800;
     font-size: 1.2em;
     color: var(--third-color);
+}
+
+/* #region Inform message container */
+
+#inform-judge-panel-container {
+    display: none;
+    z-index: 5;
+    position: fixed;
+    transform: translateX(-50%);
+    top: 25%;
+    left: 50%;
+    background-color: var(--forth-color);
+    border: 5px solid var(--third-color);
+}
+
+#inform-judge-panel-container > .upper-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#inform-judge-panel-container > .upper-container > .close-btn {
+    font-size: 1.5em;
+}
+
+#inform-judge-panel-container > .upper-container > h1 {
+    color: var(--third-color);
+    padding: 0.5em;
+    margin: 0em;
+}
+
+#inform-judge-panel-container textarea {
+    width: 500px;
+    height: 100px;
+    padding: 0em;
+    margin: 1em;
+}
+
+#inform-judge-panel-container .button-area {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 1em auto;
+}
+
+#inform-judge-panel-container .button-area button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    padding: 10px 30px;
+    border: 5px solid var(--third-color);
+    font-family: 'Onest', sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
 }
 
 /* #endregion */

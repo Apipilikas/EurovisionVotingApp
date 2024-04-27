@@ -1,3 +1,4 @@
+import { DocumentUtils } from "../document/documentUtils.js";
 import { generalTemplates } from "../handlebarsUtils.js";
 
 const NotificationType = {
@@ -32,20 +33,20 @@ export class NotificationBox {
         this.description = description;
     }
 
-    static show(type, message, description = null, elementID = "display-box-container") {
+    static show(type, message, description = null) {
         let notificationBox = new NotificationBox(type, message, description);
 
-        notificationBox.show(elementID);
+        notificationBox.show();
 
         return notificationBox;
     }
 
-    show(elementID) {
+    show() {
         let className = NotificationClassMapping.get(this.type);
         let iconCode = NotificationIconMapping.get(this.type)
         let content = {className : className, icon : iconCode, type : this.type, message : this.message, description : this.description};
 
-        const notificationBoxContainer = document.getElementById(elementID);
+        const notificationBoxContainer = DocumentUtils.getDisplayBoxContainer();
         let notificationBoxContent = generalTemplates.notificationBox(content);
         notificationBoxContainer.innerHTML = notificationBoxContent;
 
