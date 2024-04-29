@@ -188,6 +188,9 @@ function voteBtnListener(e) {
         if (response.success) {
             setPersonalVote(countryCode, points);
         }
+        else {
+            DocumentUtils.handleResponseError(response);
+        }
     });
 }
 

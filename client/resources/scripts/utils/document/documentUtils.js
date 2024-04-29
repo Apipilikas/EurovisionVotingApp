@@ -2,6 +2,7 @@ import { ErrorBox } from "../boxes/errorBox.js";
 import { MyError } from "../errorUtils.js";
 import { ElementSelectorResolver, SelectorResolver } from "./selectorResolver.js";
 import { MessageDialog } from "../dialogs/messageDialog.js";
+import { NotificationBox } from "../boxes/notificationBox.js";
 
 let DocumentUtils = {};
 
@@ -245,6 +246,11 @@ DocumentUtils.handleGeneralSocketEvent = function(response) {
             MessageDialog.show(MessageDialog.Type.WARNING, message + " Page will be refreshed soon.", true).closeAfterMs(8000);
             break;
     }
+}
+
+DocumentUtils.handleResponseError = function(response) {
+    let error = response.jsonData.error;
+    NotificationBox.show(NotificationBox.Type.ERROR, error.code, error.description);
 }
 
 //#endregion
