@@ -27,3 +27,11 @@ export class FetchError extends MyError {
         super(message, description, "FETCH_ERROR", innerError, help);
     }
 }
+
+const defaultInitDataDescription = "Error while fetching initialization Data.";
+
+export class InitDataError extends MyError {
+    constructor(message, description = defaultInitDataDescription, innerError = null, help = defaultHelp) {
+        super(message, description, "INIT_DATA_ERROR", innerError, help);
+    }
+}

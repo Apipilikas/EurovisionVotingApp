@@ -2,6 +2,7 @@ import { AnnouncementHelper, AnnouncementUtils } from "./utils/announcementUtils
 import { NotificationBox } from "./utils/boxes/notificationBox.js";
 import { ResultButton } from "./utils/customElements/resultButton.js";
 import { DocumentUtils } from "./utils/document/documentUtils.js";
+import { InitDataError } from "./utils/errorUtils.js";
 import { votingTemplates } from "./utils/handlebarsUtils.js"
 import { InitUtils } from "./utils/initUtils.js";
 import { serverURL, CountryRequests } from "./utils/requestUtils.js";
@@ -63,8 +64,9 @@ async function getInitData() {
         
         return {countries : countriesResponse.jsonData.countries, isVotingOpen : votingStatus == "OPEN"};
     }
-
-    return null;
+    else {
+        throw new InitDataError("Failed to get countries and running Country.");
+    }
 }
 
 function setCountriesToCarousel(countries)
@@ -188,9 +190,7 @@ function voteBtnListener(e) {
         if (response.success) {
             setPersonalVote(countryCode, points);
         }
-        else {
-            DocumentUtils.handleResponseError(response);
-        }
+        else DocumentUtils.handleResponseFailure(response);
     });
 }
 

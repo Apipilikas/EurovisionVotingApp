@@ -25,13 +25,13 @@ var AdminRequests = {};
 
 class ClientResponse {
     constructor(jsonData, status) {
-        this.success = IsStatusOK(status);
+        this.success = isStatusOK(status);
         this.jsonData = jsonData;
         this.status = status;
     }
 }
 
-function IsStatusOK(status) {
+function isStatusOK(status) {
     return status == 200 || status == 201 || status == 204;
 }
 
@@ -59,7 +59,7 @@ async function sendRequest(method, urlEnding, data = null, token = null) {
     try {
         response = await fetch(url, requestInit);
         if (method != Method.GET) {
-            jsonDataResponse = (IsStatusOK(response.status)) ? null : await response.json();
+            jsonDataResponse = (isStatusOK(response.status)) ? null : await response.json();
         }
         else {
             jsonDataResponse = await response.json();
