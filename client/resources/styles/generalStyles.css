@@ -919,6 +919,7 @@ details.admin-details-container {
     margin: 0em;
     font-size: 0.7em;
     white-space: nowrap;
+    overflow-y: auto;
 }
 
 /* Close button */
@@ -1536,11 +1537,11 @@ details.admin-details-container {
     }
 
     .notification-box .message-container h1 {
-        font-size: 2em;
+        font-size: 1.5em;
     }
 
     .notification-box .message-container p {
-        font-size: 1.5em;
+        font-size: 1em;
     }
 
     /* Close button */
