@@ -1,6 +1,6 @@
 import { ErrorBox } from "../boxes/errorBox.js";
 import { MyError } from "../errorUtils.js";
-import { ElementSelectorResolver, SelectorResolver } from "./selectorResolver.js";
+import { ChildSelectorResolver, ParentSelectorResolver, SelectorResolver } from "./selectorResolver.js";
 import { MessageDialog } from "../dialogs/messageDialog.js";
 import { NotificationBox } from "../boxes/notificationBox.js";
 
@@ -54,13 +54,30 @@ function addEventListener(selector, type, listenerFunction) {
     let resolvedSelector = SelectorResolver.resolve(selector);
     if (!resolvedSelector.hasElements()) return;
     
-    if (resolvedSelector.hasMultipleElements) {
-        for (var element of resolvedSelector.elements) {
+    addEventListenerByResolver(resolvedSelector, type, listenerFunction);
+}
+
+DocumentUtils.addChildClickEventListener = function(selector, parentElement, listenerFunction) {
+    addChildEventListener(selector, parentElement, "click", listenerFunction);
+}
+
+function addChildEventListener(selector, parentElement, type, listenerFunction) {
+    if (!typeof listenerFunction === "function") return;
+
+    let resolvedSelector = ChildSelectorResolver.resolve(selector, parentElement);
+    if (!resolvedSelector.hasElements()) return;
+
+    addEventListenerByResolver(resolvedSelector, type, listenerFunction);
+}
+
+function addEventListenerByResolver(resolver, type, listenerFunction) {
+    if (resolver.hasMultipleElements) {
+        for (var element of resolver.elements) {
             addEventListenerByElement(element, type, listenerFunction);
         }
     }
     else {
-        addEventListenerByElement(resolvedSelector.elements[0], type, listenerFunction);
+        addEventListenerByElement(resolver.elements[0], type, listenerFunction);
     }
 }
 
@@ -81,10 +98,17 @@ DocumentUtils.setInnerHTML = function(selector, innerHTML) {
     setInnerHTMLByResolver(resolvedSelector, innerHTML);
 }
 
-DocumentUtils.setChildInnerHTML = function(selector, parentElement, innerHTML) {
-    let resolvedSelector = ElementSelectorResolver.resolve(selector, parentElement);
+DocumentUtils.setChildInnerHTML = function(selector, element, innerHTML) {
+    let resolvedSelector = ChildSelectorResolver.resolve(selector, element);
     if (!resolvedSelector.hasElements()) return;
     
+    setInnerHTMLByResolver(resolvedSelector, innerHTML);
+}
+
+DocumentUtils.setParentInnerHTML = function(selector, element, innerHTML) {
+    let resolvedSelector = ParentSelectorResolver.resolve(selector, element);
+    if (!resolvedSelector.hasElements()) return;
+
     setInnerHTMLByResolver(resolvedSelector, innerHTML);
 }
 
@@ -248,7 +272,7 @@ DocumentUtils.handleGeneralSocketEvent = function(response) {
     }
 }
 
-DocumentUtils.handleResponseError = function(response) {
+DocumentUtils.handleResponseFailure = function(response) {
     let error = response.jsonData.error;
     NotificationBox.show(NotificationBox.Type.ERROR, error.code, error.description);
 }

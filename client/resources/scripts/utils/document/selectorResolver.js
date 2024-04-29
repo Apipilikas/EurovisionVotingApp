@@ -1,3 +1,12 @@
+/**
+ * This class is used to find specific elements of the DOM, given a specific selector.
+ * Selector has the following format:
+ * #element-id                  -> search for element by element ID
+ * .class-name                  -> search for elements by class Name
+ * tag                          -> search for element with specific tag (query Selector)
+ * #element-id .class-name      -> search for element that suits specific selector (query Selector)
+ * #element-id .class-name ALL  -> search for elements that suit specific selector (query Selector All)
+ */
 export class SelectorResolver {
     static SelectorType = {
         ElementID : "ElementID",
@@ -98,20 +107,23 @@ export class SelectorResolver {
     }
 }
 
-export class ElementSelectorResolver extends SelectorResolver {
+/**
+ * This class is used to find a specific child element, given a selector and the parent element.
+ */
+export class ChildSelectorResolver extends SelectorResolver {
     constructor(selector, element) {
         super(selector);
         this.element = element;
     }
 
     static resolve(selector, element) {
-        let selectorResolver = new ElementSelectorResolver(selector, element);
+        let selectorResolver = new ChildSelectorResolver(selector, element);
         selectorResolver.resolve();
         return selectorResolver;
     }
 
     static resolveAll(selector, element) {
-        let selectorResolver = new ElementSelectorResolver(selector, element);
+        let selectorResolver = new ChildSelectorResolver(selector, element);
         selectorResolver.resolveAll();
         return selectorResolver;
     }
@@ -141,11 +153,20 @@ export class ElementSelectorResolver extends SelectorResolver {
     }
 }
 
-export class ParentElementSelectorResolver extends SelectorResolver {
-    constructor(selector, currentElement) {
+/**
+ * This class is used to find a specific parent element, given a selector and the child element.
+ */
+export class ParentSelectorResolver extends SelectorResolver {
+    constructor(selector, element) {
         super(selector);
-        this.currentElement = currentElement;
-        this.parentElement = currentElement;
+        this.currentElement = element;
+        this.parentElement = element;
+    }
+
+    static resolve(selector, element) {
+        let selectorResolver = new ParentSelectorResolver(selector, element);
+        selectorResolver.resolve();
+        return selectorResolver;
     }
 
     resolve() {
@@ -168,6 +189,7 @@ export class ParentElementSelectorResolver extends SelectorResolver {
             this.resolve();
         }
         else {
+            this.elements = this.parentElement;
             this.hasResolved = true;
         }
     }
