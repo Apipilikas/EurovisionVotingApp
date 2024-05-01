@@ -1,5 +1,7 @@
 :root {
-  --label-color: var(--secondary-color);
+  --button-color: black;
+  --label-color: black;
+  --checked-label-color: var(--secondary-color);
 }
 
 #voting-page {
@@ -160,7 +162,7 @@
   font-size: 1.2em;
   margin: 2em auto;
   grid-column: 1/6;
-  color: var(--label-color);
+  color: var(--checked-label-color);
 }
 
 .voting-country-container .voting-country-content .voting-closed span {
@@ -170,13 +172,22 @@
 
 /* Voting country content */
 
-.voting-country-content input[type="radio"]:checked + label {
+.voting-country-content label {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
     border: 2px solid var(--label-color);
-    background-color: var(--label-color);
+    color: var(--label-color);
+}
+
+.voting-country-content input[type="radio"]:checked + label {
+    border: 2px solid var(--checked-label-color);
+    background-color: var(--checked-label-color);
 }
 
 .voting-country-content > button {
-  background-color: var(--label-color);
+  background-color: var(--checked-label-color);
+  color: var(--button-color);
 }
 
 /*  CAROUSEL STYLES  */

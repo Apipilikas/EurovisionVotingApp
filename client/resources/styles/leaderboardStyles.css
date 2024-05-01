@@ -88,6 +88,10 @@ td.closed-voting-status {
     transition: background-color 0.5s ease-out;
 }
 
+tr.voting-status-animation td:not(:first-child) {
+    color: var(--forth-color) !important;
+}
+
 table tbody tr:has(> td.open-voting-status) {
     background: linear-gradient(to right, var(--forth-color) 25%, var(--green-color) 75%) left;
     background-size: 400% 100%;

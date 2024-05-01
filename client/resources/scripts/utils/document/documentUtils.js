@@ -36,18 +36,39 @@ function areRequiredInputsFilled(inputsArea) {
 
 //#region Event Listeners utils
 
+/**
+ * Sets click event listener to the resolved selector element(s)
+ * @param {string} selector Selector ID
+ * @param {function} listenerFunction Callback function
+ */
 DocumentUtils.addClickEventListener = function(selector, listenerFunction) {
     addEventListener(selector, "click", listenerFunction);
 }
 
+/**
+ * Sets submit event listener to the resolved selector element(s)
+ * @param {string} selector Selector ID
+ * @param {function} listenerFunction Callback function
+ */
 DocumentUtils.addSubmitEventListener = function(selector, listenerFunction) {
     addEventListener(selector, "submit", listenerFunction);
 }
 
+/**
+ * Sets change event listener to the resolved selector element(s)
+ * @param {string} selector Selector ID
+ * @param {function} listenerFunction Callback function
+ */
 DocumentUtils.addChangeEventListener = function(selector, listenerFunction) {
     addEventListener(selector, "change", listenerFunction);
 }
 
+/**
+ * Generic function | Sets event listener with the given type to the resolved selector element(s)
+ * @param {string} selector Selector ID
+ * @param {string} type Type of the event
+ * @param {function} listenerFunction Callback function
+ */
 function addEventListener(selector, type, listenerFunction) {
     if (!typeof listenerFunction === "function") return;
 
@@ -57,14 +78,20 @@ function addEventListener(selector, type, listenerFunction) {
     addEventListenerByResolver(resolvedSelector, type, listenerFunction);
 }
 
-DocumentUtils.addChildClickEventListener = function(selector, parentElement, listenerFunction) {
-    addChildEventListener(selector, parentElement, "click", listenerFunction);
+/**
+ * Sets click event listener to the resolved selector child element of the given element
+ * @param {*} selector Selector ID
+ * @param {*} element Current element
+ * @param {*} listenerFunction Callback function
+ */
+DocumentUtils.addChildClickEventListener = function(selector, element, listenerFunction) {
+    addChildEventListener(selector, element, "click", listenerFunction);
 }
 
-function addChildEventListener(selector, parentElement, type, listenerFunction) {
+function addChildEventListener(selector, element, type, listenerFunction) {
     if (!typeof listenerFunction === "function") return;
 
-    let resolvedSelector = ChildSelectorResolver.resolve(selector, parentElement);
+    let resolvedSelector = ChildSelectorResolver.resolve(selector, element);
     if (!resolvedSelector.hasElements()) return;
 
     addEventListenerByResolver(resolvedSelector, type, listenerFunction);
@@ -228,16 +255,26 @@ DocumentUtils.containsClassNameByElement = function(element, className) {
 
 //#region General utils
 
+/**
+ * Blurs the screen
+ */
 DocumentUtils.blurScreen = function() {
     const blurScreen = document.getElementById("blur-screen");
     blurScreen.style.display = "initial";
 }
 
+/**
+ * Unblurs the screen
+ */
 DocumentUtils.unblurScreen = function() {
     const blurScreen = document.getElementById("blur-screen");
     blurScreen.style.display = "none";
 }
 
+/**
+ * Handles the errors by showing Error box
+ * @param {Error} e Error that will be handled 
+ */
 DocumentUtils.handleError = function(e) {
     if (e instanceof MyError) {
         ErrorBox.showMyError(e);
@@ -247,14 +284,25 @@ DocumentUtils.handleError = function(e) {
     }
 }
 
+/**
+ * Reloads the page
+ */
 DocumentUtils.reloadPage = function() {
     location.reload();
 }
 
+/**
+ * Gets the Display Box Container Element
+ * @returns {HTMLElement} Display box Container
+ */
 DocumentUtils.getDisplayBoxContainer = function() {
     return document.getElementById("display-box-container");
 }
 
+/**
+ * Handles the "general" socket event
+ * @param {Object} response The response of the "general" event 
+ */
 DocumentUtils.handleGeneralSocketEvent = function(response) {
     let code = response.data.code;
     let message = response.message.plainText;
@@ -272,6 +320,10 @@ DocumentUtils.handleGeneralSocketEvent = function(response) {
     }
 }
 
+/**
+ * Handles response failure error came from requests to the server
+ * @param {ClientResponse} response The server response
+ */
 DocumentUtils.handleResponseFailure = function(response) {
     let error = response.jsonData.error;
     NotificationBox.show(NotificationBox.Type.ERROR, error.code, error.description);

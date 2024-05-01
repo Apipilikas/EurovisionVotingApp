@@ -133,7 +133,17 @@ function setVotingContentToRunningCountry(isVotingOpen) {
 
     // Style voting country content
     const rootVariables = document.querySelector(":root");
-    rootVariables.style.setProperty("--label-color", flagColor2);
+    rootVariables.style.setProperty("--checked-label-color", flagColor2);
+
+    let labelColor = flagColor3;
+
+    if (flagColor1 == flagColor3) {
+        labelColor = flagColor2;
+    }
+
+    rootVariables.style.setProperty("--label-color", labelColor);
+    rootVariables.style.setProperty("--button-color", flagColor1);
+    
     votingCountryContent.style = "background-color:" + flagColor1;
 
     if (!isVotingOpen) {

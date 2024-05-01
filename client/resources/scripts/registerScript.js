@@ -4,7 +4,6 @@
 import { clientURL, JudgeRequests } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
 import { DocumentUtils } from "./utils/document/documentUtils.js";
-import { ParentSelectorResolver } from "./utils/document/selectorResolver.js";
 
 
 
@@ -107,8 +106,6 @@ function updateContainer(content) {
 function connectBtnListener(e) {
     console.log(e.target)
     let judgeCode = DocumentUtils.getElementAttribute("input[type=radio]:checked", "value");
-    let a = ParentSelectorResolver.resolve("#registration-fs", e.target);
-    console.log(a.elements)
 
     if (judgeCode != null) {
         window.location.replace(clientURL + "client/voting.html?judgeCode=" + judgeCode);
