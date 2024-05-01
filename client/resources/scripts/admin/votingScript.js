@@ -65,7 +65,7 @@ function initBtnLinsteners() {
     DocumentUtils.addClickEventListener("#inform-judge-btn", openInformJudgePanelContainer);
 
     // Toggle switches
-    DocumentUtils.addClickEventListener(".voting-toggle-switch", toggleSwitchListener);
+    DocumentUtils.addChangeEventListener(".voting-toggle-switch", toggleSwitchListener);
 
     // Update vote buttons
     DocumentUtils.addClickEventListener(".update-vote-btn", updateBtnListener);
@@ -76,6 +76,7 @@ function initBtnLinsteners() {
 
 function initVotesToJudges(countries) {
     for (var country of countries) {
+        if (country.votes == null) continue;
         for (var [judgeCode, points] of Object.entries(country.votes)) {
             setVoteToJudge(judgeCode, country.code, points);
         }
@@ -210,7 +211,7 @@ function setDataToDashboard(country, judgesNumber, onlineJudgesNumber) {
     let offlineJudgesNumber = judgesNumber - onlineJudgesNumber;
     let judgesVotedNumber = null;
     if (country != null) {
-        judgesVotedNumber = Object.keys(country.votes).length;
+        judgesVotedNumber = (country.votes == null) ? 0 : Object.keys(country.votes).length;
         setRunningCountryDashboard(country.runningOrder, country.name, country.song, country.artist);
         setTotalVotesDashboard(country.totalVotes);
     }

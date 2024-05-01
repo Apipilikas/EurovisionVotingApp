@@ -109,7 +109,7 @@ function getCountryInputsValue() {
         code: codeValue,
         name: nameValue,
         qualified: qualifiedValue,
-        runningOrder: runningOrderValue,
+        runningOrder: parseInt(runningOrderValue),
         flagColors: [flagColor1Value, flagColor2Value, flagColor3Value],
         artist: artistValue,
         song: songValue

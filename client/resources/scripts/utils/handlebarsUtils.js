@@ -37,7 +37,7 @@ votingTemplates.countries = Handlebars.compile(`
     <summary style="background-color: {{this.flagColors.[1]}}">
         <div class="left-container">
             <p style="background-color: {{this.flagColors.[1]}}; color: {{this.flagColors.[0]}}">{{this.runningOrder}}</p>
-            <img src="/client/resources/images/flags/gr.svg" width="55px">
+            <img src="/client/resources/images/flags/{{this.code}}.svg" width="55px">
             <div class="country-name-container">
                 <div class="color-container">
                     <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
@@ -55,8 +55,8 @@ votingTemplates.countries = Handlebars.compile(`
                 </div>
                 <p class="country-name" style="color: {{this.flagColors.[0]}}">{{this.name}}</p>
                 <div class="artist-song-container">
-                    <p class="song-title">{{this.song}}</p>
-                    <p class="artist-name">{{this.artist}}</p>
+                    <p class="song-title" style="color: {{this.flagColors.[2]}}">{{this.song}}</p>
+                    <p class="artist-name" style="color: {{this.flagColors.[2]}}">{{this.artist}}</p>
                 </div>
             </div>
         </div>
@@ -195,7 +195,7 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
     <summary>
         <div class="left-container">
             <p class="running-order-txt">{{this.runningOrder}}</p>
-            <img src="/client/resources/images/flags/gr.svg" width="55px">
+            <img src="/client/resources/images/flags/{{this.code}}.svg" width="55px">
             <p class="code-txt">{{this.code}}</p>
             <p class="name-txt">{{this.name}}</p>
         </div>
@@ -275,7 +275,7 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
         <td class="points-txt" id="{{../this.code}}-{{this.code}}-points">0</td>
         {{/each}}
         <td class="total-votes-txt" id="{{this.code}}-total-votes">{{this.totalVotes}}</td>
-        <td id="{{this.code}}-voting-status" class="closed-voting-status">CLOSED</td>
+        <td id="{{this.code}}-voting-status" class="voting-status closed-voting-status">CLOSED</td>
     </tr>
     {{/each}}
     </tbody>
