@@ -54,21 +54,21 @@ function initContainers() {
 
 function initBtnLinsteners() {
     // next country button
-    DocumentUtils.addClickEventListener("#next-country-btn", nextCountryBtnListener);
+    DocumentUtils.setClickEventListener("#next-country-btn", nextCountryBtnListener);
 
     // Admin settings buttons
-    DocumentUtils.addClickEventListener("#reset-running-country-btn", resetRunningCountryBtnListener);
-    DocumentUtils.addClickEventListener("#reset-voting-status-cache-btn", resetVotingStatusCacheBtnListener);
-    DocumentUtils.addClickEventListener("#reset-judges-cache-btn", resetJudgesCacheBtnListener);
-    DocumentUtils.addClickEventListener("#reset-countries-cache-btn", resetCountriesCacheBtnListener);
-    DocumentUtils.addClickEventListener("#reset-all-caches-btn", resetAllCachesBtnListener);
-    DocumentUtils.addClickEventListener("#inform-judge-btn", openInformJudgePanelContainer);
+    DocumentUtils.setClickEventListener("#reset-running-country-btn", resetRunningCountryBtnListener);
+    DocumentUtils.setClickEventListener("#reset-voting-status-cache-btn", resetVotingStatusCacheBtnListener);
+    DocumentUtils.setClickEventListener("#reset-judges-cache-btn", resetJudgesCacheBtnListener);
+    DocumentUtils.setClickEventListener("#reset-countries-cache-btn", resetCountriesCacheBtnListener);
+    DocumentUtils.setClickEventListener("#reset-all-caches-btn", resetAllCachesBtnListener);
+    DocumentUtils.setClickEventListener("#inform-judge-btn", openInformJudgePanelContainer);
 
     // Toggle switches
-    DocumentUtils.addChangeEventListener(".voting-toggle-switch", toggleSwitchListener);
+    DocumentUtils.setChangeEventListener(".voting-toggle-switch", toggleSwitchListener);
 
     // Update vote buttons
-    DocumentUtils.addClickEventListener(".update-vote-btn", updateBtnListener);
+    DocumentUtils.setClickEventListener(".update-vote-btn", updateBtnListener);
 
     // Init menu button
     InitUtils.initMenuBtnListener();
@@ -92,16 +92,16 @@ function initDashboard(countries, judgesNumber, onlineJudgesNumber) {
 function initRevealWinnerPanelContainer(countries) {
     let content = adminTemplates.voting.revealWinnerBoxContainerContent({countries : countries});
     DocumentUtils.setInnerHTML("#reveal-winner-panel-content", content);
-    DocumentUtils.addClickEventListener("#reveal-winner-panel-container .close-btn", closeRevealWinnerPanelContainerBtnListener);
-    DocumentUtils.addClickEventListener("#reveal-winner-panel-container .ok-btn", closeRevealWinnerPanelContainerBtnListener);
-    DocumentUtils.addClickEventListener("#reveal-winner-panel-container .clear-btn", clearWinnerCountryBtnListener)
-    DocumentUtils.addClickEventListener("#reveal-winner-btn", openRevealWinnerPanelContainer);
+    DocumentUtils.setClickEventListener("#reveal-winner-panel-container .close-btn", closeRevealWinnerPanelContainerBtnListener);
+    DocumentUtils.setClickEventListener("#reveal-winner-panel-container .ok-btn", closeRevealWinnerPanelContainerBtnListener);
+    DocumentUtils.setClickEventListener("#reveal-winner-panel-container .clear-btn", clearWinnerCountryBtnListener)
+    DocumentUtils.setClickEventListener("#reveal-winner-btn", openRevealWinnerPanelContainer);
 }
 
 function initInformJudgePanelContainer() {
-    DocumentUtils.addClickEventListener("#inform-judge-panel-container .close-btn", closeInformJudgePanelContainerBtnListener);
-    DocumentUtils.addClickEventListener("#inform-judge-panel-container .inform-btn", informJudgePanelContainerBtnListener);
-    DocumentUtils.addClickEventListener("#inform-judge-panel-container .warn-btn", informJudgePanelContainerBtnListener);
+    DocumentUtils.setClickEventListener("#inform-judge-panel-container .close-btn", closeInformJudgePanelContainerBtnListener);
+    DocumentUtils.setClickEventListener("#inform-judge-panel-container .inform-btn", informJudgePanelContainerBtnListener);
+    DocumentUtils.setClickEventListener("#inform-judge-panel-container .warn-btn", informJudgePanelContainerBtnListener);
 }
 
 //#endregion

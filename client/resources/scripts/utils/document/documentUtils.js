@@ -38,77 +38,96 @@ function areRequiredInputsFilled(inputsArea) {
 
 /**
  * Sets click event listener to the resolved selector element(s)
- * @param {string} selector Selector ID
- * @param {function} listenerFunction Callback function
+ * @param {string} selectorID Selector ID
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
-DocumentUtils.addClickEventListener = function(selector, listenerFunction) {
-    addEventListener(selector, "click", listenerFunction);
+DocumentUtils.setClickEventListener = function(selectorID, listenerFunction) {
+    setEventListener(selectorID, "click", listenerFunction);
 }
 
 /**
  * Sets submit event listener to the resolved selector element(s)
- * @param {string} selector Selector ID
- * @param {function} listenerFunction Callback function
+ * @param {string} selectorID Selector ID
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
-DocumentUtils.addSubmitEventListener = function(selector, listenerFunction) {
-    addEventListener(selector, "submit", listenerFunction);
+DocumentUtils.setSubmitEventListener = function(selectorID, listenerFunction) {
+    setEventListener(selectorID, "submit", listenerFunction);
 }
 
 /**
  * Sets change event listener to the resolved selector element(s)
- * @param {string} selector Selector ID
- * @param {function} listenerFunction Callback function
+ * @param {string} selectorID Selector ID
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
-DocumentUtils.addChangeEventListener = function(selector, listenerFunction) {
-    addEventListener(selector, "change", listenerFunction);
+DocumentUtils.setChangeEventListener = function(selectorID, listenerFunction) {
+    setEventListener(selectorID, "change", listenerFunction);
 }
 
 /**
  * Generic function | Sets event listener with the given type to the resolved selector element(s)
- * @param {string} selector Selector ID
+ * @param {string} selectorID Selector ID
  * @param {string} type Type of the event
- * @param {function} listenerFunction Callback function
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
-function addEventListener(selector, type, listenerFunction) {
+function setEventListener(selectorID, type, listenerFunction) {
     if (!typeof listenerFunction === "function") return;
 
-    let resolvedSelector = SelectorResolver.resolve(selector);
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements()) return;
     
-    addEventListenerByResolver(resolvedSelector, type, listenerFunction);
+    setEventListenerByResolver(resolvedSelector, type, listenerFunction);
 }
 
 /**
  * Sets click event listener to the resolved selector child element of the given element
- * @param {*} selector Selector ID
- * @param {*} element Current element
- * @param {*} listenerFunction Callback function
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
-DocumentUtils.addChildClickEventListener = function(selector, element, listenerFunction) {
-    addChildEventListener(selector, element, "click", listenerFunction);
+DocumentUtils.setChildClickEventListener = function(selectorID, element, listenerFunction) {
+    setChildEventListener(selectorID, element, "click", listenerFunction);
 }
 
-function addChildEventListener(selector, element, type, listenerFunction) {
+/**
+ * Sets click event listener to the resolved selector child element
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @param {string} type Type of the event
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
+ */
+function setChildEventListener(selectorID, element, type, listenerFunction) {
     if (!typeof listenerFunction === "function") return;
 
-    let resolvedSelector = ChildSelectorResolver.resolve(selector, element);
+    let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
     if (!resolvedSelector.hasElements()) return;
 
-    addEventListenerByResolver(resolvedSelector, type, listenerFunction);
+    setEventListenerByResolver(resolvedSelector, type, listenerFunction);
 }
 
-function addEventListenerByResolver(resolver, type, listenerFunction) {
+/**
+ * Generic function | Sets event listener with the given type to the resolved selector element(s)
+ * @param {SelectorResolver} resolver Resolved selector instance
+ * @param {string} type Type of the event
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
+ */
+function setEventListenerByResolver(resolver, type, listenerFunction) {
     if (resolver.hasMultipleElements) {
         for (var element of resolver.elements) {
-            addEventListenerByElement(element, type, listenerFunction);
+            setEventListenerByElement(element, type, listenerFunction);
         }
     }
     else {
-        addEventListenerByElement(resolver.elements[0], type, listenerFunction);
+        setEventListenerByElement(resolver.elements[0], type, listenerFunction);
     }
 }
 
-function addEventListenerByElement(element, type, listenerFunction) {
+/**
+ * Sets event listener with the given type to the element
+ * @param {HTMLElement} element Element
+ * @param {string} type Type of the event
+ * @param {function} listenerFunction Callback function. Always passes event as a parameter.
+ */
+function setEventListenerByElement(element, type, listenerFunction) {
     element.addEventListener(type, e => listenerFunction(e));
 }
 
@@ -116,36 +135,62 @@ function addEventListenerByElement(element, type, listenerFunction) {
 
 //#region Inner HTML utils
 
-DocumentUtils.setInnerHTML = function(selector, innerHTML) {
+/**
+ * Sets inner HTML to the resolved selector element(s)
+ * @param {string} selectorID Selector ID
+ * @param {string} innerHTML Inner HTML content
+ */
+DocumentUtils.setInnerHTML = function(selectorID, innerHTML) {
     if (innerHTML == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selector);
-    if (!resolvedSelector.hasElements()) return;
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
 
     setInnerHTMLByResolver(resolvedSelector, innerHTML);
 }
 
-DocumentUtils.setChildInnerHTML = function(selector, element, innerHTML) {
-    let resolvedSelector = ChildSelectorResolver.resolve(selector, element);
-    if (!resolvedSelector.hasElements()) return;
+/**
+ * Sets inner HTML to the resolved selector child element(s)
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @param {string} innerHTML Inner HTML content
+ */
+DocumentUtils.setChildInnerHTML = function(selectorID, element, innerHTML) {
+    let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
     
     setInnerHTMLByResolver(resolvedSelector, innerHTML);
 }
 
-DocumentUtils.setParentInnerHTML = function(selector, element, innerHTML) {
-    let resolvedSelector = ParentSelectorResolver.resolve(selector, element);
-    if (!resolvedSelector.hasElements()) return;
+/**
+ * Sets inner HTML to the resolved selector parent element
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @param {string} innerHTML Inner HTML content
+ */
+DocumentUtils.setParentInnerHTML = function(selectorID, element, innerHTML) {
+    let resolvedSelector = ParentSelectorResolver.resolve(selectorID, element);
 
     setInnerHTMLByResolver(resolvedSelector, innerHTML);
 }
 
+/**
+ * Sets inner HTML to the current element
+ * @param {HTMLElement} element Current element
+ * @param {string} innerHTML Inner HTML content 
+ */
 DocumentUtils.setInnerHTMLByElement = function(element, innerHTML) {
     if (element == null || innerHTML == null) return;
     
     element.innerHTML = innerHTML;
 }
 
+/**
+ * Generic function | Sets inner HTML to the resolved selector element(s)
+ * @param {SelectorResolver} resolver Resolver instance
+ * @param {string} innerHTML Inner HTML content
+ */
 function setInnerHTMLByResolver(resolver, innerHTML) {
+    if (!resolver.hasElements()) return;
+
     if (resolver.hasMultipleElements) {
         for (var element of resolver.elements) {
             DocumentUtils.setInnerHTMLByElement(element, innerHTML);
@@ -179,12 +224,12 @@ DocumentUtils.setElementAttribute = function(selector, attributeName, attributeV
 }
 
 DocumentUtils.getElementAttributeByElement = function(element, attributeName) {
-    if (element == null || !element instanceof Element) return;
+    if (element == null) return;
     return element[attributeName];
 }
 
 DocumentUtils.setElementAttributeByElement = function(element, attributeName, attributeValue) {
-    if (element == null || !element instanceof Element) return;
+    if (element == null) return;
     element[attributeName] = attributeValue;
 }
 
@@ -253,6 +298,20 @@ DocumentUtils.containsClassNameByElement = function(element, className) {
 
 //#endregion
 
+//#region Root property utils
+
+/**
+ * Sets value to the :root property name.
+ * @param {string} propertyName Name of the property
+ * @param {string} propertyValue Value of the property
+ */
+DocumentUtils.setRootProperty = function(propertyName, propertyValue) {
+    const rootVariables = document.querySelector(":root");
+    rootVariables.style.setProperty(propertyName, propertyValue);
+}
+
+//#endregion
+
 //#region General utils
 
 /**
@@ -273,14 +332,14 @@ DocumentUtils.unblurScreen = function() {
 
 /**
  * Handles the errors by showing Error box
- * @param {Error} e Error that will be handled 
+ * @param {Error} error Error that will be handled 
  */
-DocumentUtils.handleError = function(e) {
-    if (e instanceof MyError) {
-        ErrorBox.showMyError(e);
+DocumentUtils.handleError = function(error) {
+    if (error instanceof MyError) {
+        ErrorBox.showMyError(error);
     }
     else {
-        ErrorBox.show(e.message, e.stack, "GENERAL_ERROR", "Contact Aggelos and reload the page.");
+        ErrorBox.show(error.message, error.stack, "GENERAL_ERROR", "Contact Aggelos and reload the page.");
     }
 }
 

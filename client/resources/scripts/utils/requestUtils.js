@@ -1,11 +1,11 @@
 import { FetchError } from "./errorUtils.js";
 
 const serverURL = {
-    address: "http://192.168.1.70:8080/",
+    address: "http://127.0.0.1:8080/",
     prefix : "api/v1/"
 };
 
-const clientURL = "http://192.168.1.70:5500/";
+const clientURL = "http://127.0.0.1:5500/";
 
 const Method = {
     GET: "GET",
