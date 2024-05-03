@@ -37,7 +37,7 @@ function areRequiredInputsFilled(inputsArea) {
 //#region Event Listeners utils
 
 /**
- * Sets click event listener to the resolved selector element(s)
+ * Sets click event listener to the resolved selector element(s).
  * @param {string} selectorID Selector ID
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
@@ -46,7 +46,7 @@ DocumentUtils.setClickEventListener = function(selectorID, listenerFunction) {
 }
 
 /**
- * Sets submit event listener to the resolved selector element(s)
+ * Sets submit event listener to the resolved selector element(s).
  * @param {string} selectorID Selector ID
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
@@ -55,7 +55,7 @@ DocumentUtils.setSubmitEventListener = function(selectorID, listenerFunction) {
 }
 
 /**
- * Sets change event listener to the resolved selector element(s)
+ * Sets change event listener to the resolved selector element(s).
  * @param {string} selectorID Selector ID
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
@@ -64,7 +64,7 @@ DocumentUtils.setChangeEventListener = function(selectorID, listenerFunction) {
 }
 
 /**
- * Generic function | Sets event listener with the given type to the resolved selector element(s)
+ * Generic function | Sets event listener with the given type to the resolved selector element(s).
  * @param {string} selectorID Selector ID
  * @param {string} type Type of the event
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
@@ -79,7 +79,7 @@ function setEventListener(selectorID, type, listenerFunction) {
 }
 
 /**
- * Sets click event listener to the resolved selector child element of the given element
+ * Sets click event listener to the resolved selector child element of the given element.
  * @param {string} selectorID Selector ID
  * @param {HTMLElement} element Current element
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
@@ -89,7 +89,7 @@ DocumentUtils.setChildClickEventListener = function(selectorID, element, listene
 }
 
 /**
- * Sets click event listener to the resolved selector child element
+ * Sets click event listener to the resolved selector child element.
  * @param {string} selectorID Selector ID
  * @param {HTMLElement} element Current element
  * @param {string} type Type of the event
@@ -105,7 +105,7 @@ function setChildEventListener(selectorID, element, type, listenerFunction) {
 }
 
 /**
- * Generic function | Sets event listener with the given type to the resolved selector element(s)
+ * Generic function | Sets event listener with the given type to the resolved selector element(s).
  * @param {SelectorResolver} resolver Resolved selector instance
  * @param {string} type Type of the event
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
@@ -122,7 +122,7 @@ function setEventListenerByResolver(resolver, type, listenerFunction) {
 }
 
 /**
- * Sets event listener with the given type to the element
+ * Sets event listener with the given type to the element.
  * @param {HTMLElement} element Element
  * @param {string} type Type of the event
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
@@ -136,7 +136,7 @@ function setEventListenerByElement(element, type, listenerFunction) {
 //#region Inner HTML utils
 
 /**
- * Sets inner HTML to the resolved selector element(s)
+ * Sets inner HTML to the resolved selector element(s).
  * @param {string} selectorID Selector ID
  * @param {string} innerHTML Inner HTML content
  */
@@ -149,7 +149,7 @@ DocumentUtils.setInnerHTML = function(selectorID, innerHTML) {
 }
 
 /**
- * Sets inner HTML to the resolved selector child element(s)
+ * Sets inner HTML to the resolved selector child element(s).
  * @param {string} selectorID Selector ID
  * @param {HTMLElement} element Current element
  * @param {string} innerHTML Inner HTML content
@@ -161,7 +161,7 @@ DocumentUtils.setChildInnerHTML = function(selectorID, element, innerHTML) {
 }
 
 /**
- * Sets inner HTML to the resolved selector parent element
+ * Sets inner HTML to the resolved selector parent element.
  * @param {string} selectorID Selector ID
  * @param {HTMLElement} element Current element
  * @param {string} innerHTML Inner HTML content
@@ -173,7 +173,7 @@ DocumentUtils.setParentInnerHTML = function(selectorID, element, innerHTML) {
 }
 
 /**
- * Sets inner HTML to the current element
+ * Sets inner HTML to the current element.
  * @param {HTMLElement} element Current element
  * @param {string} innerHTML Inner HTML content 
  */
@@ -184,7 +184,7 @@ DocumentUtils.setInnerHTMLByElement = function(element, innerHTML) {
 }
 
 /**
- * Generic function | Sets inner HTML to the resolved selector element(s)
+ * Generic function | Sets inner HTML to the resolved selector element(s).
  * @param {SelectorResolver} resolver Resolver instance
  * @param {string} innerHTML Inner HTML content
  */
@@ -315,7 +315,7 @@ DocumentUtils.setRootProperty = function(propertyName, propertyValue) {
 //#region General utils
 
 /**
- * Blurs the screen
+ * Blurs the screen.
  */
 DocumentUtils.blurScreen = function() {
     const blurScreen = document.getElementById("blur-screen");
@@ -323,7 +323,7 @@ DocumentUtils.blurScreen = function() {
 }
 
 /**
- * Unblurs the screen
+ * Unblurs the screen.
  */
 DocumentUtils.unblurScreen = function() {
     const blurScreen = document.getElementById("blur-screen");
@@ -331,7 +331,7 @@ DocumentUtils.unblurScreen = function() {
 }
 
 /**
- * Handles the errors by showing Error box
+ * Handles the errors by showing Error box.
  * @param {Error} error Error that will be handled 
  */
 DocumentUtils.handleError = function(error) {
@@ -344,14 +344,14 @@ DocumentUtils.handleError = function(error) {
 }
 
 /**
- * Reloads the page
+ * Reloads the page.
  */
 DocumentUtils.reloadPage = function() {
     location.reload();
 }
 
 /**
- * Gets the Display Box Container Element
+ * Gets the Display Box Container Element.
  * @returns {HTMLElement} Display box Container
  */
 DocumentUtils.getDisplayBoxContainer = function() {
@@ -359,7 +359,7 @@ DocumentUtils.getDisplayBoxContainer = function() {
 }
 
 /**
- * Handles the "general" socket event
+ * Handles the "general" socket event.
  * @param {Object} response The response of the "general" event 
  */
 DocumentUtils.handleGeneralSocketEvent = function(response) {
@@ -380,7 +380,7 @@ DocumentUtils.handleGeneralSocketEvent = function(response) {
 }
 
 /**
- * Handles response failure error came from requests to the server
+ * Handles response failure error came from requests to the server.
  * @param {ClientResponse} response The server response
  */
 DocumentUtils.handleResponseFailure = function(response) {
