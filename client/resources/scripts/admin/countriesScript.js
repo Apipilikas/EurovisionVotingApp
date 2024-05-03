@@ -36,11 +36,11 @@ function initBtnListeners() {
                                                                                          inputsArea,
                                                                                          loadCountries()));
 
-    DocumentUtils.addSubmitEventListener("#create-country-form", createCountryFormListener);
-    DocumentUtils.addClickEventListener("#modify-countries-list-container", countryContainerListener);
+    DocumentUtils.setSubmitEventListener("#create-country-form", createCountryFormListener);
+    DocumentUtils.setClickEventListener("#modify-countries-list-container", countryContainerListener);
 
-    DocumentUtils.addClickEventListener("#modify-btn", modifyBtnListener);
-    DocumentUtils.addClickEventListener("#delete-btn", deleteBtnListener);
+    DocumentUtils.setClickEventListener("#modify-btn", modifyBtnListener);
+    DocumentUtils.setClickEventListener("#delete-btn", deleteBtnListener);
 }
 
 //#endregion

@@ -132,8 +132,7 @@ function setVotingContentToRunningCountry(isVotingOpen) {
     if (votingCountryContent == null) return;
 
     // Style voting country content
-    const rootVariables = document.querySelector(":root");
-    rootVariables.style.setProperty("--checked-label-color", flagColor2);
+    DocumentUtils.setRootProperty("--checked-label-color", flagColor2);
 
     let labelColor = flagColor3;
 
@@ -141,9 +140,9 @@ function setVotingContentToRunningCountry(isVotingOpen) {
         labelColor = flagColor2;
     }
 
-    rootVariables.style.setProperty("--label-color", labelColor);
-    rootVariables.style.setProperty("--button-color", flagColor1);
-    
+    DocumentUtils.setRootProperty("--label-color", labelColor);
+    DocumentUtils.setRootProperty("--button-color", flagColor1);
+
     votingCountryContent.style = "background-color:" + flagColor1;
 
     if (!isVotingOpen) {
@@ -249,6 +248,10 @@ socket.on("votingStatus", (response) => {
     if (votingStatus.countries.find(el => el == runningCountryCode) != null) {
         setVotingContentToRunningCountry(isVotingOpen);
     }
+});
+
+socket.on("general", (response) => {
+    DocumentUtils.handleGeneralSocketEvent(response);
 });
 
 //#endregion

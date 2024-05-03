@@ -183,6 +183,7 @@
 .voting-country-content input[type="radio"]:checked + label {
     border: 2px solid var(--checked-label-color);
     background-color: var(--checked-label-color);
+    color: var(--button-color);
 }
 
 .voting-country-content > button {

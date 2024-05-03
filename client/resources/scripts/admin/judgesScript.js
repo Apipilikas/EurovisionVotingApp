@@ -36,12 +36,12 @@ function initBtnListeners() {
                                                                                          loadJudges()));
 
     // createJudgeForm.addEventListener("submit", e => createJudgeFormListener(e));
-    DocumentUtils.addSubmitEventListener("#create-judge-form", createJudgeFormListener);
+    DocumentUtils.setSubmitEventListener("#create-judge-form", createJudgeFormListener);
 
     // modifyJudgesListContainer.addEventListener("click", e => judgeContainerListener(e));
-    DocumentUtils.addClickEventListener("#modify-judges-list-container", judgeContainerListener);
-    DocumentUtils.addClickEventListener("#modify-btn", modifyBtnListener);
-    DocumentUtils.addClickEventListener("#delete-btn", deleteBtnListener);
+    DocumentUtils.setClickEventListener("#modify-judges-list-container", judgeContainerListener);
+    DocumentUtils.setClickEventListener("#modify-btn", modifyBtnListener);
+    DocumentUtils.setClickEventListener("#delete-btn", deleteBtnListener);
 }
 
 //#endregion

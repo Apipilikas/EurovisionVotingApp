@@ -1,6 +1,3 @@
-// to get arguments from url => index.html?userID=test&userName=name
-// const params = new URLSearchParams(document.location.search);
-
 import { clientURL, JudgeRequests } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
 import { DocumentUtils } from "./utils/document/documentUtils.js";
@@ -23,7 +20,7 @@ function init() {
 //#region Init functions
 
 function initBtnLinsteners() {
-    DocumentUtils.addClickEventListener("#connect-btn", connectBtnListener);
+    DocumentUtils.setClickEventListener("#connect-btn", connectBtnListener);
 }
 
 function initJudgeListContainer() {
