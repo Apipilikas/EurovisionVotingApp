@@ -23,15 +23,31 @@ const MessageCaptionMapping = new Map([
 
 const closeMessageDialogClassName = "close-message-dialog";
 
+/**
+ * This class is used to display different kind of information ensuring user future actions.
+ */
 export class MessageDialog {
     static Type = MessageType;
 
+    /**
+     * MessageDialog constructor
+     * @param {MessageDialog.Type} type Type of the dialog
+     * @param {string} message 
+     * @param {boolean} reloadPage True to reload page
+     */
     constructor(type, message, reloadPage = false) {
         this.type = type;
         this.message = message;
         this.reloadPage = reloadPage;
     }
 
+    /**
+     * Creates and shows the message dialog.
+     * @param {MessageDialog.Type} type Type of the dialog
+     * @param {string} message 
+     * @param {boolean} reloadPage True to reload page
+     * @returns {MessageDialog} Returns a MessageDialog instance.
+     */
     static show(type, message, reloadPage = false) {
         let messageDialog = new MessageDialog(type, message, reloadPage);
 
@@ -40,6 +56,9 @@ export class MessageDialog {
         return messageDialog;
     }
 
+    /**
+     * Shows the message dialog.
+     */
     show() {
         DocumentUtils.blurScreen();
 
@@ -59,6 +78,10 @@ export class MessageDialog {
         closeBtn.addEventListener("click", e => this.close());
     }
 
+    /**
+     * Closes message dialog after specific ms if user hasn't done it before this time. Countdown is displayed next to close button.
+     * @param {number} ms  
+     */
     closeAfterMs(ms) {
         const timerContainer = document.getElementsByClassName("timer-container")[0];
         timerContainer.style.display = "flex";
@@ -81,11 +104,18 @@ export class MessageDialog {
         }, ms);
     }
 
+    /**
+     * Gets timer container caption. If reload page is true then the caption is "Reloading in". Otherwise "Closing in".
+     * @returns {string} Caption
+     */
     getTimerContainerCaption() {
         if (this.reloadPage) return "Reloading in";
         else return "Closing in";
     }
 
+    /**
+     * Closes the message dialog. If reload page is true, closing the dialog forces page to be reloaded.
+     */
     close() {
         DocumentUtils.unblurScreen();
 

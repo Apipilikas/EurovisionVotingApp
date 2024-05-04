@@ -1,9 +1,21 @@
 import { DocumentUtils } from "../document/documentUtils.js";
+import { MyError } from "../errorUtils.js";
 import { generalTemplates } from "../handlebarsUtils.js";
 
 const closeErrorBoxClassName = "close-error-box";
 
+/**
+ * This class is used to display further information when an error is thrown.
+ */
 export class ErrorBox {
+    /**
+     * ErrorBox constructor
+     * @param {string} message Error message
+     * @param {string} stackTrace Error stack trace
+     * @param {string} type Error type
+     * @param {string} help Help message
+     * @param {string} description Description for further information
+     */
     constructor(message, stackTrace, type, help, description) {
         this.message = message;
         this.stackTrace = stackTrace;
@@ -12,6 +24,15 @@ export class ErrorBox {
         this.description = description;
     }
 
+    /**
+     * Creates and shows the error box.
+     * @param {string} message Error message
+     * @param {string} stackTrace Error stack trace
+     * @param {string} type Error type
+     * @param {string} help Help message
+     * @param {string} description Description for further information
+     * @returns {ErrorBox} Returns an ErrorBox instance.
+     */
     static show(message, stackTrace, type, help = null, description = null) {
         let errorBox = new ErrorBox(message, stackTrace, type, help, description);
 
@@ -20,6 +41,11 @@ export class ErrorBox {
         return errorBox;
     }
 
+    /**
+     * Creates and shows the error box using MyError information.
+     * @param {MyError} myError MyError instance
+     * @returns {ErrorBox} Returns an ErrorBox instance.
+     */
     static showMyError(myError) {
         let stackTrace = myError.stack;
 
@@ -30,6 +56,9 @@ export class ErrorBox {
         return this.show(myError.message, stackTrace, myError.type, myError.help, myError.description);
     }
 
+    /**
+     * Shows the error box.
+     */
     show() {
         DocumentUtils.blurScreen();
 
@@ -48,6 +77,9 @@ export class ErrorBox {
         });
     }
 
+    /**
+     * Closes the error box.
+     */
     close() {
         DocumentUtils.unblurScreen();
 

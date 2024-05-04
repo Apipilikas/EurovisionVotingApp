@@ -3,6 +3,10 @@ import { generalTemplates } from "../handlebarsUtils.js";
 
 const closeConfirmDialogClassName = "close-confirm-dialog";
 
+/**
+ * This class is used to ensure user wants to procceed to ones action. Three dialog results are supported: [YES] meaning user has
+ * clicked the yes button, [NO] meaning user has clicked the no button and [CLOSE] meaning user has clicked the close button.
+ */
 export class ConfirmDialog {
     static DialogResult = {
         YES : "YES",
@@ -10,16 +14,31 @@ export class ConfirmDialog {
         CLOSE : "CLOSE"
     }
 
+    /**
+     * ConfirmDialog constructor
+     * @param {string} message Question to the user
+     */
     constructor(message) {
         this.message = message;
     }
 
+    /**
+     * Creates and shows the confirm dialog.
+     * @param {string} message Question to the user
+     * @returns {Promise<ConfirmDialog.DialogResult>} Returns the DialogResult. [YES] meaning user has
+     * clicked the yes button, [NO] meaning user has clicked the no button and [CLOSE] meaning user has clicked the close button.
+     */
     static show(message) {
         let confirmDialog = new ConfirmDialog(message);
 
         return confirmDialog.show();
     }
 
+    /**
+     * Shows the confirm dialog.
+     * @returns {Promise<ConfirmDialog.DialogResult>} Returns the DialogResult. [YES] meaning user has
+     * clicked the yes button, [NO] meaning user has clicked the no button and [CLOSE] meaning user has clicked the close button.
+     */
     show() {
         DocumentUtils.blurScreen();
 
@@ -51,6 +70,9 @@ export class ConfirmDialog {
         })
     }
 
+    /**
+     * Closes the confirm dialog.
+     */
     close() {
         DocumentUtils.unblurScreen();
 

@@ -205,29 +205,53 @@ function setInnerHTMLByResolver(resolver, innerHTML) {
 
 //#region Element Attribute utils
 
-DocumentUtils.getElementAttribute = function(selector, attributeName) {
-    if (attributeName == null) return;
+/**
+ * Gets element's attribute from the resolved selector first element.
+ * @param {*} selectorID Selector ID
+ * @param {*} attributeName Attribute name
+ * @returns {object} Attribute value. If attribute was not found, returns null.
+ */
+DocumentUtils.getElementAttribute = function(selectorID, attributeName) {
+    if (attributeName == null) return null;
 
-    let resolvedSelector = SelectorResolver.resolve(selector);
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return null;
 
     return this.getElementAttributeByElement(resolvedSelector.elements[0], attributeName);
 }
 
-DocumentUtils.setElementAttribute = function(selector, attributeName, attributeValue) {
+/**
+ * Sets element's attribute to the resolved selector first element.
+ * @param {string} selectorID Selector ID
+ * @param {string} attributeName Attribute name
+ * @param {object} attributeValue Attribute value
+ */
+DocumentUtils.setElementAttribute = function(selectorID, attributeName, attributeValue) {
     if (attributeName == null) return;
     
-    let resolvedSelector = SelectorResolver.resolve(selector);
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
     
     this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue)
 }
 
+/**
+ * Gets element's attribute.
+ * @param {HTMLElement} element 
+ * @param {string} attributeName Attribute name
+ * @returns 
+ */
 DocumentUtils.getElementAttributeByElement = function(element, attributeName) {
-    if (element == null) return;
+    if (element == null) return null;
     return element[attributeName];
 }
 
+/**
+ * Sets element's attribute.
+ * @param {HTMLElement} element 
+ * @param {string} attributeName Attribute name
+ * @param {object} attributeValue Attribute value
+ */
 DocumentUtils.setElementAttributeByElement = function(element, attributeName, attributeValue) {
     if (element == null) return;
     element[attributeName] = attributeValue;
@@ -237,10 +261,16 @@ DocumentUtils.setElementAttributeByElement = function(element, attributeName, at
 
 //#region Document class utils
 
-DocumentUtils.addClassName = function(selector, className) {
+/**
+ * Adds class name to the resolved selector element(s) class list.
+ * The addition takes place if the class name is not contained in element's class list.
+ * @param {string} selectorID Selector ID
+ * @param {string} className Class name
+ */
+DocumentUtils.addClassName = function(selectorID, className) {
     if (className == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selector);
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements()) return;
 
     if (resolvedSelector.hasMultipleElements) {
@@ -253,10 +283,16 @@ DocumentUtils.addClassName = function(selector, className) {
     }
 }
 
-DocumentUtils.removeClassName = function(selector, className) {
+/**
+ * Removes class name from the resolved selector element(s) class list.
+ * The removement takes place if the class name is contained in element's class list.
+ * @param {string} selectorID Selector ID
+ * @param {string} className Class name
+ */
+DocumentUtils.removeClassName = function(selectorID, className) {
     if (className == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selector);
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements()) return;
 
     if (resolvedSelector.hasMultipleElements) {
@@ -269,27 +305,51 @@ DocumentUtils.removeClassName = function(selector, className) {
     }
 }
 
-DocumentUtils.containsClassName = function(selector, className) {
+/**
+ * Checks if class name is contained in the resolved selector element class list.
+ * @param {string} selectorID Selector ID
+ * @param {string} className Class name
+ * @returns {boolean} Returns true if class name is present. Otherwise false.
+ */
+DocumentUtils.containsClassName = function(selectorID, className) {
     if (className == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selector);
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
 
     return this.containsClassNameByElement(resolvedSelector.elements[0], className);
 }
 
+/**
+ * Adds class name to the element's class list.
+ * The addition takes place if the class name is not contained in element's class list.
+ * @param {HTMLElement} element 
+ * @param {string} className Class name
+ */
 DocumentUtils.addClassNameByElement = function(element, className) {
     if (element != null && !this.containsClassNameByElement(element, className)) {
         element.classList.add(className);
     }
 }
 
+/**
+ * Removes class name from the element's class list.
+ * The removement takes place if the class name is contained in element's class list.
+ * @param {HTMLElement} element 
+ * @param {string} className Class name
+ */
 DocumentUtils.removeClassNameByElement = function(element, className) {
     if (this.containsClassNameByElement(element, className)) {
         element.classList.remove(className);
     }
 }
 
+/**
+ * Checks if class name is contained in the class list.
+ * @param {HTMLElement} element 
+ * @param {string} className Class name
+ * @returns {boolean} Returns true if class name is present. Otherwise false.
+ */
 DocumentUtils.containsClassNameByElement = function(element, className) {
     if (element == null) return false;
 
