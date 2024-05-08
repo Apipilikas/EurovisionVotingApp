@@ -105,7 +105,7 @@ function connectBtnListener(e) {
     let judgeCode = DocumentUtils.getElementAttribute("input[type=radio]:checked", "value");
 
     if (judgeCode != null) {
-        window.location.replace(clientURL + "client/voting.html?judgeCode=" + judgeCode);
+        window.location.replace(clientURL + "/voting.html?judgeCode=" + judgeCode);
     }
 }
 
