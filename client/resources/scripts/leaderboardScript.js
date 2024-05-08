@@ -49,6 +49,9 @@ function initLeaderboardContainer() {
             initVotesToJudgesAndVotingStatuses(data.countries, data.votingStatuses);
             highlightRunningCountry();
             initTableRowListeners();
+            if (data.winnerCountry != null) {
+                setWinnerCountry(data.winnerCountry.code)
+            }
         }
     })
     .catch(e => handleError(e));
@@ -87,13 +90,14 @@ async function getInitData() {
     const countriesResponse = await CountryRequests.getAllCountries();
     const judgesResponse = await JudgeRequests.getAllJudges();
     const votingStatusesResponse = await CountryRequests.getVotingCountryStatuses();
+    const winnerCountry = await CountryRequests.getWinnerCountry();
 
     if (runningCountryResponse.success && countriesResponse.success &&
-        judgesResponse.success && votingStatusesResponse.success) {
+        judgesResponse.success && votingStatusesResponse.success && winnerCountry.success) {
         runningCountry = runningCountryResponse.jsonData.runningCountry;
         totalCountries = countriesResponse.jsonData.countries.length;
 
-        return {countries : countriesResponse.jsonData.countries, judges : judgesResponse.jsonData.judges, votingStatuses : votingStatusesResponse.jsonData.votingStatuses}
+        return {countries : countriesResponse.jsonData.countries, judges : judgesResponse.jsonData.judges, votingStatuses : votingStatusesResponse.jsonData.votingStatuses, winnerCountry : winnerCountry.jsonData.country}
     }
     else {
         throw new InitDataError("Failed to get runningCountry, countries, judges and voting statuses.")
@@ -144,6 +148,11 @@ function setVotingStatus(countryCode, votingStatus) {
 function setTotalVotes(countryCode, totalVotes) {
     const tag = "#" + countryCode + "-total-votes";
     DocumentUtils.setInnerHTML(tag, totalVotes);
+}
+
+function setWinnerCountry(winnerCountryCode) {
+    const tag = "tbody" + " tr[countrycode='" + winnerCountryCode + "']";
+    DocumentUtils.addClassName(tag, "winner-country");
 }
 
 function closeVotingCountryPanel() {

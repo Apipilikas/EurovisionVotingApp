@@ -275,7 +275,7 @@ DocumentUtils.addClassName = function(selectorID, className) {
 
     if (resolvedSelector.hasMultipleElements) {
         for (var element of resolvedSelector.elements) {
-            this.addClassListByElement(element, className);
+            this.addClassNameByElement(element, className);
         }
     }
     else {
