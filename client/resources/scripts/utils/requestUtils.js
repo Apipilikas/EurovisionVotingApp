@@ -1,11 +1,11 @@
 import { FetchError } from "./errorUtils.js";
 
 const serverURL = {
-    address: "http://127.0.0.1:8080/",
+    address: "https://eurovision-app-api.onrender.com/",
     prefix : "api/v1/"
 };
 
-const clientURL = "http://127.0.0.1:5500/";
+const clientURL = "https://eurovision-app.onrender.com/";
 
 const Method = {
     GET: "GET",
