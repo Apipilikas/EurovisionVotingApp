@@ -270,7 +270,11 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
     {{#each countries}}
     <tr countrycode="{{this.code}}" countryname="{{this.name}}">
         <td>{{this.runningOrder}}</th>
-        <td>{{this.name}}</th>
+        <td class="name-txt">
+        <span>{{this.name}}</span>
+
+        <img src="/client/resources/images/flags/{{this.code}}.svg" width="55px">
+        </td>
         {{#each ../judges}}
         <td class="points-txt" id="{{../this.code}}-{{this.code}}-points">0</td>
         {{/each}}
@@ -377,6 +381,13 @@ generalTemplates.messageDialog = Handlebars.compile(`
         </div>
     </div>
 </div>
-`)
+`);
+
+generalTemplates.revealWinner = Handlebars.compile(`
+<div>
+    <h2>The winner country is <span id="reveal-winner-country-name-txt">{{this.name}}</span></h2>
+    <p>Total votes: <span id="reveal-winner-country-total-votes-txt">{{this.totalVotes}}</span></p>
+</div>
+`);
 
 export {votingTemplates, registerTemplates, adminTemplates, leaderboardTemplates, generalTemplates};

@@ -54,9 +54,69 @@ table tbody tr td:first-child {
     font-weight: 900;
 }
 
+/* Running order table data */
 table tbody tr.running-country td:first-child {
     background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
     color: var(--fifth-color);
+}
+
+/* Winning country table data */
+table tbody tr.winner-country > * {
+    font-size: 1.2em;
+    background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
+    background-size: 200% 200% !important;
+    animation: color-animation 3s linear infinite;
+}
+
+/* Conutry table data */
+table tbody tr td.name-txt {
+    overflow: hidden;
+    padding: 0em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+table tbody tr td.name-txt span {
+    padding: 1em;
+    font-weight: 900;
+    animation: show-span-animation ease 10s infinite;
+    animation-fill-mode: forwards;
+}
+
+table tbody tr td.name-txt div.flag-container > div {
+    /* position: absolute; */
+    position: absolute; 
+    /* margin: auto; */
+}
+
+table tbody tr td.name-txt img {
+    position: absolute; 
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto;
+    /* transform: translateX(100px); */
+    animation: show-img-animation ease 10s infinite;
+}
+
+@keyframes show-span-animation {
+    0% {transform: translateY(0);}
+    20% {transform: translateY(0);}
+    40% {transform: translateY(100px);}
+    60% {transform: translateY(100px);}
+    80% {transform: translateY(0);}
+    100% {transform: translateY(0);}
+}
+
+@keyframes show-img-animation {
+    0% {transform: translateY(100px);}
+    20% {transform: translateY(100px);}
+    40% {transform: translateY(0);}
+    60% {transform: translateY(0);}
+    80% {transform: translateY(100px);}
+    100% {transform: translateY(100px);}
 }
 
 table tbody tr td.total-votes-txt {
