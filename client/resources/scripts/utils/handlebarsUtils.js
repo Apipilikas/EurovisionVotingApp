@@ -37,7 +37,7 @@ votingTemplates.countries = Handlebars.compile(`
     <summary style="background-color: {{this.flagColors.[1]}}">
         <div class="left-container">
             <p style="background-color: {{this.flagColors.[1]}}; color: {{this.flagColors.[0]}}">{{this.runningOrder}}</p>
-            <img src="../resources/images/flags/{{this.code}}.svg" width="55px">
+            <img src="./resources/images/flags/{{this.code}}.svg" width="55px">
             <div class="country-name-container">
                 <div class="color-container">
                     <div class="color-segment" style="background: linear-gradient( {{this.flagColors.[0]}}, {{this.flagColors.[1]}}, {{this.flagColors.[2]}}, {{this.flagColors.[1]}}, {{this.flagColors.[0]}}"></div>
@@ -195,7 +195,7 @@ adminTemplates.voting.votingCountryContainer = Handlebars.compile(`
     <summary>
         <div class="left-container">
             <p class="running-order-txt">{{this.runningOrder}}</p>
-            <img src="/client/resources/images/flags/{{this.code}}.svg" width="55px">
+            <img src="../resources/images/flags/{{this.code}}.svg" width="55px">
             <p class="code-txt">{{this.code}}</p>
             <p class="name-txt">{{this.name}}</p>
         </div>
