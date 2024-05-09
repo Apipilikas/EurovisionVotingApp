@@ -273,7 +273,7 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
         <td class="name-txt">
         <span>{{this.name}}</span>
 
-        <img src="./resources/images/flags/{{this.code}}.svg" width="55px">
+        <img src="../resources/images/flags/{{this.code}}.svg" width="55px">
         </td>
         {{#each ../judges}}
         <td class="points-txt" id="{{../this.code}}-{{this.code}}-points">0</td>
