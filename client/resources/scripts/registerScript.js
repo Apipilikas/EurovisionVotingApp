@@ -101,7 +101,6 @@ function updateContainer(content) {
 //#region Event linstener functions
 
 function connectBtnListener(e) {
-    console.log(e.target)
     let judgeCode = DocumentUtils.getElementAttribute("input[type=radio]:checked", "value");
 
     if (judgeCode != null) {
