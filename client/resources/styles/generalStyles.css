@@ -173,14 +173,14 @@ header {
 /* logo container */
 
 #logo-container {
-    width: 250px;
+    width: 200px;
     padding-top: 0.5em;
     display: flex;
     flex-direction: column;
 }
 
 #logo-container p {
-    font-size: 1.3em;
+    font-size: 1.1em;
     padding-top: 0.2em;
     font-weight: 800;
     margin: auto;
@@ -251,6 +251,11 @@ header {
     font-weight: 700;
     padding: 1em 0em 1em 0em;
     transition: 1s;
+}
+
+/* >!< Quick fix */
+#header-navigation-bar > li:last-child {
+    margin-bottom: 50%;
 }
 
 @keyframes nav-animation {
@@ -1451,6 +1456,11 @@ details.admin-details-container {
     #header-navigation-bar > li {
         flex-basis: 50%;
         transition: 0.5s;
+    }
+
+    /* >!< Quick fix */
+    #header-navigation-bar > li:last-child {
+        margin-bottom: initial;
     }
 
     .hide-nav#header-navigation-bar > li > a {

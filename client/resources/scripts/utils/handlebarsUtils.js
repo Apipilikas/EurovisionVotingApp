@@ -61,7 +61,9 @@ votingTemplates.countries = Handlebars.compile(`
             </div>
         </div>
         <div class="right-container">
-            <p class="personal-vote" style="background-color: {{this.flagColors.[0]}}; color: {{this.flagColors.[1]}}">0</p>
+        <div style="background-color: {{this.flagColors.[0]}}">
+        <p class="personal-vote" style="color: {{this.flagColors.[1]}}">0</p>
+        </div>
             <p class="total-votes" style="color: {{this.flagColors.[0]}}">{{this.totalVotes}}</p>
         </div>
     </summary>
@@ -257,12 +259,12 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
 <table id="voting-leaderboard-table">
     <thead>
         <tr>
-            <th>R/O</th>
+            <th>R/O<i class="material-icons sorting-icon">arrow_drop_down</i></th>
             <th>Country</th>
             {{#each judges}}
-            <th>{{this.name}}</th>
+            <th class="judge-caption" judgecode="{{this.code}}">{{this.name}}<i class="material-icons sorting-icon"></i></th>
             {{/each}}
-            <th>Points</th>
+            <th class="points-caption">Points<i class="material-icons sorting-icon"></i></th>
             <th>Status</th>
         </tr>
     </thead>
@@ -276,7 +278,7 @@ leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
         <img src="./resources/images/flags/{{this.code}}.svg" width="55px">
         </td>
         {{#each ../judges}}
-        <td class="points-txt" id="{{../this.code}}-{{this.code}}-points">0</td>
+        <td class="points-txt" id="{{../this.code}}-{{this.code}}-points" judgecode="{{this.code}}">0</td>
         {{/each}}
         <td class="total-votes-txt" id="{{this.code}}-total-votes">{{this.totalVotes}}</td>
         <td id="{{this.code}}-voting-status" class="voting-status closed-voting-status">CLOSED</td>

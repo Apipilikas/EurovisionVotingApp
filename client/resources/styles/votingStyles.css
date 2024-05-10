@@ -28,7 +28,6 @@
   position: relative;
   display: flex;
   justify-content: space-between;
-  font-size: 2em;
 }
 
 .voting-country-container > summary::-webkit-details-marker { 
@@ -85,13 +84,22 @@
 }
 
 /* country name container */
+.voting-country-container .left-container > p,
+.voting-country-container .left-container .country-name,
+.voting-country-container .right-container p {
+  font-size: 1.5em;
+  margin: auto;
+}
+
 .voting-country-container .left-container .country-name-container {
   width: 100%;
   display: flex;
+  position: relative;
 }
 
 .voting-country-container .left-container .country-name {
   width: 100%;
+  text-wrap: nowrap;
   /* -webkit-text-stroke: 1px black; */
 }
 
@@ -116,12 +124,12 @@
 }
 
 .voting-country-container .left-container .artist-name {
-  font-size: 0.4em;
+  font-size: 0.9em;
   width: 100%;
 }
 
 .voting-country-container .left-container .song-title {
-  font-size: 0.5em;
+  font-size: 1.1em;
   width: 100%;
 }
 
@@ -130,12 +138,8 @@
 }
 
 .voting-country-container .color-container {
+  width: 100%;
   position: absolute;
-}
-
-.voting-country-container > summary .personal-vote {
-  color: var(--secondary-color);
-  background-color: var(--forth-color);
 }
 
 .voting-country-container[open] .voting-country-content {

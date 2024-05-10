@@ -201,14 +201,71 @@ function setInnerHTMLByResolver(resolver, innerHTML) {
     }
 }
 
+/**
+ * Gets resolved selector element(s) inner HTML.
+ * @param {string} selectorID Selector ID
+ * @returns {string[]} Array of elements inner HTML content 
+ */
+DocumentUtils.getInnerHTML = function(selectorID) {
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
+
+    return getInnerHTMLByResolver(resolvedSelector);
+}
+
+/**
+ * Gets resolved selector child element(s) inner HTML.
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element 
+ * @returns {string[]} Array of elements inner HTML content
+ */
+DocumentUtils.getChildInnerHTML = function(selectorID, element) {
+    let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
+
+    return getInnerHTMLByResolver(resolvedSelector);
+}
+
+/**
+ * Gets resolved selector parent element inner HTML.
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @returns {string} Inner HTML content
+ */
+DocumentUtils.getParentInnerHTML = function(selectorID, element) {
+    let resolvedSelector = ParentSelectorResolver.resolve(selectorID, element);
+
+    return getInnerHTMLByResolver(resolvedSelector)[0];
+}
+
+/**
+ * Generic Function | Gets resolved selector element(s) inner HTML.
+ * @param {SelectorResolver} resolver 
+ * @returns {string[]} Array of elements inner HTML content
+ */
+function getInnerHTMLByResolver(resolver) {
+    let innerHTMLs = [];
+
+    if (!resolver.hasElements()) return innerHTMLs;
+
+    if (resolver.hasMultipleElements) {
+        for (var element of resolver.elements) {
+            innerHTMLs.push(element.innerHTML)
+        }
+    }
+    else {
+        innerHTMLs.push(resolver.elements[0].innerHTML)
+    }
+
+    return innerHTMLs;
+}
+
 //#endregion
 
 //#region Element Attribute utils
 
 /**
  * Gets element's attribute from the resolved selector first element.
- * @param {*} selectorID Selector ID
- * @param {*} attributeName Attribute name
+ * @param {string} selectorID Selector ID
+ * @param {string} attributeName Attribute name
  * @returns {object} Attribute value. If attribute was not found, returns null.
  */
 DocumentUtils.getElementAttribute = function(selectorID, attributeName) {
@@ -232,7 +289,24 @@ DocumentUtils.setElementAttribute = function(selectorID, attributeName, attribut
     let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
     
-    this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue)
+    this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue);
+}
+
+/**
+ * Sets element's attribute to the resolved selector first child element.
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @param {string} attributeName Attribute name
+ * @param {object} attributeValue Attribute value 
+ * @returns 
+ */
+DocumentUtils.setChildElementAttribute = function(selectorID, element, attributeName, attributeValue) {
+    if (attributeName == null) return;
+    
+    let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
+    if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
+    
+    this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue);
 }
 
 /**
@@ -255,6 +329,22 @@ DocumentUtils.getElementAttributeByElement = function(element, attributeName) {
 DocumentUtils.setElementAttributeByElement = function(element, attributeName, attributeValue) {
     if (element == null) return;
     element[attributeName] = attributeValue;
+}
+
+DocumentUtils.getAttributesToString = function(selectorID, attributeName) {
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
+
+    if (!resolvedSelector.hasElements()) return null;
+
+    return DocumentUtils.getAttributesToStringByElements(resolvedSelector.elements, attributeName);
+}
+
+DocumentUtils.getAttributesToStringByElements = function(elements, attributeName) {
+    let str = "";
+
+    elements.forEach(element => {str += element[attributeName]});
+
+    return str;
 }
 
 //#endregion
@@ -368,6 +458,37 @@ DocumentUtils.containsClassNameByElement = function(element, className) {
 DocumentUtils.setRootProperty = function(propertyName, propertyValue) {
     const rootVariables = document.querySelector(":root");
     rootVariables.style.setProperty(propertyName, propertyValue);
+}
+
+//#endregion
+
+//#region Sort utils
+
+/**
+ * Gets sorted array of resolved selector element(s).
+ * @param {string} selectorID Selector ID
+ * @param {Function} evaluatorFunction Function that evaluates each element. This function has only one parameter with type <Element> and returns the value that will be compared with the other ones.
+ * @param {boolean} descending The sorting order
+ * @returns {HTMLElement[]} Sorted elements
+ */
+DocumentUtils.sortElements = function(selectorID, evaluatorFunction, descending = true) {
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
+
+    if (!resolvedSelector.hasElements()) return null;
+    let elements = Array.prototype.slice.call(resolvedSelector.elements, 0);
+    
+    let sortingValue = descending ? 1 : -1;
+
+    elements.sort((elementA, elementB) => {
+        let elementAValue = evaluatorFunction(elementA);
+        let elementBValue = evaluatorFunction(elementB);
+        
+        if (elementAValue == elementBValue) return 0;
+        else if (elementAValue < elementBValue) return 1 * sortingValue;
+        else return -1 * sortingValue;
+    });
+
+    return elements;
 }
 
 //#endregion
