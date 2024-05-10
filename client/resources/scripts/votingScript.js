@@ -155,6 +155,10 @@ function setVotingContentToRunningCountry(isVotingOpen) {
 
     votingCountryContent.innerHTML = content;
 
+    var personalVote = DocumentUtils.getChildInnerHTML(".personal-vote", currentRunningCountry);
+    var selectedVoteTag = "input[name='choose-vote'][value='" + personalVote + "'";
+    DocumentUtils.setChildElementAttribute(selectedVoteTag, currentRunningCountry, "checked", true);
+
     setTimeout(() => {
         currentRunningCountry.open = true;
     }, 3000);

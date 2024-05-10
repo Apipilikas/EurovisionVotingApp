@@ -16,8 +16,19 @@ table {
     border-spacing: 0 0.5em;
 }
 
+table thead {
+    position: sticky;
+    top: 0;
+}
+
 table th {
     padding: 1em;
+    text-wrap: nowrap;
+}
+
+table th i.sorting-icon {
+    margin: auto 0em;
+    font-size: 1em;
 }
 
 table thead tr {
@@ -52,6 +63,7 @@ table tbody tr td:first-child {
     background: linear-gradient(90deg, var(--eighth-color) 20%, var(--forth-color) 100%);
     color: var(--third-color);
     font-weight: 900;
+    z-index: 1;
 }
 
 /* Running order table data */

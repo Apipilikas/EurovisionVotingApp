@@ -71,6 +71,8 @@ function initVotesToJudgesAndVotingStatuses(countries, votingStatuses) {
 }
 
 function initTableRowListeners() {
+    DocumentUtils.setClickEventListener("thead th.judge-caption ALL", sortByVotesListener);
+    DocumentUtils.setClickEventListener("thead th.points-caption", sortByTotalVotesListener);
     DocumentUtils.setClickEventListener("tbody tr ALL", tableRowListener);
 }
 
@@ -161,6 +163,27 @@ function closeVotingCountryPanel() {
     DocumentUtils.unblurScreen();
 }
 
+function showSortingIcon(selectorID, descending = true) {
+    hideSortingIcon();
+
+    let iconTag = "arrow_drop_down";
+
+    if (descending) {
+        iconTag = "arrow_drop_up";
+    }
+
+    console.log(selectorID + " i")
+    DocumentUtils.setInnerHTML(selectorID, iconTag);
+}
+
+function hideSortingIcon() {
+    DocumentUtils.setInnerHTML("thead tr th i ALL", "");
+}
+
+function isSortDescending(selectorID) {
+    return DocumentUtils.getInnerHTML(selectorID)[0] == "arrow_drop_down";
+}
+
 //#endregion
 
 //#region Event Listener functions
@@ -202,6 +225,30 @@ function voteBtnListener(e) {
     .catch(e => DocumentUtils.handleError(e));
 }
 
+function sortByTotalVotesListener(e) {
+    let isDescending = isSortDescending("table th.points-caption i");
+
+    const countryRows = DocumentUtils.sortElements("table tbody tr ALL",(element) => {
+        return parseInt(element.querySelector(".total-votes-txt").innerHTML);
+    }, isDescending);
+
+    DocumentUtils.setInnerHTML("table tbody", DocumentUtils.getAttributesToStringByElements(countryRows, "outerHTML"));
+    showSortingIcon("table th.points-caption i", isDescending);
+}
+
+function sortByVotesListener(e) {
+    let judgeCode = e.target.getAttribute("judgecode");
+    let tag = "table td[judgecode='" + judgeCode + "']";
+    let isDescending = isSortDescending("table th[judgecode='" + judgeCode + "'] i");
+
+    const countryRows = DocumentUtils.sortElements("table tbody tr ALL",(element) => {
+        return parseInt(element.querySelector(tag).innerHTML);
+    }, isDescending);
+
+    DocumentUtils.setInnerHTML("table tbody", DocumentUtils.getAttributesToStringByElements(countryRows, "outerHTML"));
+    showSortingIcon("table th[judgecode='" + judgeCode + "'] i", isDescending);
+}
+
 //#endregion
 
 //#region Animation functions
@@ -211,7 +258,6 @@ function highlightRunningCountry() {
     const nextRunningCountryTag = "tbody tr:nth-child(" + runningCountry +")";
 
     DocumentUtils.removeClassName(".running-country", className);
-
     DocumentUtils.addClassName(nextRunningCountryTag, className);
 }
 
