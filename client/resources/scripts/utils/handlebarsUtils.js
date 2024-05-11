@@ -255,6 +255,12 @@ adminTemplates.voting.revealWinnerBoxContainerContent = Handlebars.compile(`
 {{/each}}
 `);
 
+adminTemplates.voting.clearTotalVotesCountriesListContent = Handlebars.compile(`
+{{#each countries}}
+<option value="{{this.code}}">{{this.name}}</option>
+{{/each}}
+`)
+
 leaderboardTemplates.votingLeaderboardContainer = Handlebars.compile(`
 <table id="voting-leaderboard-table">
     <thead>

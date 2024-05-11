@@ -83,5 +83,5 @@ AnnouncementUtils.initAnnouncementContainer = function(announcementHelper) {
             pElement.classList.remove("hide-announcement-box");
             pElement.innerHTML = nextAnnouncement;
         }, 1000);
-    }, 4000);
+    }, 5000);
 }

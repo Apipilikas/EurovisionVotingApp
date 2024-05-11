@@ -2,8 +2,8 @@
 
 <html lang="en">
     <head>
-        <title>Eurovision Voting App | ESC 2023</title>
-        <link rel="icon" href="">
+        <title>Admin voting page | ESCV 2024</title>
+        <link rel="icon" href="../resources/images/eurovision-icon.png">
         <meta name="description" content="Eurovision Voting App">
         <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest">
         <meta name="author" content="Aggelos Pipilikas">
@@ -160,6 +160,13 @@
                                 <span class="rb-content-container">INFORM</span><span class="rb-status-container"></span>
                             </button>
                         </div>
+                        <div id="clear-total-votes-container" class="button-container">
+                            <label>Clear total votes</label>
+                            <button class="result-button" id="clear-total-votes-btn">
+                                <span class="rb-content-container">CLEAR</span><span class="rb-status-container"></span>
+                            </button>
+                            <select id="clear-total-votes-countries-list"></select>
+                        </div>
                     </div>
                 </details>
                 <div id="voting-countries-order-list-container"></div>
@@ -195,8 +202,8 @@
         </main>
         
         <footer>
-            <p>©Copyright 2024</p>
-            <p>Powered by Aggelos Pipilikas</p>
+            <p id="escv-caption">Eurovision Song Contest Voting App 2024</p>
+            <p id="credits-caption">Powered by Aggelos Pipilikas | ©Copyright 2024</p>
         </footer>
     </body>
 </html>
