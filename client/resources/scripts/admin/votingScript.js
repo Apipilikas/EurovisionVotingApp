@@ -4,6 +4,7 @@ import { adminTemplates } from "../utils/handlebarsUtils.js";
 import { DocumentUtils } from "../utils/document/documentUtils.js";
 import { ResultButton } from "../utils/customElements/resultButton.js";
 import { InitUtils } from "../utils/initUtils.js";
+import { ConfirmDialog } from "../utils/dialogs/confirmDialog.js";
 
 var loginJudge = null;
 var runningCountry = 0;
@@ -45,6 +46,8 @@ function initContainers() {
 
         initRevealWinnerPanelContainer(data.countries);
 
+        initClearTotalVotesCountriesListContainer(data.countries);
+
         initInformJudgePanelContainer();
 
         initBtnLinsteners();
@@ -62,7 +65,8 @@ function initBtnLinsteners() {
     DocumentUtils.setClickEventListener("#reset-judges-cache-btn", resetJudgesCacheBtnListener);
     DocumentUtils.setClickEventListener("#reset-countries-cache-btn", resetCountriesCacheBtnListener);
     DocumentUtils.setClickEventListener("#reset-all-caches-btn", resetAllCachesBtnListener);
-    DocumentUtils.setClickEventListener("#inform-judge-btn", openInformJudgePanelContainer);
+    DocumentUtils.setClickEventListener("#inform-judge-btn", openInformJudgePanelListener);
+    DocumentUtils.setClickEventListener("#clear-total-votes-btn", clearTotalVotesBtnListener);
 
     // Toggle switches
     DocumentUtils.setChangeEventListener(".voting-toggle-switch", toggleSwitchListener);
@@ -102,6 +106,11 @@ function initInformJudgePanelContainer() {
     DocumentUtils.setClickEventListener("#inform-judge-panel-container .close-btn", closeInformJudgePanelContainerBtnListener);
     DocumentUtils.setClickEventListener("#inform-judge-panel-container .inform-btn", informJudgePanelContainerBtnListener);
     DocumentUtils.setClickEventListener("#inform-judge-panel-container .warn-btn", informJudgePanelContainerBtnListener);
+}
+
+function initClearTotalVotesCountriesListContainer(countries) {
+    let content = adminTemplates.voting.clearTotalVotesCountriesListContent({countries : countries});
+    DocumentUtils.setInnerHTML("#clear-total-votes-countries-list", content);
 }
 
 //#endregion
@@ -187,7 +196,7 @@ function setRevealWinnerResultText(winnerCountryCode) {
 }
 
 // Inform judge container
-function openInformJudgePanelContainer() {
+function openInformJudgePanelListener() {
     DocumentUtils.blurScreen();
     const informJudgePanelContainer = document.getElementById("inform-judge-panel-container");
     informJudgePanelContainer.style.display = "initial";
@@ -360,6 +369,19 @@ function informJudgePanelContainerBtnListener(e) {
 
 function closeInformJudgePanelContainerBtnListener(e) {
     closeInformJudgePanelContainer();
+}
+
+// Clear country total votes
+function clearTotalVotesBtnListener(e) {
+    let countryCode = DocumentUtils.getElementAttribute("#clear-total-votes-countries-list", "value");
+    ConfirmDialog.show("Are you sure you want to clear total votes of country with code [" + countryCode + "]?")
+    .then(result => {
+        if (result == ConfirmDialog.DialogResult.YES) {
+            ResultButton.getByElement(e.target)
+            .execute(CountryRequests.clearCountryTotalVotes(loginJudge.code, countryCode))
+            .then(response => {console.log(response)});
+        }
+    });
 }
 
 //#endregion
