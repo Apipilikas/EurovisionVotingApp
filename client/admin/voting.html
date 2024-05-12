@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Admin voting page | ESCV 2024</title>
+        <link rel="icon" href="../resources/images/eurovision-icon.png">
+        <meta name="description" content="Eurovision Voting App">
+        <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest">
+        <meta name="author" content="Aggelos Pipilikas">
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.js"></script>
+        <script type="module" src="../resources/scripts/admin/votingScript.js"></script>
+        <link rel="stylesheet" href="../resources/styles/generalStyles.css">
+        <link rel="stylesheet" href="../resources/styles/admin/votingStyles.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body class="no-scrolling">
+        <header>
+            <div id="header-color-container" class="color-container">
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+            </div>
+            <div id="header-container">
+                <div id="main-logo-container">
+                    <!-- <h1>Eurovision Song Contest 2024</h1> -->
+                    <div id="logo-container">
+                        <img src="../resources/images/eurovision-logo.svg">
+                        <p>2024</p>
+                    </div>
+                    <h2>UNITED BY MUSIC</h2>
+                </div>
+                <div id="menu-button">
+                        <div></div>
+                </div>
+            </div>
+            <nav>
+                <ul id="header-navigation-bar">
+                    <li><a href="voting.html">Voting</a></li>
+                    <li><a href="countries.html">Countries</a></li>
+                    <li><a href="judges.html">Judges</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="no-scrolling" id="admin-voting-page">
+            <div class="upper-container" id="running-order-display-dashboard">
+                <section class="admin-dashboard-container dashboard-running-country-container">
+                    <h1>Running country</h1>
+                    <div class="admin-dashboard-content">
+                        <h2><span id="admin-db-running-order-txt">--</span> <span id="admin-db-running-country-name-txt"></span></h2>
+                        <div class="dashboard-caption-container song-container">
+                            <h3>SONG</h3>
+                            <p id="admin-db-song-txt">--</p>
+                        </div>
+                        <div class="dashboard-caption-container artist-container">
+                            <h3>ARTIST</h3>
+                            <p id="admin-db-artist-txt">--</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-dashboard-container dashboard-judges-voted-container">
+                    <h1>Judges</h1>
+                    <div class="admin-dashboard-content">
+                        <h2><span id="judges-voted-no-txt">-</span> / <span class="admin-db-total-judges-no-txt">-</span></h2>
+                        <div class="dashboard-caption-container online-container">
+                            <h3>ONLINE</h3>
+                            <p><span id="admin-db-online-judges-no-txt">1</span>/<span class="admin-db-total-judges-no-txt">5</span></p>
+                        </div>
+                        <div class="dashboard-caption-container offline-container">
+                            <h3>OFFLINE</h3>
+                            <p><span id="admin-db-offline-judges-no-txt">1</span>/<span class="admin-db-total-judges-no-txt">5</span></p>
+                        </div>
+                    </div>
+                </section>
+                <section class="admin-dashboard-container dashboard-total-voting-points-container">
+                    <h1>Total votes</h1>
+                    <div class="admin-dashboard-content">
+                        <span id="admin-db-total-votes-txt">--</span>
+                    </div>
+                </section>
+            </div>
+
+            <div class="lower-container">
+                <details class="admin-details-container">
+                    <summary>Admin settings</summary>
+                    <div class="admin-details-content" id="admin-settings-content">
+                        <div class="reset-running-country-container button-container">
+                            <label>Reset running country</label>
+                            <button class="result-button" id="reset-running-country-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-voting-statuses-cache-container" class="button-container">
+                            <label>Reset voting status cache</label>
+                            <button class="result-button" id="reset-voting-status-cache-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-judges-cache-container" class="button-container">
+                            <label>Reset judges cache</label>
+                            <button class="result-button" id="reset-judges-cache-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-countries-cache-container" class="button-container">
+                            <label>Reset countries cache</label>
+                            <button class="result-button" id="reset-countries-cache-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reset-all-caches-container" class="button-container">
+                            <label>Reset all caches</label>
+                            <button class="result-button" id="reset-all-caches-btn">
+                                <span class="rb-content-container">RESET</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="choose-voting-status-container" class="button-container">
+                            <label>Choose voting status</label>
+                            <button class="result-button" id="choose-voting-status-btn">
+                                <span class="rb-content-container">CHOOSE</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+
+                        <div id="reveal-winner-container" class="button-container">
+                            <label>Reveal winner</label>
+                            <button class="result-button" id="reveal-winner-btn">
+                                <span class="rb-content-container">REVEAL</span><span class="rb-status-container"></span>
+                            </button>
+                            <span class="result-text">NONE</span>
+                        </div>
+
+                        <div id="inform-judge-container" class="button-container">
+                            <label>Inform Judge</label>
+                            <button class="result-button" id="inform-judge-btn">
+                                <span class="rb-content-container">INFORM</span><span class="rb-status-container"></span>
+                            </button>
+                        </div>
+                        <div id="clear-total-votes-container" class="button-container">
+                            <label>Clear total votes</label>
+                            <button class="result-button" id="clear-total-votes-btn">
+                                <span class="rb-content-container">CLEAR</span><span class="rb-status-container"></span>
+                            </button>
+                            <select id="clear-total-votes-countries-list"></select>
+                        </div>
+                    </div>
+                </details>
+                <div id="voting-countries-order-list-container"></div>
+                <div class="button-areas">
+                    <!-- <button id="previous-country-btn">PREVIOUS COUNTRY</button> -->
+                    <button id="next-country-btn">NEXT COUNTRY</button>
+                </div>
+            </div>
+            <div id="blur-screen"></div>
+            <div id="display-box-container"></div>
+            <div id="reveal-winner-panel-container">
+                <div class="upper-container">
+                    <h1>Choose winner country</h1>
+                    <span class="close-btn">&times;</span>
+                </div>
+                <div id="reveal-winner-panel-content"></div>
+                <div class="button-area">
+                    <button class="ok-btn">OK</button>
+                    <button class="clear-btn">CLEAR</button>
+                </div>
+            </div>
+            <div id="inform-judge-panel-container">
+                <div class="upper-container">
+                    <h1>Inform judge</h1>
+                    <span class="close-btn">&times;</span>
+                </div>
+                <textarea></textarea>
+                <div class="button-area">
+                    <button class="inform-btn">INFORM</button>
+                    <button class="warn-btn">WARN</button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p id="escv-caption">Eurovision Song Contest Voting App 2024</p>
+            <p id="credits-caption">Powered by Aggelos Pipilikas | ©Copyright 2024</p>
+        </footer>
+    </body>
+</html>

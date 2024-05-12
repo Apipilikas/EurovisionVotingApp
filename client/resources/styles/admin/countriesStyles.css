@@ -1,0 +1,85 @@
+/* #region form-grid-areas */
+
+.inputs-area {
+    display: grid;
+    border-top: 0px;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas: "code    code    name    name    qualified   runningorder"
+                         "fc1     fc1     fc2     fc2     fc3         fc3"
+                         "song    song    song    artist  artist      artist";
+}
+
+/* #endregion */
+
+/* #region grid-areas */
+
+#code-container {
+    grid-area: code;
+}
+
+#name-container {
+    grid-area: name;
+}
+
+#qualified-container {
+    grid-area: qualified;
+}
+
+#runningorder-container {
+    grid-area: runningorder;
+}
+
+#flagcolor1-container {
+    grid-area: fc1;
+}
+
+#flagcolor2-container {
+    grid-area: fc2;
+}
+
+#flagcolor3-container {
+    grid-area: fc3;
+}
+
+#song-container {
+    grid-area: song;
+}
+
+#artist-container {
+    grid-area: artist;
+}
+
+/* #endregion */
+
+/* #region country-container */
+.country-container {
+    margin: 0.5em;
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 0.5fr;
+    cursor: pointer;
+}
+
+.country-container > * {
+    pointer-events:none
+}
+
+.country-container > h1 {
+    grid-column: 2/3;
+    margin: 0em;
+}
+
+.country-container > h2 {
+    grid-column: 1/2;
+    grid-row: 1/4;
+    margin: auto;
+    font-size: 3em;
+}
+
+.country-container > h3 {
+    margin: 0em;
+}
+/* #endregion */

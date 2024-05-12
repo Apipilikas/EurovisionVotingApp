@@ -1,0 +1,53 @@
+/* #region form-grid-areas */
+
+.inputs-area {
+    display: grid;
+    border-top: 0px;
+    grid-template-columns: 1fr 2fr 0.5fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-areas: "code name admin"
+                         "origincountry origincountry origincountry";
+}
+
+/* #endregion */
+
+/* #region grid-areas */
+
+#code-container {
+    grid-template: code;
+}
+
+#admin-container {
+    grid-template: admin;
+}
+
+#name-container {
+    grid-area: name;
+}
+
+#origincountry-container {
+    grid-area: origincountry;
+}
+
+/* #endregion */
+
+/* #region judge-container */
+.judge-container {
+    margin: 0.5em;
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+    padding-left: 0.5em;
+}
+
+.judge-container h1 {
+    margin: 0em;
+}
+
+.judge-container h2 {
+    margin: 0em;
+}
+
+.judge-container > * {
+    pointer-events: none;
+}
+/* #endregion */

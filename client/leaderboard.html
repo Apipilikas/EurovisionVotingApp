@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Leaderboard page | ESCV 2024</title>
+        <link rel="icon" href="resources/images/eurovision-icon.png">
+        <meta name="description" content="Eurovision Voting App">
+        <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest">
+        <meta name="author" content="Aggelos Pipilikas">
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.js"></script>
+        <script type="module" src="resources/scripts/leaderboardScript.js"></script>
+        <link rel="stylesheet" href="resources/styles/generalStyles.css">
+        <link rel="stylesheet" href="resources/styles/leaderboardStyles.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body class="no-scrolling">
+        <header>
+            <div id="header-color-container" class="color-container">
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+                <div class="color-segment desktop"></div>
+            </div>
+            <div id="header-container">
+                <div id="main-logo-container">
+                    <!-- <h1>Eurovision Song Contest 2024</h1> -->
+                    <div id="logo-container">
+                        <img src="./resources/images/eurovision-logo.svg">
+                        <p>2024</p>
+                    </div>
+                    <div id="live-announcement-container">
+                        <div id="live-box-content"><p>LIVE</p></div>
+                        <div id="announcement-content">
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="menu-button">
+                        <div></div>
+                </div>
+            </div>
+            <nav>
+                <ul id="header-navigation-bar">
+                    <li><a href="voting.html">Voting</a></li>
+                    <li><a href="leaderboard.html">Leaderboard</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main id="leaderboard-page">
+            <div id="voting-leaderboard-container"></div>
+            <div id="blur-screen">
+                <div id="voting-country-panel-container">
+                    <div id="voting-country-panel-bar-content">
+                        <div class="left-container">
+                            <p>Vote for <span id="country-name-caption">GREECE</span></p>
+                        </div>
+                        <div class="right-container">
+                            <span id="close-voting-country-panel-btn">&times;</span>
+                        </div>
+                    </div>
+                    <div id="voting-country-panel-content"></div>
+                </div>
+            </div>
+
+            <div id="display-box-container"></div>
+        </main>
+        
+        <footer>
+            <p id="escv-caption">Eurovision Song Contest Voting App 2024</p>
+            <p id="credits-caption">Powered by Aggelos Pipilikas | ©Copyright 2024</p>
+        </footer>
+    </body>
+</html>

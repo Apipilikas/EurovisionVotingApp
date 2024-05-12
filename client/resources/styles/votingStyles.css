@@ -1,0 +1,359 @@
+:root {
+  --button-color: black;
+  --label-color: black;
+  --checked-label-color: var(--secondary-color);
+}
+
+#voting-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.voting-country-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  padding: 1.5em 0em;
+  filter: drop-shadow(0 2px 2px #555);
+  will-change: transform, opacity;
+}
+
+.voting-country-container > summary {
+  height: 40px;
+  background-color: var(--secondary-color);
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.voting-country-container > summary::-webkit-details-marker { 
+  display: none; 
+}
+
+.voting-country-container > summary div {
+  display: flex;
+}
+
+.voting-country-container > summary > * {
+  pointer-events: none;
+}
+
+.voting-country-container > summary p {
+  margin: 0em;
+  padding: 0em 0.5em;
+  font-weight: 600;
+}
+
+.voting-country-container .left-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.voting-country-container:nth-child(3) .color-segment {
+  transform: translateY(100px);
+}
+
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 1) {animation: color-animation 7s linear infinite, hide-animation 5s ease 10.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 2) {animation: color-animation 7s linear infinite 0.5s, hide-animation 5s ease 11s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 3) {animation: color-animation 7s linear infinite 1s, hide-animation 5s ease 11.5s;}
+.voting-country-container:nth-child(4) .color-segment:nth-child(4n + 4) {animation: color-animation 7s linear infinite 1.5s, hide-animation 5s ease 12s;}
+
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 1) {animation: color-animation 7s linear infinite, show-animation 5s ease 0.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 2) {animation: color-animation 7s linear infinite 0.5s, show-animation 5s ease 1s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 3) {animation: color-animation 7s linear infinite 1s, show-animation 5s ease 1.5s;}
+.voting-country-container:nth-child(3) .color-segment:nth-child(4n + 4) {animation: color-animation 7s linear infinite 1.5s, show-animation 5s ease 2s;}
+
+.voting-country-container .color-segment {
+  /* animation: color-animation 7s ease infinite, hide-animation 5s ease; */
+  animation-fill-mode: forwards !important;
+}
+
+@keyframes hide-animation {
+  0% {transform: translateY(0);}
+  100% {transform: translateY(100px);}
+}
+
+@keyframes show-animation {
+  0% {transform: translateY(100px);}
+  100% {transform: translateY(0);}
+}
+
+/* country name container */
+.voting-country-container .left-container > p,
+.voting-country-container .left-container .country-name,
+.voting-country-container .right-container p {
+  font-size: 1.5em;
+  margin: auto;
+}
+
+.voting-country-container .left-container .country-name-container {
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.voting-country-container .left-container .country-name {
+  width: 100%;
+  text-wrap: nowrap;
+  /* -webkit-text-stroke: 1px black; */
+}
+
+.voting-country-container .left-container .artist-song-container {
+  z-index: 2;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-100px);
+  /* width: 100%; */
+}
+
+.voting-country-container:nth-child(4) .left-container .country-name {
+  animation: hide-animation 2s ease 4s, show-animation 2s ease 10s;
+  animation-fill-mode: forwards;
+}
+
+.voting-country-container:nth-child(4) .left-container .artist-song-container {
+  animation: show-animation 2s ease 4s, hide-animation 2s ease 10s;
+  animation-fill-mode: forwards;
+  /* width: 100%; */
+}
+
+.voting-country-container .left-container .artist-name {
+  font-size: 0.9em;
+  width: 100%;
+}
+
+.voting-country-container .left-container .song-title {
+  font-size: 1.1em;
+  width: 100%;
+}
+
+.voting-country-container .left-container *:not(div) {
+  z-index: 2;
+}
+
+.voting-country-container .color-container {
+  width: 100%;
+  position: absolute;
+}
+
+.voting-country-container[open] .voting-country-content {
+  animation: show-container-animation ease 1.5s;
+  animation-fill-mode: forwards;
+}
+
+.voting-country-container.hide-container .voting-country-content {
+  animation: hide-container-animation ease 1.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes show-container-animation {
+  0% {max-height: 0px;}
+  100%{max-height: 180px;}
+}
+
+@keyframes hide-container-animation {
+  0% {max-height: 180px;}
+  100%{max-height: 0px;}
+}
+
+.voting-country-container .voting-country-content .voting-closed {
+  font-size: 1.2em;
+  margin: 2em auto;
+  grid-column: 1/6;
+  color: var(--checked-label-color);
+}
+
+.voting-country-container .voting-country-content .voting-closed span {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+/* Voting country content */
+
+.voting-country-content label {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    border: 2px solid var(--label-color);
+    color: var(--label-color);
+}
+
+.voting-country-content input[type="radio"]:checked + label {
+    border: 2px solid var(--checked-label-color);
+    background-color: var(--checked-label-color);
+    color: var(--button-color);
+}
+
+.voting-country-content > button {
+  background-color: var(--checked-label-color);
+  color: var(--button-color);
+}
+
+/*  CAROUSEL STYLES  */
+
+#countries-carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  visibility: hidden;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.voting-country-container:nth-child(1) {
+  -webkit-animation: none;
+  animation: none;
+  visibility: hidden;
+}
+
+.voting-country-container:nth-child(2) {
+  transform: translateY(-150%) scale(0.7);
+  opacity: 0.4;
+  visibility: visible;
+  animation: carousel-animate-top 3s linear;
+  animation-fill-mode: forwards;
+          
+}
+
+.voting-country-container:nth-child(3) {
+  animation: carousel-animate-center 3s linear;
+  animation-fill-mode: forwards;
+}
+
+.voting-country-container:nth-child(4) {
+  transform: translateY(150%) scale(0.7);
+  opacity: 0.4;
+  visibility: visible;
+  animation: carousel-animate-bottom 3s linear;
+  animation-fill-mode: forwards;
+          
+}
+
+.voting-country-container:nth-child(5) {
+  visibility: hidden;
+  -webkit-animation: carousel-animate-new 3s linear;
+  animation: carousel-animate-new 3s linear;
+  animation-fill-mode: forwards;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-top: 10px;
+}
+  
+/*  ANIMATIONS  */
+
+@-webkit-keyframes carousel-animate-top {
+  0% {
+    transform: translateY(-150) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-150%) scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@-webkit-keyframes carousel-animate-center {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-150%) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+}
+
+@-webkit-keyframes carousel-animate-bottom {
+  0% {
+    transform: translateY(150%) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@-webkit-keyframes carousel-animate-new {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    transform: translateY(150%) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+}
+
+@keyframes carousel-animate-top {
+  0% {
+    transform: translateY(-150) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-150%) scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes carousel-animate-center {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-150%) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+}
+
+@keyframes carousel-animate-bottom {
+  0% {
+    transform: translateY(150%) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes carousel-animate-new {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    transform: translateY(150%) scale(0.7);
+    opacity: 0.5;
+    visibility: visible;
+  }
+}
+/* 
+  -webkit-animation: carousel-animate-vertical 9s linear infinite;
+  animation: carousel-animate-vertical 9s linear infinite; */

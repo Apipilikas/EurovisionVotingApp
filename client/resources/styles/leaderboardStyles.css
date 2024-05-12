@@ -1,0 +1,249 @@
+.color-segment {
+    /* background: linear-gradient( var(--main-color), var(--secondary-color), var(--third-color), var(--secondary-color), var(--main-color)); */
+    background: linear-gradient( var(--sixth-color), var(--fifth-color) 10%, var(--third-color), var(--fifth-color), var(--sixth-color));
+}
+
+/* #region voting leaderboard container / table */
+
+#voting-leaderboard-container {
+    width: 100vw;
+    overflow-x: auto;
+}
+
+table {
+    table-layout: fixed;
+    margin: auto;
+    border-spacing: 0 0.5em;
+}
+
+table thead {
+    position: sticky;
+    top: 0;
+}
+
+table th {
+    padding: 1em;
+    text-wrap: nowrap;
+}
+
+table th i.sorting-icon {
+    margin: auto 0em;
+    font-size: 1em;
+}
+
+table thead tr {
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+}
+
+table thead th:first-child {
+    position: sticky;
+    left: 0;
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+}
+
+table tbody tr {
+    transition: all 1s ease-out;
+}
+
+table td {
+    padding: 1em;
+    text-align: center;
+    transition: background-color 0.5s ease-out;
+}
+
+table td.voting-animation {
+    background-color: var(--third-color);
+}
+
+table tbody tr td:first-child {
+    position: sticky;
+    left: 0;
+    background: linear-gradient(90deg, var(--eighth-color) 20%, var(--forth-color) 100%);
+    color: var(--third-color);
+    font-weight: 900;
+    z-index: 1;
+}
+
+/* Running order table data */
+table tbody tr.running-country td:first-child {
+    background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
+    color: var(--fifth-color);
+}
+
+/* Winning country table data */
+table tbody tr.winner-country > * {
+    font-size: 1.2em;
+    background: linear-gradient(90deg, var(--third-color) 20%, var(--forth-color) 100%);
+    background-size: 200% 200% !important;
+    animation: color-animation 3s linear infinite;
+}
+
+/* Conutry table data */
+table tbody tr td.name-txt {
+    overflow: hidden;
+    padding: 0em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+table tbody tr td.name-txt span {
+    padding: 1em;
+    font-weight: 900;
+    animation: show-span-animation ease 10s infinite;
+    animation-fill-mode: forwards;
+}
+
+table tbody tr td.name-txt div.flag-container > div {
+    /* position: absolute; */
+    position: absolute; 
+    /* margin: auto; */
+}
+
+table tbody tr td.name-txt img {
+    position: absolute; 
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto;
+    /* transform: translateX(100px); */
+    animation: show-img-animation ease 10s infinite;
+}
+
+@keyframes show-span-animation {
+    0% {transform: translateY(0);}
+    20% {transform: translateY(0);}
+    40% {transform: translateY(100px);}
+    60% {transform: translateY(100px);}
+    80% {transform: translateY(0);}
+    100% {transform: translateY(0);}
+}
+
+@keyframes show-img-animation {
+    0% {transform: translateY(100px);}
+    20% {transform: translateY(100px);}
+    40% {transform: translateY(0);}
+    60% {transform: translateY(0);}
+    80% {transform: translateY(100px);}
+    100% {transform: translateY(100px);}
+}
+
+table tbody tr td.total-votes-txt {
+    background-color: var(--eighth-color);
+    color: var(--forth-color);
+}
+
+table tbody tr td.points-txt {
+    color: var(--fifth-color);
+}
+
+table tbody tr td:nth-child(2) {
+    color: var(--third-color);
+}
+
+table tr {
+    font-weight: bold;
+}
+
+td.open-voting-status {
+    font-weight: 900;
+    color: var(--green-color);
+    transition: background-color 0.5s ease-out;
+}
+
+td.closed-voting-status {
+    font-weight: 900;
+    color: var(--red-color);
+    transition: background-color 0.5s ease-out;
+}
+
+tr.voting-status-animation td:not(:first-child) {
+    color: var(--forth-color) !important;
+}
+
+table tbody tr:has(> td.open-voting-status) {
+    background: linear-gradient(to right, var(--forth-color) 25%, var(--green-color) 75%) left;
+    background-size: 400% 100%;
+    transition: all 1s ease-out;
+}
+
+table tbody tr:has(td.closed-voting-status) {
+    background: linear-gradient(to right, var(--forth-color) 25%, var(--red-color) 75%) left;
+    background-size: 400% 100%;
+    transition: all 1s ease-out;
+}
+
+table tr.voting-status-animation td.total-votes-txt {
+    background-color: transparent;
+}
+
+table tr.voting-status-animation:has(> td.open-voting-status),
+table tr.voting-status-animation:has(> td.closed-voting-status) {
+    background-position: right;
+}
+
+/* #endregion */
+
+/* #region Voting panel container */
+
+#voting-country-panel-bar-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+#voting-country-panel-bar-content .left-container p {
+    padding-left: 0.5em;
+    margin: 0em;
+    font-size: 1.5em;
+}
+
+#voting-country-panel-bar-content .left-container span {
+    margin: 0em;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+#voting-country-panel-bar-content > div {
+    margin: auto 0em;
+    display: flex;
+}
+
+#voting-country-panel-bar-content .right-container span {
+    padding-right: 0.5em;
+    margin: auto;
+    font-size: 2em;
+}
+
+#voting-country-panel-container {
+    display: none;
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    overflow: auto;
+    background-color: var(--third-color);
+
+}
+
+#voting-country-panel-content button {
+    background-color: var(--third-color);
+}
+
+#voting-country-panel-content input[type="radio"]:checked + label {
+    border: 2px solid var(--third-color);
+    background-color: var(--third-color);
+}
+
+/* #endregion */
+
+/* TABLET-BASED LAYOUT */
+@media only screen and (min-width: 425px) {
+    #voting-country-panel-container {
+        width: 40%;
+    }
+}
