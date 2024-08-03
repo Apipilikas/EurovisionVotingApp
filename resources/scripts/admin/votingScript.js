@@ -5,6 +5,7 @@ import { DocumentUtils } from "../utils/document/documentUtils.js";
 import { ResultButton } from "../utils/customElements/resultButton.js";
 import { InitUtils } from "../utils/initUtils.js";
 import { ConfirmDialog } from "../utils/dialogs/confirmDialog.js";
+import { DialogResult } from "../utils/dialogs/baseDialog.js";
 
 var loginJudge = null;
 var runningCountry = 0;
@@ -376,7 +377,7 @@ function clearTotalVotesBtnListener(e) {
     let countryCode = DocumentUtils.getElementAttribute("#clear-total-votes-countries-list", "value");
     ConfirmDialog.show("Are you sure you want to clear total votes of country with code [" + countryCode + "]?")
     .then(result => {
-        if (result == ConfirmDialog.DialogResult.YES) {
+        if (result == DialogResult.OK) {
             ResultButton.getByElement(e.target)
             .execute(CountryRequests.clearCountryTotalVotes(loginJudge.code, countryCode))
             .then(response => {console.log(response)});

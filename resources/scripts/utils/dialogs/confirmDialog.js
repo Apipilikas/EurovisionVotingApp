@@ -1,32 +1,33 @@
 import { DocumentUtils } from "../document/documentUtils.js";
-import { generalTemplates } from "../handlebarsUtils.js";
-
-const closeConfirmDialogClassName = "close-confirm-dialog";
+import { BaseDialog, DialogResult } from "./baseDialog.js";
 
 /**
- * This class is used to ensure user wants to procceed to ones action. Three dialog results are supported: [YES] meaning user has
- * clicked the yes button, [NO] meaning user has clicked the no button and [CLOSE] meaning user has clicked the close button.
+ * This class is used to ensure user wants to procceed to ones action.
  */
-export class ConfirmDialog {
-    static DialogResult = {
-        YES : "YES",
-        NO : "NO",
-        CLOSE : "CLOSE"
-    }
-
+export class ConfirmDialog extends BaseDialog {
     /**
      * ConfirmDialog constructor
      * @param {string} message Question to the user
      */
     constructor(message) {
+        super("confirm-dialog", BaseDialog.Type.INFO, "Confirm your action");
         this.message = message;
+
+        this.setBottomContainer(`
+            <p class="confirm-message">` + message + `</p>
+        `);
+
+        this.setButtonsArea(`
+            <button class="yes-btn">YES</button>
+            <button class="no-btn">NO</button>
+        `);
+        this.#initBtnListeners();
     }
 
     /**
      * Creates and shows the confirm dialog.
      * @param {string} message Question to the user
-     * @returns {Promise<ConfirmDialog.DialogResult>} Returns the DialogResult. [YES] meaning user has
-     * clicked the yes button, [NO] meaning user has clicked the no button and [CLOSE] meaning user has clicked the close button.
+     * @returns Returns the DialogResult.
      */
     static show(message) {
         let confirmDialog = new ConfirmDialog(message);
@@ -34,49 +35,15 @@ export class ConfirmDialog {
         return confirmDialog.show();
     }
 
-    /**
-     * Shows the confirm dialog.
-     * @returns {Promise<ConfirmDialog.DialogResult>} Returns the DialogResult. [YES] meaning user has
-     * clicked the yes button, [NO] meaning user has clicked the no button and [CLOSE] meaning user has clicked the close button.
-     */
-    show() {
-        DocumentUtils.blurScreen();
+    #initBtnListeners() {
+        DocumentUtils.setChildClickEventListener(".yes-btn", this.container, (e) => {
+            this.dialogResult = DialogResult.OK;
+            this.close();
+        });
 
-        let content = {message : this.message};
-
-        const confirmDialogContainer = DocumentUtils.getDisplayBoxContainer();
-        let confirmDialogContent = generalTemplates.confirmDialog(content);
-        confirmDialogContainer.innerHTML = confirmDialogContent;
-
-        const closeBtn = confirmDialogContainer.querySelector(".close-btn");
-        const yesBtn = confirmDialogContainer.querySelector(".yes-btn");
-        const noBtn = confirmDialogContainer.querySelector(".no-btn");
-
-        return new Promise((resolve) => {
-            yesBtn.addEventListener("click", e => {
-                resolve(ConfirmDialog.DialogResult.YES);
-                this.close();
-            })
-
-            noBtn.addEventListener("click", e => {
-                resolve(ConfirmDialog.DialogResult.NO);
-                this.close();
-            })
-
-            closeBtn.addEventListener("click", e => {
-                resolve(ConfirmDialog.DialogResult.CLOSE);
-                this.close();
-            });
+        DocumentUtils.setChildClickEventListener(".no-btn", this.container, (e) => {
+            this.dialogResult = DialogResult.CANCEL;
+            this.close();
         })
-    }
-
-    /**
-     * Closes the confirm dialog.
-     */
-    close() {
-        DocumentUtils.unblurScreen();
-
-        const confirmDialog = document.querySelector(".confirm-dialog");
-        confirmDialog.classList.add(closeConfirmDialogClassName);
     }
 }

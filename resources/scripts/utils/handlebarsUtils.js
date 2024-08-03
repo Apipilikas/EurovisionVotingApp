@@ -348,48 +348,27 @@ generalTemplates.errorBox = Handlebars.compile(`
 </div>
 `);
 
-generalTemplates.confirmDialog = Handlebars.compile(`
-<div class="confirm-dialog">
-    <div class="top-container">
-        <div class="icon-container">
-            <i class="material-icons">info</i>
-            <p>Confirm your action</p>
-        </div>
-        <span class="close-btn">&times;</span>
-    </div>
-    <div class="bottom-container">
-        <p class="confirm-message">{{this.message}}</h1>
-        <div class="buttons-area">
-            <button class="yes-btn">YES</button>
-            <button class="no-btn">NO</button>
-        </div>
-    </div>
-</div>
-`);
-
-generalTemplates.messageDialog = Handlebars.compile(`
-<div class="message-dialog {{this.className}}">
-    <div class="top-container">
-        <div class="icon-container">
-            <i class="material-icons">{{this.icon}}</i>
-            <p>{{this.caption}}</p>
-        </div>
-        <div class="right-container">
-            <div class="timer-container">
-                <p class="timer-caption">Reloading after</p>
-                <p class="timer-txt"><span class="timer-seconds-txt">5</span> s</p>
+generalTemplates.baseDialog = Handlebars.compile(`
+    <div class="base-dialog {{this.dialogName}} {{this.className}}">
+        <div class="top-container">
+            <div class="icon-container">
+                <i class="material-icons">{{this.icon}}</i>
+                <p>{{this.caption}}</p>
             </div>
-            <span class="close-btn">&times;</span>
+            <div class="right-container">
+                <div class="timer-container">
+                    <p class="timer-caption">Closing in</p>
+                    <p class="timer-txt"><span class="timer-seconds-txt">5</span> s</p>
+                </div>
+                <span class="close-btn">&times;</span>
+            </div>
         </div>
-    </div>
-    <div class="bottom-container">
-        <p class="message">{{this.message}}</p>
+        <div class="bottom-container">
+        </div>
         <div class="buttons-area">
-            <button class="ok-btn">OK</button>
         </div>
     </div>
-</div>
-`);
+    `);
 
 generalTemplates.revealWinner = Handlebars.compile(`
 <div>

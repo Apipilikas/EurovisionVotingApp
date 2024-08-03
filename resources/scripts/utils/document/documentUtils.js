@@ -3,6 +3,7 @@ import { MyError } from "../errorUtils.js";
 import { ChildSelectorResolver, ParentSelectorResolver, SelectorResolver } from "./selectorResolver.js";
 import { MessageDialog } from "../dialogs/messageDialog.js";
 import { NotificationBox } from "../boxes/notificationBox.js";
+import { DialogType } from "../dialogs/baseDialog.js";
 
 let DocumentUtils = {};
 
@@ -129,6 +130,44 @@ function setEventListenerByResolver(resolver, type, listenerFunction) {
  */
 function setEventListenerByElement(element, type, listenerFunction) {
     element.addEventListener(type, e => listenerFunction(e));
+}
+
+//#endregion
+
+//#region Style utils
+
+DocumentUtils.setStyle = function(selectorID, styleName, styleValue) {
+    let resolvedSelector = SelectorResolver.resolve(selectorID);
+
+    if (!resolvedSelector.hasElements()) return;
+
+    if (resolvedSelector.hasMultipleElements) {
+        for (var element of resolvedSelector.elements) {
+            this.setStyleByElement(element, styleName, styleValue);
+        }
+    }
+    else {
+        this.setStyleByElement(resolvedSelector.elements[0], styleName, styleValue);
+    }
+}
+
+DocumentUtils.setChildStyle = function(selectorID, element, styleName, styleValue) {
+    let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
+
+    if (!resolvedSelector.hasElements()) return;
+
+    if (resolvedSelector.hasMultipleElements) {
+        for (var element of resolvedSelector.elements) {
+            this.setStyleByElement(element, styleName, styleValue);
+        }
+    }
+    else {
+        this.setStyleByElement(resolvedSelector.elements[0], styleName, styleValue);
+    }
+}
+
+DocumentUtils.setStyleByElement = function(element, styleName, styleValue) {
+    element.style[styleName] = styleValue;
 }
 
 //#endregion
@@ -549,13 +588,13 @@ DocumentUtils.handleGeneralSocketEvent = function(response) {
 
     switch (code) {
         case "INFORM_MESSAGE":
-            MessageDialog.show(MessageDialog.Type.INFO, message);
+            MessageDialog.show(DialogType.INFO, message);
             break;
         case "WARNING_MESSAGE":
-            MessageDialog.show(MessageDialog.Type.WARNING, message);
+            MessageDialog.show(DialogType.WARNING, message);
             break;
         case "RESET_CACHE":
-            MessageDialog.show(MessageDialog.Type.WARNING, message + " Page will be refreshed soon.", true).closeAfterMs(8000);
+            MessageDialog.showAndCloseAfterMs(DialogType.WARNING, message + " Page will be refreshed soon.", 8000, true);
             break;
     }
 }
