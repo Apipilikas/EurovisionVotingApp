@@ -1,11 +1,66 @@
 import { ErrorBox } from "../boxes/errorBox.js";
 import { MyError } from "../errorUtils.js";
-import { ChildSelectorResolver, ParentSelectorResolver, SelectorResolver } from "./selectorResolver.js";
+import { SelectorResolver } from "./selectorResolver/selectorResolver.js";
+import { ChildSelectorResolver } from "./selectorResolver/childSelectorResolver.js";
+import { ParentSelectorResolver } from "./selectorResolver/parentSelectorResolver.js";
 import { MessageDialog } from "../dialogs/messageDialog.js";
 import { NotificationBox } from "../boxes/notificationBox.js";
 import { DialogType } from "../dialogs/baseDialog.js";
 
 let DocumentUtils = {};
+
+//#region Selector Resolver cache
+
+var SelectorResolverCache = new Map();
+
+/**
+ * 
+ * @param {*} selectorID 
+ * @returns {SelectorResolver}
+ */
+function getSelectorResolver(selectorID) {
+    let resolver = SelectorResolverCache.get(selectorID);
+
+    if (resolver == null) {
+        resolver = SelectorResolver.resolve(selectorID);
+        SelectorResolverCache.set(selectorID, resolver);
+    }
+
+    return resolver;
+}
+
+/**
+ * 
+ * @param {*} selectorID 
+ * @param {HTMLElement} element 
+ * @returns 
+ */
+function getChildSelectorResolver(selectorID, element) {
+    let key = element.id + " " + selectorID;
+    let resolver = SelectorResolverCache.get(key);
+
+    if (resolver == null) {
+        resolver = ChildSelectorResolver.resolve(selectorID, element);
+        SelectorResolverCache.set(key, resolver);
+    }
+
+    return resolver;
+}
+
+function getParentSelectorResolver(selectorID, element) {
+    let key = element.id + " " + selectorID;
+
+    let resolver = SelectorResolverCache.get(key);
+
+    if (resolver == null) {
+        resolver = ParentSelectorResolver.resolve(selectorID, element);
+        SelectorResolverCache.set(key, resolver);
+    }
+
+    return resolver;
+}
+
+//#endregion
 
 //#region Input utils
 
@@ -73,9 +128,7 @@ DocumentUtils.setChangeEventListener = function(selectorID, listenerFunction) {
 function setEventListener(selectorID, type, listenerFunction) {
     if (!typeof listenerFunction === "function") return;
 
-    let resolvedSelector = SelectorResolver.resolve(selectorID);
-    if (!resolvedSelector.hasElements()) return;
-    
+    let resolvedSelector = getSelectorResolver(selectorID);
     setEventListenerByResolver(resolvedSelector, type, listenerFunction);
 }
 
@@ -100,8 +153,6 @@ function setChildEventListener(selectorID, element, type, listenerFunction) {
     if (!typeof listenerFunction === "function") return;
 
     let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
-    if (!resolvedSelector.hasElements()) return;
-
     setEventListenerByResolver(resolvedSelector, type, listenerFunction);
 }
 
@@ -112,14 +163,15 @@ function setChildEventListener(selectorID, element, type, listenerFunction) {
  * @param {function} listenerFunction Callback function. Always passes event as a parameter.
  */
 function setEventListenerByResolver(resolver, type, listenerFunction) {
-    if (resolver.hasMultipleElements) {
-        for (var element of resolver.elements) {
-            setEventListenerByElement(element, type, listenerFunction);
-        }
-    }
-    else {
-        setEventListenerByElement(resolver.elements[0], type, listenerFunction);
-    }
+    resolver.applyFunctionToElements(setEventListenerByElement, type, listenerFunction);
+    // if (resolver.hasMultipleElements) {
+    //     for (var element of resolver.elements) {
+    //         setEventListenerByElement(element, type, listenerFunction);
+    //     }
+    // }
+    // else {
+    //     setEventListenerByElement(resolver.elements[0], type, listenerFunction);
+    // }
 }
 
 /**
@@ -137,33 +189,33 @@ function setEventListenerByElement(element, type, listenerFunction) {
 //#region Style utils
 
 DocumentUtils.setStyle = function(selectorID, styleName, styleValue) {
-    let resolvedSelector = SelectorResolver.resolve(selectorID);
+    let resolvedSelector = getSelectorResolver(selectorID);
+    resolvedSelector.applyFunctionToElements(this.setStyleByElement, styleName, styleValue);
+    // if (!resolvedSelector.hasElements()) return;
 
-    if (!resolvedSelector.hasElements()) return;
-
-    if (resolvedSelector.hasMultipleElements) {
-        for (var element of resolvedSelector.elements) {
-            this.setStyleByElement(element, styleName, styleValue);
-        }
-    }
-    else {
-        this.setStyleByElement(resolvedSelector.elements[0], styleName, styleValue);
-    }
+    // if (resolvedSelector.hasMultipleElements) {
+    //     for (var element of resolvedSelector.elements) {
+    //         this.setStyleByElement(element, styleName, styleValue);
+    //     }
+    // }
+    // else {
+    //     this.setStyleByElement(resolvedSelector.elements[0], styleName, styleValue);
+    // }
 }
 
 DocumentUtils.setChildStyle = function(selectorID, element, styleName, styleValue) {
     let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
+    resolvedSelector.applyFunctionToElements(this.setStyleByElement, styleName, styleValue);
+    // if (!resolvedSelector.hasElements()) return;
 
-    if (!resolvedSelector.hasElements()) return;
-
-    if (resolvedSelector.hasMultipleElements) {
-        for (var element of resolvedSelector.elements) {
-            this.setStyleByElement(element, styleName, styleValue);
-        }
-    }
-    else {
-        this.setStyleByElement(resolvedSelector.elements[0], styleName, styleValue);
-    }
+    // if (resolvedSelector.hasMultipleElements) {
+    //     for (var element of resolvedSelector.elements) {
+    //         this.setStyleByElement(element, styleName, styleValue);
+    //     }
+    // }
+    // else {
+    //     this.setStyleByElement(resolvedSelector.elements[0], styleName, styleValue);
+    // }
 }
 
 DocumentUtils.setStyleByElement = function(element, styleName, styleValue) {
@@ -228,16 +280,17 @@ DocumentUtils.setInnerHTMLByElement = function(element, innerHTML) {
  * @param {string} innerHTML Inner HTML content
  */
 function setInnerHTMLByResolver(resolver, innerHTML) {
-    if (!resolver.hasElements()) return;
+    resolver.applyFunctionToElements(DocumentUtils.setInnerHTMLByElement, innerHTML);
+    // if (!resolver.hasElements()) return;
 
-    if (resolver.hasMultipleElements) {
-        for (var element of resolver.elements) {
-            DocumentUtils.setInnerHTMLByElement(element, innerHTML);
-        }
-    }
-    else {
-        DocumentUtils.setInnerHTMLByElement(resolver.elements[0], innerHTML)
-    }
+    // if (resolver.hasMultipleElements) {
+    //     for (var element of resolver.elements) {
+    //         DocumentUtils.setInnerHTMLByElement(element, innerHTML);
+    //     }
+    // }
+    // else {
+    //     DocumentUtils.setInnerHTMLByElement(resolver.elements[0], innerHTML)
+    // }
 }
 
 /**
@@ -313,7 +366,8 @@ DocumentUtils.getElementAttribute = function(selectorID, attributeName) {
     let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return null;
 
-    return this.getElementAttributeByElement(resolvedSelector.elements[0], attributeName);
+    return resolvedSelector.applyFunctionToElements(this.getElementAttributeByElement, attributeName)[0];
+    // return this.getElementAttributeByElement(resolvedSelector.elements[0], attributeName);
 }
 
 /**
@@ -328,7 +382,8 @@ DocumentUtils.setElementAttribute = function(selectorID, attributeName, attribut
     let resolvedSelector = SelectorResolver.resolve(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
     
-    this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue);
+    resolvedSelector.applyFunctionToElements(this.setElementAttributeByElement, attributeName, attributeValue);
+    // this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue);
 }
 
 /**
@@ -345,7 +400,8 @@ DocumentUtils.setChildElementAttribute = function(selectorID, element, attribute
     let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
     
-    this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue);
+    resolvedSelector.applyFunctionToElements(this.setElementAttributeByElement, attributeName, attributeValue);
+    // this.setElementAttributeByElement(resolvedSelector.elements[0], attributeName, attributeValue);
 }
 
 /**
@@ -375,7 +431,8 @@ DocumentUtils.getAttributesToString = function(selectorID, attributeName) {
 
     if (!resolvedSelector.hasElements()) return null;
 
-    return DocumentUtils.getAttributesToStringByElements(resolvedSelector.elements, attributeName);
+    return resolvedSelector.applyFunctionToElements(this.getAttributesToStringByElements, attributeName);
+    // return DocumentUtils.getAttributesToStringByElements(resolvedSelector.elements, attributeName);
 }
 
 DocumentUtils.getAttributesToStringByElements = function(elements, attributeName) {
@@ -399,17 +456,17 @@ DocumentUtils.getAttributesToStringByElements = function(elements, attributeName
 DocumentUtils.addClassName = function(selectorID, className) {
     if (className == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selectorID);
-    if (!resolvedSelector.hasElements()) return;
-
-    if (resolvedSelector.hasMultipleElements) {
-        for (var element of resolvedSelector.elements) {
-            this.addClassNameByElement(element, className);
-        }
-    }
-    else {
-        this.addClassNameByElement(resolvedSelector.elements[0], className);
-    }
+    let resolvedSelector = getSelectorResolver(selectorID);
+    // if (!resolvedSelector.hasElements()) return;
+    resolvedSelector.applyFunctionToElements(this.addClassNameByElement, className);
+    // if (resolvedSelector.hasMultipleElements) {
+    //     for (var element of resolvedSelector.elements) {
+    //         this.addClassNameByElement(element, className);
+    //     }
+    // }
+    // else {
+    //     this.addClassNameByElement(resolvedSelector.elements[0], className);
+    // }
 }
 
 /**
@@ -421,17 +478,18 @@ DocumentUtils.addClassName = function(selectorID, className) {
 DocumentUtils.removeClassName = function(selectorID, className) {
     if (className == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selectorID);
-    if (!resolvedSelector.hasElements()) return;
+    let resolvedSelector = getSelectorResolver(selectorID);
+    resolvedSelector.applyFunctionToElements(this.removeClassNameByElement, className);
+    // if (!resolvedSelector.hasElements()) return;
 
-    if (resolvedSelector.hasMultipleElements) {
-        for (var element of resolvedSelector.elements) {
-            this.removeClassNameByElement(element, className);
-        }
-    }
-    else {
-        this.removeClassNameByElement(resolvedSelector.elements[0], className);
-    }
+    // if (resolvedSelector.hasMultipleElements) {
+    //     for (var element of resolvedSelector.elements) {
+    //         this.removeClassNameByElement(element, className);
+    //     }
+    // }
+    // else {
+    //     this.removeClassNameByElement(resolvedSelector.elements[0], className);
+    // }
 }
 
 /**
@@ -443,10 +501,10 @@ DocumentUtils.removeClassName = function(selectorID, className) {
 DocumentUtils.containsClassName = function(selectorID, className) {
     if (className == null) return;
 
-    let resolvedSelector = SelectorResolver.resolve(selectorID);
+    let resolvedSelector = getSelectorResolver(selectorID);
     if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return;
 
-    return this.containsClassNameByElement(resolvedSelector.elements[0], className);
+    return DocumentUtils.containsClassNameByElement(resolvedSelector.elements[0], className);
 }
 
 /**
@@ -456,7 +514,7 @@ DocumentUtils.containsClassName = function(selectorID, className) {
  * @param {string} className Class name
  */
 DocumentUtils.addClassNameByElement = function(element, className) {
-    if (element != null && !this.containsClassNameByElement(element, className)) {
+    if (element != null && !DocumentUtils.containsClassNameByElement(element, className)) {
         element.classList.add(className);
     }
 }
