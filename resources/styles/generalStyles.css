@@ -1284,7 +1284,7 @@ details.admin-details-container {
 .base-dialog {
     opacity: 1;
     z-index: 4;
-    display: flex;
+    display: none;
     flex-direction: column;
     /* justify-content: space-between; */
     position: fixed;
@@ -1298,7 +1298,16 @@ details.admin-details-container {
 }
 
 .base-dialog.show-dialog {
+    display: flex;
     animation: dialog-open-animation 1s ease-in-out 2s, show-dialog-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+.base-dialog.show-dialog.simple-animation {
+    animation: dialog-open-simple-animation 1s ease-in-out;
+    bottom: 50%;
+    height: 200px;
+    width: 80%;
     animation-fill-mode: forwards; 
 }
 
@@ -1312,6 +1321,7 @@ details.admin-details-container {
 
 /* Close base dialog */
 .base-dialog.close-dialog  {
+    display: flex;
     animation: dialog-close-animation 0.4s ease-in-out;
     animation-fill-mode: forwards; 
 }
@@ -1410,11 +1420,11 @@ details.admin-details-container {
     color: white;
 }
 
-.base-dialog .bottom-container * {
-    display: flex;
+.base-dialog .bottom-container > :first-child {
+    /* display: flex; */
     overflow: hidden;
-    text-align: center;
-    padding: 0.5em 0em 0.5em 0em;
+    /* text-align: center; */
+    /* padding: 0.5em 0em 0.5em 0em; */
     margin: auto;
     font-weight: 700;
 }
@@ -1491,18 +1501,165 @@ details.admin-details-container {
     }
 }
 
+@keyframes dialog-open-simple-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    } 
+}
+
 @keyframes dialog-close-animation {
     0% {
-        height: 200px;
-        width: 80%;
         opacity: 1;
     }
 
     100% {
-        height: 200px;
-        width: 80%;
         opacity: 0;
     } 
+}
+
+/* #endregion */
+
+/* #region Circular progress dialog */
+
+.base-dialog.circular-progress-dialog {
+    width: 250px !important;
+    height: 250px !important;
+}
+
+/* #endregion */
+
+/* #region Circular progress bar */
+  
+.circular-progress-bar {
+position: relative;
+height: 170px;
+width: 170px;
+border-radius: 50%;
+background: conic-gradient(var(--info-color) 3.6deg, #ededed 0deg);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.circular-progress-bar.completed {
+    background: var(--green-color) !important;
+}
+
+.circular-progress-bar.canceled {
+    background: var(--error-color) !important;
+}
+
+.circular-progress-bar::before {
+content: "";
+position: absolute;
+height: 150px;
+width: 150px;
+border-radius: 50%;
+background-color: #fff;
+}
+
+.circular-progress-bar > div {
+position: relative;
+font-size: 20px;
+font-weight: 600;
+color: var(--info-color);
+display: flex;
+flex-direction: column;
+}
+
+.circular-progress-bar.completed > div {
+    color: var(--green-color);
+}
+
+.circular-progress-bar.canceled > div {
+    color: var(--error-color);
+}
+
+.circular-progress-bar > .content > * {
+    margin: auto;
+}
+
+.circular-progress-bar > .content > i {
+    font-size: 40px;
+    
+}
+
+.circular-progress-bar > .content > .percentage {
+    font-size: 20px;
+    display: none;
+}
+
+  @keyframes circular-progress-bar-flickering-animation {
+    from {
+
+    }
+  }
+
+/* #endregion */
+
+/* #region Linear progress bar */
+
+.linear-progress-bar {
+    width: 80%;
+}
+
+.linear-progress-bar-container {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+    background-color: #ededed;
+}
+
+.linear-progress-bar .bar {
+    width: 0%;
+    height: 20px;
+    background-color: var(--info-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.linear-progress-bar.completed .bar {
+    background-color: var(--green-color);
+}
+
+.linear-progress-bar.warning .bar {
+    background-color: var(--warning-color);
+}
+
+.linear-progress-bar.canceled .bar {
+    background-color: var(--error-color);
+}
+
+.linear-progress-bar .bar-details {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.linear-progress-bar .bar-details .percentage {
+    display: none;
+}
+
+.linear-progress-bar i {
+    font-size: 1.3em;
+}
+
+.linear-progress-bar.completed i {
+    color: var(--green-color);
+}
+
+.linear-progress-bar.warning i {
+    color: var(--warning-color);
+}
+
+.linear-progress-bar.canceled i {
+    color: var(--error-color);
 }
 
 /* #endregion */
@@ -1658,6 +1815,16 @@ details.admin-details-container {
     .error-box .message-container p {
         font-size: 1em;
     }
+
+    /* #region Base dialog */
+
+    .base-dialog.show-dialog.simple-animation {
+        bottom: 50%;
+        height: 200px;
+        width: 40%;
+    }
+
+    /* #endregion */
 
     /* Animations */
 

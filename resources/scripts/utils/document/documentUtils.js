@@ -526,7 +526,7 @@ DocumentUtils.addClassNameByElement = function(element, className) {
  * @param {string} className Class name
  */
 DocumentUtils.removeClassNameByElement = function(element, className) {
-    if (this.containsClassNameByElement(element, className)) {
+    if (DocumentUtils.containsClassNameByElement(element, className)) {
         element.classList.remove(className);
     }
 }

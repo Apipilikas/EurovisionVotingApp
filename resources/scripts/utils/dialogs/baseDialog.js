@@ -44,6 +44,8 @@ export class BaseDialog {
     #container
     dialogResult
     #timerContainerCaption = "Closing in"
+    #topContainerVisibility = true
+    #simpleShowAnimation = false
 
     /**
      * BaseDialog constructor
@@ -67,8 +69,25 @@ export class BaseDialog {
         return this.#container;
     }
 
+    /**
+     * @param {string} value
+     */
     set timerContainerCaption(value) {
         this.#timerContainerCaption = value;
+    }
+
+    /**
+     * @param {boolean} value
+     */
+    set topContainerVisibility(value) {
+        this.#topContainerVisibility = value;
+    }
+
+    /**
+     * @param {boolean} value 
+     */
+    set simpleShowAnimation(value) {
+        this.#simpleShowAnimation = value;
     }
 
     /**
@@ -81,9 +100,10 @@ export class BaseDialog {
         let caption = (this.caption == null) ? CaptionMapping.get(this.type) : this.caption;
         let content = {dialogName: this.dialogName, className : className, icon : iconCode, caption : caption};
 
-        this.#container = DocumentUtils.getDisplayBoxContainer();
+        let boxContainer = DocumentUtils.getDisplayBoxContainer();
         let baseDialogContent = generalTemplates.baseDialog(content);
-        this.#container.innerHTML = baseDialogContent;
+        boxContainer.innerHTML = baseDialogContent;
+        this.#container = boxContainer.querySelector(".base-dialog");
     }
 
     /**
@@ -108,10 +128,13 @@ export class BaseDialog {
      * @returns {Promise<DialogResult>} Returns the DialogResult.
      */
     show() {
+        if(!this.#topContainerVisibility) DocumentUtils.setChildStyle(".top-container", this.#container, "display", "none");
+        if (this.#simpleShowAnimation) DocumentUtils.addClassNameByElement(this.#container, "simple-animation");
+
         DocumentUtils.blurScreen();
         
         DocumentUtils.addClassName(".base-dialog", showBaseDialogClassName);
-        DocumentUtils.setChildClickEventListener(".base-dialog .close-btn", this.#container, (e) => {this.close()});
+        DocumentUtils.setChildClickEventListener(".close-btn", this.#container, (e) => this.close());
 
         return new Promise((resolve) => {
             this.#container.addEventListener("closingDialog", () => {
@@ -126,27 +149,36 @@ export class BaseDialog {
      * @returns Returns the DialogResult.
      */
     showAndCloseAfterMs(ms) {
-        const timerContainer = document.getElementsByClassName("timer-container")[0];
+        ms += 3000; // animation delay
+        this.closeAfterMs(ms);
+        return this.show();
+    }
+
+    /**
+     * Closes the dialog after specific ms.
+     * @param {number} ms 
+     */
+    closeAfterMs(ms) {
+        const timerContainer = this.#container.querySelector(".timer-container");
         timerContainer.style.display = "flex";
         
         DocumentUtils.setChildInnerHTML(".timer-caption", timerContainer, this.#timerContainerCaption);
         const timerTxt = timerContainer.querySelector(".timer-seconds-txt");
 
+        // Animation
         let totalMs = 0;
         let interval = setInterval(() => {
+            totalMs += 1000;
+            
             if (totalMs >= ms) {
                 clearInterval(interval);
-                this.close();
             }
             
-            totalMs += 1000;
             timerTxt.innerHTML = (ms - totalMs) / 1000;
-        },1000)
+        }, 1000);
         setTimeout(() => {
             this.close();
         }, ms);
-
-        return this.show();
     }
 
     /**

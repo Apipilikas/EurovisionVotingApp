@@ -73,6 +73,7 @@ export class MessageDialog extends BaseDialog {
 
     /**
      * Closes the message dialog. If reload page is true, closing the dialog forces page to be reloaded.
+     * @override
      */
     close() {
         super.close();

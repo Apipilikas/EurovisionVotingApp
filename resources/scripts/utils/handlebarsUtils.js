@@ -349,26 +349,49 @@ generalTemplates.errorBox = Handlebars.compile(`
 `);
 
 generalTemplates.baseDialog = Handlebars.compile(`
-    <div class="base-dialog {{this.dialogName}} {{this.className}}">
-        <div class="top-container">
-            <div class="icon-container">
-                <i class="material-icons">{{this.icon}}</i>
-                <p>{{this.caption}}</p>
-            </div>
-            <div class="right-container">
-                <div class="timer-container">
-                    <p class="timer-caption">Closing in</p>
-                    <p class="timer-txt"><span class="timer-seconds-txt">5</span> s</p>
-                </div>
-                <span class="close-btn">&times;</span>
-            </div>
+<div class="base-dialog {{this.dialogName}} {{this.className}}">
+    <div class="top-container">
+        <div class="icon-container">
+            <i class="material-icons">{{this.icon}}</i>
+            <p>{{this.caption}}</p>
         </div>
-        <div class="bottom-container">
-        </div>
-        <div class="buttons-area">
+        <div class="right-container">
+            <div class="timer-container">
+                <p class="timer-caption">Closing in</p>
+                <p class="timer-txt"><span class="timer-seconds-txt">5</span> s</p>
+            </div>
+            <span class="close-btn">&times;</span>
         </div>
     </div>
-    `);
+    <div class="bottom-container">
+    </div>
+    <div class="buttons-area">
+    </div>
+</div>
+`);
+
+generalTemplates.circularProgressBar = Handlebars.compile(`
+<div class="circular-progress-bar bar">
+    <div class="content">
+        <span class="percentage">0%</span>
+        <i class="material-icons">hourglass_empty</i>
+        <span class="description">Initializing</span>
+    </div>
+</div>
+`);
+
+generalTemplates.linearProgressBar = Handlebars.compile(`
+<div class="linear-progress-bar">
+    <div class="linear-progress-bar-container">
+        <div class="bar"></div>
+        <div class="bar-details">
+            <span class="percentage">0%</span>
+            <i class="material-icons">hourglass_empty</i>
+        </div>
+    </div>
+    <span class="description">Initializing...</span>
+</div>    
+`);
 
 generalTemplates.revealWinner = Handlebars.compile(`
 <div>
