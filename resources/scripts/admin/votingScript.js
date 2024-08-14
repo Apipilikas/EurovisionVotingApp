@@ -6,6 +6,9 @@ import { ResultButton } from "../utils/customElements/resultButton.js";
 import { InitUtils } from "../utils/initUtils.js";
 import { ConfirmDialog } from "../utils/dialogs/confirmDialog.js";
 import { DialogResult } from "../utils/dialogs/baseDialog.js";
+import { InformJudgePanel } from "../utils/panels/informJudgePanel.js";
+import { RevealWinnerPanel } from "../utils/panels/revealWinnerPanel.js";
+import { ClearTotalVotesPanel } from "../utils/panels/clearTotalVotesPanel.js";
 
 var loginJudge = null;
 var runningCountry = 0;
@@ -35,6 +38,7 @@ function initContainers() {
         
         var content = adminTemplates.voting.votingCountryContainer.content;
         content.countries = data.countries;
+        window.countries =  data.countries;
         content.judges = data.judges;
         
         initDashboard(data.countries, data.judges.length, data.onlineJudgeCodes.length);
@@ -44,12 +48,6 @@ function initContainers() {
         initVotesToJudges(data.countries);
 
         setRevealWinnerResultText(data.winnerCountry?.code);
-
-        initRevealWinnerPanelContainer(data.countries);
-
-        initClearTotalVotesCountriesListContainer(data.countries);
-
-        initInformJudgePanelContainer();
 
         initBtnLinsteners();
     })
@@ -66,7 +64,8 @@ function initBtnLinsteners() {
     DocumentUtils.setClickEventListener("#reset-judges-cache-btn", resetJudgesCacheBtnListener);
     DocumentUtils.setClickEventListener("#reset-countries-cache-btn", resetCountriesCacheBtnListener);
     DocumentUtils.setClickEventListener("#reset-all-caches-btn", resetAllCachesBtnListener);
-    DocumentUtils.setClickEventListener("#inform-judge-btn", openInformJudgePanelListener);
+    DocumentUtils.setClickEventListener("#reveal-winner-btn", revealWinnerCountryBtnListener);
+    DocumentUtils.setClickEventListener("#inform-judge-btn", informJudgeBtnListener);
     DocumentUtils.setClickEventListener("#clear-total-votes-btn", clearTotalVotesBtnListener);
 
     // Toggle switches
@@ -92,26 +91,6 @@ function initDashboard(countries, judgesNumber, onlineJudgesNumber) {
     let country = countries.find(el => parseInt(el.runningOrder) == parseInt(runningCountry));
     
     setDataToDashboard(country, judgesNumber, onlineJudgesNumber);
-}
-
-function initRevealWinnerPanelContainer(countries) {
-    let content = adminTemplates.voting.revealWinnerBoxContainerContent({countries : countries});
-    DocumentUtils.setInnerHTML("#reveal-winner-panel-content", content);
-    DocumentUtils.setClickEventListener("#reveal-winner-panel-container .close-btn", closeRevealWinnerPanelContainerBtnListener);
-    DocumentUtils.setClickEventListener("#reveal-winner-panel-container .ok-btn", closeRevealWinnerPanelContainerBtnListener);
-    DocumentUtils.setClickEventListener("#reveal-winner-panel-container .clear-btn", clearWinnerCountryBtnListener)
-    DocumentUtils.setClickEventListener("#reveal-winner-btn", openRevealWinnerPanelContainer);
-}
-
-function initInformJudgePanelContainer() {
-    DocumentUtils.setClickEventListener("#inform-judge-panel-container .close-btn", closeInformJudgePanelContainerBtnListener);
-    DocumentUtils.setClickEventListener("#inform-judge-panel-container .inform-btn", informJudgePanelContainerBtnListener);
-    DocumentUtils.setClickEventListener("#inform-judge-panel-container .warn-btn", informJudgePanelContainerBtnListener);
-}
-
-function initClearTotalVotesCountriesListContainer(countries) {
-    let content = adminTemplates.voting.clearTotalVotesCountriesListContent({countries : countries});
-    DocumentUtils.setInnerHTML("#clear-total-votes-countries-list", content);
 }
 
 //#endregion
@@ -176,37 +155,9 @@ function setTotalVotes(countryCode, totalVotes) {
 }
 
 // Reveal Winner container
-function openRevealWinnerPanelContainer() {
-    DocumentUtils.blurScreen();
-    const revealWinnerPanelContainer = document.getElementById("reveal-winner-panel-container");
-    revealWinnerPanelContainer.style.display = "initial";
-}
-
-function closeRevealWinnerPanelContainer() {
-    DocumentUtils.unblurScreen();
-    const revealWinnerPanelContainer = document.getElementById("reveal-winner-panel-container");
-    revealWinnerPanelContainer.style.display = "none";
-}
-
-function getWinnerCountryCode() {
-    return DocumentUtils.getElementAttribute("input[name='reveal-winner']:checked", "value");
-}
 
 function setRevealWinnerResultText(winnerCountryCode) {
     DocumentUtils.setInnerHTML("#reveal-winner-container .result-text", winnerCountryCode);
-}
-
-// Inform judge container
-function openInformJudgePanelListener() {
-    DocumentUtils.blurScreen();
-    const informJudgePanelContainer = document.getElementById("inform-judge-panel-container");
-    informJudgePanelContainer.style.display = "initial";
-}
-
-function closeInformJudgePanelContainer() {
-    DocumentUtils.unblurScreen();
-    const informJudgePanelContainer = document.getElementById("inform-judge-panel-container");
-    informJudgePanelContainer.style.display = "none";
 }
 
 function emitInformMessageToJudge(code, message) {
@@ -330,59 +281,43 @@ function resetAllCachesBtnListener(e) {
     });
 }
 
-// Reveal Winner panel listeners
-function closeRevealWinnerPanelContainerBtnListener(e) {
-    closeRevealWinnerPanelContainer();
-
-    if (e.target.classList.contains("close-btn")) return;
-    
-    let winnerCountryCode = getWinnerCountryCode();
-    setRevealWinnerResultText(winnerCountryCode);
-
-    AdminRequests.setWinnerCountry(loginJudge.code, winnerCountryCode);
-}
-
-function clearWinnerCountryBtnListener(e) {
-    AdminRequests.clearWinnerCountry(loginJudge.code)
-    .then(response => {
-        if (response.success) {
-            closeRevealWinnerPanelContainer();
-            setRevealWinnerResultText("NONE");
+function revealWinnerCountryBtnListener(e) {
+    let countries = window.countries;
+    let panel = new RevealWinnerPanel(countries);
+    panel.show(countries)
+    .then(result => {
+        switch (result) {
+            case DialogResult.CLOSE: return;
+            case DialogResult.OK:
+                AdminRequests.setWinnerCountry(loginJudge.code, panel.winnerCountryCode);
+                break;
+            case DialogResult.CHOICE1: // Clear
+                AdminRequests.clearWinnerCountry(loginJudge.code);
+                break;
         }
     })
 }
 
-// Inform judge panel listeners
-function informJudgePanelContainerBtnListener(e) {
-    let textAreaValue = DocumentUtils.getElementAttribute("#inform-judge-panel-container textarea", "value");
-    let code = "WARNING";
-
-    if (e.target.className == "inform-btn") {
-        code = "INFORM";
-    }
-
-    code += "_MESSAGE"
-
-    emitInformMessageToJudge(code, textAreaValue);
-
-    closeInformJudgePanelContainer();
-}
-
-function closeInformJudgePanelContainerBtnListener(e) {
-    closeInformJudgePanelContainer();
-}
-
-// Clear country total votes
-function clearTotalVotesBtnListener(e) {
-    let countryCode = DocumentUtils.getElementAttribute("#clear-total-votes-countries-list", "value");
-    ConfirmDialog.show("Are you sure you want to clear total votes of country with code [" + countryCode + "]?")
+function informJudgeBtnListener() {
+    let panel = new InformJudgePanel();
+    panel.show()
     .then(result => {
-        if (result == DialogResult.OK) {
-            ResultButton.getByElement(e.target)
-            .execute(CountryRequests.clearCountryTotalVotes(loginJudge.code, countryCode))
-            .then(response => {console.log(response)});
+        let code = "WARNING";
+        switch (result) {
+            case DialogResult.CLOSE: return;
+            case DialogResult.CHOICE1: // Inform
+                code = "INFORM";
+                break;
         }
+    
+        code += "_MESSAGE"
+        emitInformMessageToJudge(code, panel.text);
     });
+}
+
+function clearTotalVotesBtnListener(e) {
+    let panel = new ClearTotalVotesPanel(window.countries, loginJudge.code);
+    panel.show();
 }
 
 //#endregion

@@ -25,9 +25,8 @@ export class MessageDialog extends BaseDialog {
         this.setButtonsArea(`
             <button class="ok-btn">OK</button>
         `);
-        this.#initBtnListeners();
-        this.timerContainerCaption = this.getTimerContainerCaption();
-        
+
+        if (reloadPage) this.timerContainerCaption = "Reloading in";
     }
 
     /**
@@ -55,22 +54,6 @@ export class MessageDialog extends BaseDialog {
         return messageDialog.showAndCloseAfterMs(ms);
     }
 
-    #initBtnListeners() {
-        DocumentUtils.setChildClickEventListener(".ok-btn", this.container, (e) => {
-            this.dialogResult = DialogResult.OK;
-            this.close();
-        });
-    }
-
-    /**
-     * Gets timer container caption. If reload page is true then the caption is "Reloading in". Otherwise default caption.
-     * @returns {string} Caption
-     */
-    getTimerContainerCaption() {
-        if (this.reloadPage) return "Reloading in";
-        else return this.timerContainerCaption;
-    }
-
     /**
      * Closes the message dialog. If reload page is true, closing the dialog forces page to be reloaded.
      * @override
@@ -79,4 +62,17 @@ export class MessageDialog extends BaseDialog {
         super.close();
         if (this.reloadPage) DocumentUtils.reloadPage();
     }
+
+    initBtnListeners() {
+        this.setClickBtnEventListener(".ok-btn", this.#okBtnListener);
+    }
+
+    //#region Button listeners
+
+    #okBtnListener(e) {
+        this.dialogResult = DialogResult.OK;
+        this.close();
+    }
+
+    //#endregion
 }

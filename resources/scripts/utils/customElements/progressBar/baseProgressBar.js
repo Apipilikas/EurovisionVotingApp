@@ -16,7 +16,7 @@ export class BaseProgressBar {
     #stepIncrement = 0
     #startValue = 0
     #endValue = 0
-    container
+    #container
     bar
     #percentage
     #description
@@ -35,14 +35,35 @@ export class BaseProgressBar {
         this.initListeners();
     }
 
-    initContainer() {
-        this.#percentage = this.container.querySelector(".percentage");
-        this.#description = this.container.querySelector(".description");
-        this.bar = this.container.querySelector(".bar");
+    /**
+     * Gets container.
+     */
+    get container() {
+        return this.#container;
     }
 
+    /**
+     * Initializes main container.
+     */
+    initContainer() {
+        this.#container = this.getContainer();
+        this.#percentage = this.#container.querySelector(".percentage");
+        this.#description = this.#container.querySelector(".description");
+        this.bar = this.#container.querySelector(".bar");
+    }
+
+    /**
+     * Initializes listeners.
+     */
     initListeners() {
-        this.container.addEventListener("barCompleted", (e) => this.onBarCompletedListener(this, e));
+        this.#container.addEventListener("barCompleted", (e) => this.onBarCompletedListener(this, e));
+    }
+
+    /**
+     * Gets main container. Should it not be overriden, initialization will fail.
+     */
+    getContainer() {
+        throw new Error("Should be overriden!");
     }
 
     /**
@@ -75,7 +96,7 @@ export class BaseProgressBar {
      */
     showPercentage() {
         this.#percentage.style.display = "initial";
-        let iconEl = this.container.querySelector("i"); 
+        let iconEl = this.#container.querySelector("i"); 
         iconEl.style.display = "none";
     }
 
@@ -85,17 +106,17 @@ export class BaseProgressBar {
      */
     showIcon(icon) {
         this.#percentage.style.display = "none";
-        let iconEl = this.container.querySelector("i"); 
+        let iconEl = this.#container.querySelector("i"); 
         iconEl.style.display = "initial";
         iconEl.innerHTML = icon;
     }
 
     #setBarAsCompleted() {
         this.showIcon("check");
-        DocumentUtils.removeClassNameByElement(this.container, "warning");
-        DocumentUtils.addClassNameByElement(this.container, "completed");
+        DocumentUtils.removeClassNameByElement(this.#container, "warning");
+        DocumentUtils.addClassNameByElement(this.#container, "completed");
         this.description = "Completed";
-        this.container.dispatchEvent(new Event("barCompleted"));
+        this.#container.dispatchEvent(new Event("barCompleted"));
     }
 
     /**
@@ -131,7 +152,7 @@ export class BaseProgressBar {
     warn(desc = "Warning") {
         this.#barState = BarState.WARNING;
         this.showIcon("warning");
-        DocumentUtils.addClassNameByElement(this.container, "warning");
+        DocumentUtils.addClassNameByElement(this.#container, "warning");
         this.description = desc;
 
         setTimeout(() => {
@@ -148,7 +169,7 @@ export class BaseProgressBar {
 
         this.#barState = BarState.CANCELED;
         this.showIcon("priority_high");
-        DocumentUtils.addClassNameByElement(this.container, "canceled");
+        DocumentUtils.addClassNameByElement(this.#container, "canceled");
         this.description = desc;
     }
 
@@ -215,6 +236,6 @@ export class BaseProgressBar {
      * @param {*} currentValue 
      */
     updateBarStatus(currentValue) {
-
+        throw new Error("Should be overriden!");
     }
 }

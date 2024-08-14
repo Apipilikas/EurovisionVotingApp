@@ -1,6 +1,10 @@
 import { BaseProgressBar } from "./baseProgressBar.js"
 
 export class CircularProgressBar extends BaseProgressBar {
+    /**
+     * CircularProgressBar constructor
+     * @param {number} steps number of steps 
+     */
     constructor(steps = 0) {
         super(steps);
     }
@@ -8,9 +12,8 @@ export class CircularProgressBar extends BaseProgressBar {
     /**
      * @override
      */
-    initContainer() {
-        this.container = document.getElementsByClassName("circular-progress-bar")[0];
-        super.initContainer();
+    getContainer() {
+        return document.getElementsByClassName("circular-progress-bar")[0];
     }
 
     /**

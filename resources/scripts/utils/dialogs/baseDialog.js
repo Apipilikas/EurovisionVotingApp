@@ -9,7 +9,10 @@ export const DialogResult = {
     CANCEL : "CANCEL",
     CLOSE : "CLOSE",
     AUTOCLOSE : "AUTOCLOSE",
-    ABORT : "ABORT"
+    ABORT : "ABORT",
+    CHOICE1 : "CHOICE1",
+    CHOICE2 : "CHOICE2"
+
 }
 
 export const DialogType = {
@@ -43,9 +46,9 @@ export class BaseDialog {
 
     #container
     dialogResult
-    #timerContainerCaption = "Closing in"
-    #topContainerVisibility = true
-    #simpleShowAnimation = false
+    timerContainerCaption = "Closing in"
+    topContainerVisibility = true
+    simpleShowAnimation = false
 
     /**
      * BaseDialog constructor
@@ -58,52 +61,62 @@ export class BaseDialog {
         this.type = type;
         this.caption = caption;
 
-        this.initializeContainer();
+        this.initContainer();
+        this.initListeners();
     }
 
     /**
      * Gets main container.
      * @returns {HTMLElement}
+     * @readonly
      */
     get container() {
         return this.#container;
     }
 
     /**
-     * @param {string} value
-     */
-    set timerContainerCaption(value) {
-        this.#timerContainerCaption = value;
-    }
-
-    /**
-     * @param {boolean} value
-     */
-    set topContainerVisibility(value) {
-        this.#topContainerVisibility = value;
-    }
-
-    /**
-     * @param {boolean} value 
-     */
-    set simpleShowAnimation(value) {
-        this.#simpleShowAnimation = value;
-    }
-
-    /**
      * Initializes main container.
      * This function SHOULD always be invoked first.
      */
-    initializeContainer() {
+    initContainer() {
         let className = ClassMapping.get(this.type);
         let iconCode = IconMapping.get(this.type);
         let caption = (this.caption == null) ? CaptionMapping.get(this.type) : this.caption;
         let content = {dialogName: this.dialogName, className : className, icon : iconCode, caption : caption};
 
-        let boxContainer = DocumentUtils.getDisplayBoxContainer();
+        let boxContainer = this.getDisplayContainer();
         let baseDialogContent = generalTemplates.baseDialog(content);
         boxContainer.innerHTML = baseDialogContent;
         this.#container = boxContainer.querySelector(".base-dialog");
+    }
+
+    /**
+     * Initializes button listeners. Initialization occurs only when setButtonsArea is invoked.
+     */
+    initBtnListeners() {
+    }
+
+    /**
+     * Initializes listeners.
+     */
+    initListeners() {
+    }
+
+    /**
+     * Sets click button event listener.
+     * @param {string} btnClassName 
+     * @param {Function} listenerFunction 
+     */
+    setClickBtnEventListener(btnClassName, listenerFunction) {
+        DocumentUtils.setChildClickEventListener(btnClassName, this.#container, listenerFunction.bind(this));
+    }
+
+    /**
+     * Gets display container.
+     * @returns {HTMLElement}
+     */
+    getDisplayContainer() {
+        return DocumentUtils.getDisplayBoxContainer();
     }
 
     /**
@@ -121,6 +134,7 @@ export class BaseDialog {
     setButtonsArea(innerHTML) {
         DocumentUtils.setChildStyle(".buttons-area", this.#container, "display", "flex");
         DocumentUtils.setChildInnerHTML(".buttons-area", this.#container, innerHTML);
+        this.initBtnListeners();
     }
 
     /**
@@ -128,13 +142,13 @@ export class BaseDialog {
      * @returns {Promise<DialogResult>} Returns the DialogResult.
      */
     show() {
-        if(!this.#topContainerVisibility) DocumentUtils.setChildStyle(".top-container", this.#container, "display", "none");
-        if (this.#simpleShowAnimation) DocumentUtils.addClassNameByElement(this.#container, "simple-animation");
+        if(!this.topContainerVisibility) DocumentUtils.setChildStyle(".top-container", this.#container, "display", "none");
+        if (this.simpleShowAnimation) DocumentUtils.addClassNameByElement(this.#container, "simple-animation");
 
         DocumentUtils.blurScreen();
         
         DocumentUtils.addClassName(".base-dialog", showBaseDialogClassName);
-        DocumentUtils.setChildClickEventListener(".close-btn", this.#container, (e) => this.close());
+        this.setClickBtnEventListener(".close-btn", this.#closeBtnListener);
 
         return new Promise((resolve) => {
             this.#container.addEventListener("closingDialog", () => {
@@ -162,7 +176,7 @@ export class BaseDialog {
         const timerContainer = this.#container.querySelector(".timer-container");
         timerContainer.style.display = "flex";
         
-        DocumentUtils.setChildInnerHTML(".timer-caption", timerContainer, this.#timerContainerCaption);
+        DocumentUtils.setChildInnerHTML(".timer-caption", timerContainer, this.timerContainerCaption);
         const timerTxt = timerContainer.querySelector(".timer-seconds-txt");
 
         // Animation
@@ -188,11 +202,24 @@ export class BaseDialog {
         this.#container.dispatchEvent(new Event("closingDialog"));
         DocumentUtils.unblurScreen();
 
-        DocumentUtils.removeClassName(".base-dialog", showBaseDialogClassName);
-        DocumentUtils.addClassName(".base-dialog", closeBaseDialogClassName);
+        DocumentUtils.removeClassNameByElement(this.#container, showBaseDialogClassName);
+        DocumentUtils.addClassNameByElement(this.#container, closeBaseDialogClassName);
     }
 
+    /**
+     * Disposes the dialog.
+     */
     dispose() {
-
+        this.#container.remove();
+        DocumentUtils.unblurScreen();
     }
+
+    //#region 
+
+    #closeBtnListener(e) {
+        this.dialogResult = DialogResult.CLOSE;
+        this.close();
+    }
+
+    //#endregion
 }

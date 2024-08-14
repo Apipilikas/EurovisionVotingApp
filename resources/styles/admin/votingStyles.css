@@ -261,15 +261,13 @@ table.voting-country-table tbody button:hover {
 
 /* #region Reveal winner container */
 
-#reveal-winner-panel-container {
-    display: none;
-    z-index: 5;
-    position: fixed;
-    transform: translateX(-50%);
-    top: 25%;
-    left: 50%;
-    background-color: var(--forth-color);
-    border: 5px solid var(--fifth-color);
+.base-dialog.clear-total-votes-panel .bottom-container > * {
+    /* display: flex; */
+    overflow: hidden;
+    /* text-align: center; */
+    /* padding: 0.5em 0em 0.5em 0em; */
+    margin: auto;
+    font-weight: 700;
 }
 
 #reveal-winner-panel-container > .upper-container {
@@ -345,37 +343,10 @@ table.voting-country-table tbody button:hover {
 
 /* #region Inform message container */
 
-#inform-judge-panel-container {
-    display: none;
-    z-index: 5;
-    position: fixed;
-    transform: translateX(-50%);
-    top: 25%;
-    left: 50%;
-    background-color: var(--forth-color);
-    border: 5px solid var(--third-color);
-}
-
-#inform-judge-panel-container > .upper-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-#inform-judge-panel-container > .upper-container > .close-btn {
-    font-size: 1.5em;
-}
-
-#inform-judge-panel-container > .upper-container > h1 {
-    color: var(--third-color);
-    padding: 0.5em;
-    margin: 0em;
-}
-
-#inform-judge-panel-container textarea {
+.inform-judge-panel textarea {
     width: 500px;
     height: 100px;
-    padding: 0em;
-    margin: 1em;
+    margin: 1em auto !important;    
 }
 
 #inform-judge-panel-container .button-area {

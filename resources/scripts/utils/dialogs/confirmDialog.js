@@ -21,7 +21,6 @@ export class ConfirmDialog extends BaseDialog {
             <button class="yes-btn">YES</button>
             <button class="no-btn">NO</button>
         `);
-        this.#initBtnListeners();
     }
 
     /**
@@ -35,15 +34,22 @@ export class ConfirmDialog extends BaseDialog {
         return confirmDialog.show();
     }
 
-    #initBtnListeners() {
-        DocumentUtils.setChildClickEventListener(".yes-btn", this.container, (e) => {
-            this.dialogResult = DialogResult.OK;
-            this.close();
-        });
-
-        DocumentUtils.setChildClickEventListener(".no-btn", this.container, (e) => {
-            this.dialogResult = DialogResult.CANCEL;
-            this.close();
-        })
+    initBtnListeners() {
+        this.setClickBtnEventListener(".yes-btn", this.#yesBtnListener);
+        this.setClickBtnEventListener(".no-btn", this.#noBtnListener);
     }
+
+    //#region Button listeners
+
+    #yesBtnListener(e) {
+        this.dialogResult = DialogResult.OK;
+        this.close();
+    }
+
+    #noBtnListener(e) {
+        this.dialogResult = DialogResult.CANCEL;
+        this.close();
+    }
+
+    //#endregion
 }

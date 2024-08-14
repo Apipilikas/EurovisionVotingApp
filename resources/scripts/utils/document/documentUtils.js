@@ -387,6 +387,21 @@ DocumentUtils.setElementAttribute = function(selectorID, attributeName, attribut
 }
 
 /**
+ * Gets element's attribute from the resolved selector first child element.
+ * @param {string} selectorID Selector ID
+ * @param {HTMLElement} element Current element
+ * @param {string} attributeName Attribute name 
+ */
+DocumentUtils.getChildElementAttribute = function(selectorID, element, attributeName) {
+    if (attributeName == null) return null;
+
+    let resolvedSelector = ChildSelectorResolver.resolve(selectorID, element);
+    if (!resolvedSelector.hasElements() || resolvedSelector.hasMultipleElements) return null;
+
+    return resolvedSelector.applyFunctionToElements(this.getElementAttributeByElement, attributeName);
+}
+
+/**
  * Sets element's attribute to the resolved selector first child element.
  * @param {string} selectorID Selector ID
  * @param {HTMLElement} element Current element
