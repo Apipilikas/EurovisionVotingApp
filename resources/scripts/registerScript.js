@@ -1,12 +1,11 @@
 import { clientURL, JudgeRequests } from "./utils/requestUtils.js";
 import { registerTemplates } from "./utils/handlebarsUtils.js";
 import { DocumentUtils } from "./utils/document/documentUtils.js";
-
-
+import { InitUtils } from "./utils/initUtils.js";
 
 window.onload = init;
 
-function init() {
+async function init() {
     try {
         initBtnLinsteners();
     
@@ -21,6 +20,7 @@ function init() {
 
 function initBtnLinsteners() {
     DocumentUtils.setClickEventListener("#connect-btn", connectBtnListener);
+    InitUtils.initMenuBtnListener();
 }
 
 function initJudgeListContainer() {

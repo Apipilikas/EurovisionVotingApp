@@ -52,6 +52,24 @@
     src: url(fonts/Onest-VariableFont_wght.ttf);
 }
 
+@font-face {
+    font-family: 'Geologica';
+    font-weight: 100;
+    src: url(fonts/Geologica-VariableFont_CRSV\,SHRP\,slnt\,wght.ttf);
+}
+
+@font-face {
+    font-family: 'Geologica';
+    font-weight: 200;
+    src: url(fonts/Geologica-VariableFont_CRSV\,SHRP\,slnt\,wght.ttf);
+}
+
+@font-face {
+    font-family: 'Geologica';
+    font-weight: 300;
+    src: url(fonts/Geologica-VariableFont_CRSV\,SHRP\,slnt\,wght.ttf);
+}
+
 :root {
     --main-color: #f2dc14;
     --secondary-color: #ff751b;
@@ -75,7 +93,7 @@
 body {
     background: linear-gradient(45deg, var(--seventh-color), var(--forth-color));
     background-size: 300% 300%;
-    font-family: 'Onest', sans-serif;
+    font-family: 'Onest', 'Geologica';
     margin: 0em;
     display: grid;
     height: 100%;
@@ -296,6 +314,29 @@ header {
     100% {
         height: 0%;
     }
+}
+
+/* Language switcher */
+#language-switcher-container input[type="radio"] {
+    display: none;
+}
+
+#language-switcher-container input[type="radio"] + label {
+    display: inline-block;
+    padding: 0.5em;
+}
+
+#language-switcher-container input[type="radio"] + label > img {
+    opacity: 0.3;
+    transition: opacity .5s ease-in-out;
+}
+
+#language-switcher-container input[type="radio"]:checked + label > img {
+    opacity: 1;
+}
+
+#header-navigation-bar.hide-nav #language-switcher-container input[type="radio"] + label > img  {
+    opacity: 0;
 }
 
 /* Footer */
@@ -1717,6 +1758,13 @@ flex-direction: column;
 
     #main-logo-container > h2 {
         margin: auto;
+    }
+
+    /* Language switcher */
+    #language-switcher-container {
+        position: absolute;
+        top: 0;
+        right: 0;
     }
 
     /* Announcement container */

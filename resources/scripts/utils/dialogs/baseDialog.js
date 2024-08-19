@@ -1,5 +1,6 @@
 import { DocumentUtils } from "../document/documentUtils.js";
 import { generalTemplates } from "../handlebarsUtils.js";
+import { TranslationHelper } from "../translation/translationHelper.js";
 
 const showBaseDialogClassName = "show-dialog";
 const closeBaseDialogClassName = "close-dialog";
@@ -88,6 +89,8 @@ export class BaseDialog {
         let baseDialogContent = generalTemplates.baseDialog(content);
         boxContainer.innerHTML = baseDialogContent;
         this.#container = boxContainer.querySelector(".base-dialog");
+
+        TranslationHelper.observeTranslationChanges(this.#container);
     }
 
     /**

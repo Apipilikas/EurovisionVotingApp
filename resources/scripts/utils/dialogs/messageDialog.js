@@ -19,7 +19,7 @@ export class MessageDialog extends BaseDialog {
         this.reloadPage = reloadPage;
 
         this.setBottomContainer(`
-            <p class="message">` + message + `</p>
+            <p class="message" translation-id="test">` + message + `</p>
         `);
 
         this.setButtonsArea(`

@@ -1,3 +1,4 @@
+import { DocumentUtils } from "./document/documentUtils.js";
 import { LoginError } from "./errorUtils.js";
 import { JudgeRequests } from "./requestUtils.js";
 
@@ -40,9 +41,8 @@ InitUtils.initLoginJudge = async function(socket) {
 // #region Menu button
 
 InitUtils.initMenuBtnListener = function() {
-    const menuBtn = document.getElementById("menu-button");
-
-    menuBtn.addEventListener("click", e => menuBtnListener(e));
+    DocumentUtils.setClickEventListener("#menu-button", menuBtnListener);
+    InitUtils.initLanguageSwitcherListener();
 }
 
 function menuBtnListener(e) {
@@ -65,6 +65,18 @@ function menuBtnListener(e) {
         menuBtn.classList.add(menuClassName);
         navigationBar.style.display = "flex";
     }
+}
+
+//#endregion
+
+//#region Language switcher
+
+InitUtils.initLanguageSwitcherListener = function() {
+    DocumentUtils.setChangeEventListener("input[name='language-switcher'] ALL", languageSwitcherListener);
+}
+
+function languageSwitcherListener(e) {
+    console.log(e.target.id);
 }
 
 //#endregion
