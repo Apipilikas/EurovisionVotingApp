@@ -1,0 +1,22 @@
+.color-input-container {
+    display: flex;
+}
+
+input[type="color"] {
+    height: 35px;
+    width: 80px;
+    margin: 0em 0em 0em 1em;
+    border: 3px solid black;
+}
+
+.color-input-container .input-help-icon {
+    right: 4.5em;
+}
+
+.color-input-container .input-help-caption::after {
+    right: 1em;
+}
+
+.color-input-container .input-help-caption {
+    right: 7em;
+}

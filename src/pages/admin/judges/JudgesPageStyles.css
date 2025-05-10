@@ -1,0 +1,38 @@
+.judge-form {
+    display: grid;
+    width: 100%;
+    border-top: 0px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas: "code    code    name    name"
+                         "oc      oc      admin   active"
+                         "pc      pc      pc      pc";
+}
+
+.judge-form .code-input {
+    grid-area: code;
+}
+
+.judge-form .name-input {
+    grid-area: name;
+}
+
+.judge-form .qualified-input {
+    grid-area: qualified;
+}
+
+.judge-form .originCountry-input {
+    grid-area: oc;
+}
+
+.judge-form .admin-input {
+    grid-area: admin;
+}
+
+.judge-form .active-input {
+    grid-area: active;
+}
+
+.judge-form .policyCode-input {
+    grid-area: pc;
+}

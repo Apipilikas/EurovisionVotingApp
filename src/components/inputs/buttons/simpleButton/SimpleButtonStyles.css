@@ -1,0 +1,33 @@
+.simple-button {
+    font-size: 1.2em;
+    height: 50px;
+    width: 200px;
+    margin: 0.5em auto;
+    color: var(--seventh-color);
+    border: 3px solid var(--forth-color);
+    /* border: none; */
+    background-color: transparent;
+    position: relative;
+    font-family: 'Onest', sans-serif;
+    /* display: flex; */
+}
+
+.simple-button span {
+    width: 100%;
+    height: 0%;
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    background: linear-gradient(90deg, var(--eleventh-color), var(--tenth-color) 100%);
+    z-index: -1;
+    transition: 0.25s;
+}
+
+.simple-button:hover span {
+    height: 100%;
+}
+
+.simple-button:hover {
+    font-weight: 900;
+    transition: font-weight 0.2s ease-in;
+}

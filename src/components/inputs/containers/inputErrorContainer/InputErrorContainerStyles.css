@@ -1,0 +1,24 @@
+.input-error-container {
+    opacity: 0;
+    z-index: 2;
+    transform: translateY(-2.1em);
+    background-color: var(--error-color);
+    display: flex;
+    height: 1.5em;
+    transition: transform 0.2s ease-in;
+    /* position: absolute;
+    top: 2.5em;
+    box-sizing: border-box;
+    width: calc(100% - 32px); */
+}
+
+.input-error-icon {
+    margin: auto 0.2em;
+    font-size: 1.1em !important;
+}
+
+.input-error-caption {
+    margin: auto 0em;
+    font-weight: 700;
+    font-size: 1em;
+}

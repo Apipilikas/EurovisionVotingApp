@@ -1,0 +1,22 @@
+
+#leaderboard-table {
+    width: 100vw;
+    /* height: 100%; */
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-cell {
+    text-align: center;
+}
+
+.leaderboard-table-row.leaderboard-table-head-row {
+    z-index: 1;
+    position: sticky;
+    top: 0;
+    background-color: var(--forth-color);
+}
+
+.leaderboard-table-row {
+    background-color: var(--fifth-color);
+}

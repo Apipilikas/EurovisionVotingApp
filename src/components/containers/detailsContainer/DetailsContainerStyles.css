@@ -1,0 +1,26 @@
+details.details-container {
+    margin: 1em auto;
+    width: 80%;
+}
+
+.details-container summary {
+    height: 40px;
+    padding: 0.5em;
+    background-color: var(--third-color);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    font-size: 2em;
+    color: var(--forth-color);
+    font-weight: 700;
+}
+
+.details-container summary::-webkit-details-marker { 
+    display: none; 
+}
+
+.details-container .details-content {
+    background-color: var(--forth-color);
+    overflow: auto;
+    border: 5px solid var(--third-color);
+}

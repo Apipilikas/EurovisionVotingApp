@@ -1,0 +1,119 @@
+.base-input > label {
+    position: absolute;
+    top: 0.2em;
+    left: 0.5em;
+    height: 30px;
+    line-height: 30px;
+    color:#ccc;
+    /* cursor:text; */
+    transition: all 200ms ease-out;
+    z-index: 2;
+    white-space: nowrap;
+}
+
+.button-container > label {
+    padding: 0.5em 0em 0.2em 0em;
+    font-weight: 600;
+    color: var(--eighth-color);
+}
+
+.base-input {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.base-input input {
+    display: block;
+    padding: 0.5em;
+    border: 0;
+    border-bottom: 3px solid #555;
+    /* background: transparent; */
+    width: 100%;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-bottom 0.5s ease-out;
+    z-index: 2;
+}
+
+.base-input input:focus {
+    border: none;
+    outline: none;
+    border-bottom: 3px solid var(--third-color);
+}
+
+.base-input input:focus + label, 
+.base-input input:valid + label {
+    /* color: var(--forth-color); */
+    color: black;
+    font-weight: 700;
+    transform: translate(-0.5em, -1.8em);
+    cursor:default;
+}
+
+/* Base input styles */
+input[type="color"]:focus {
+    border: 3px solid var(--third-color);
+}
+
+.button-container > label {
+    padding: 0.5em 0em 0.2em 0em;
+    font-weight: 600;
+    color: var(--eighth-color);
+}
+
+.text-input-container, .email-input-container, .number-input-container, 
+.color-input-container, .checkbox-input-container {
+    margin: auto 0em;
+    height: 60px;
+    /* display: flex;
+    flex-direction: column; */
+    /* margin-bottom: 0.5em; */
+    padding: 0em 1em;
+    position: relative;
+}
+
+/* .text-input-container input[type="text"], .number-input-container input[type="text"], 
+.color-picker-input-container input[type="text"], input[type="number"] {
+    display: block;
+    padding: 0.5em;
+    border: 0;
+    border-bottom: 3px solid #555;
+    width: 100%;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-bottom 0.5s ease-out;
+    z-index: 2;
+}
+
+.text-input-container input[type="text"]:focus,
+.color-picker-input-container input[type="text"]:focus,
+.text-input-container input[type="number"]:focus {
+    border: none;
+    outline: none;
+    border-bottom: 3px solid var(--third-color);
+}
+
+.text-input-container input[type="text"]:focus + label, 
+.text-input-container input[type="text"]:valid + label,
+.color-picker-input-container > label:has(+ .color-picker-container > input[type="text"]:focus), 
+.color-picker-input-container > label:has(+ .color-picker-container > input[type="text"]:valid),
+.number-input-container input[type="number"]:focus + label, 
+.number-input-container input[type="number"]:valid + label {
+    color: black;
+    font-weight: 700;
+    transform: translate(-0.5em, -1.8em);
+    cursor:default;
+}
+
+input[type="color"] {
+    height: auto;
+    width: 80px;
+    margin: 0em 0em 0em 1em;
+    border: 3px solid black;
+}
+
+input[type="color"]:focus {
+    border: 3px solid var(--third-color);
+} */
