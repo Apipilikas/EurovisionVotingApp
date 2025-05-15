@@ -25,6 +25,7 @@ import {
 } from "../../components/common/session/SessionProvider";
 import { useRunningOrder } from "../../hooks/useRunningOrder";
 import { useCountries } from "../../hooks/useCountries";
+import Heart from "../../components/common/heart/Heart";
 
 export const VotingPage = forwardRef((props, ref) => {
   const pageLoaded = () => {
@@ -51,16 +52,15 @@ function Carousel() {
   // Set displayed countries based on running Order
   useEffect(() => {
     if (runningOrder > -1) {
-      const emptyDisplayedComponents = 2 - runningOrder;
       let list = [];
-  
-      for (let i = 0; i < emptyDisplayedComponents; i++)
-        list.push({ isEmpty: true });
-  
-      let startIndex = Math.min(runningOrder, 2);
-      for (let i = startIndex; i >= 0; i--)
-        list.push(countries[runningOrder - i]);
-  
+      const emptyDisplayedComponents = maxDisplayedCountries - 1 - runningOrder;
+
+      for (let i = 0; i < emptyDisplayedComponents; i++) list.push({ isEmpty: true });
+      
+      const startIndex = Math.max(0, runningOrder - 2);
+
+      for (let i = startIndex; i <= runningOrder; i++)  list.push(countries[i]);
+      
       setDisplayedCountries(list);
     }
 
@@ -153,7 +153,7 @@ function Country({ country, isCurrent, ...props }) {
   useEffect(() => {
     if (judge != null) {
       let vote = country.votes[judge.code];
-      let points = vote == null ? 0 : vote;
+      let points = vote == null ? "VOTE" : vote;
       setSelectedVote(points);
     }
   }, [judge]);
@@ -184,7 +184,7 @@ function Country({ country, isCurrent, ...props }) {
 
   // Listeners
   const handleVotingItemClick = (vote) => {
-    if (vote === selectedVote) return;
+    if (vote === selectedVote || vote === "VOTE") return;
     setSelectedVote(vote);
     CountryRequests.voteCountry(country.code, judge.code, vote);
   };
@@ -206,7 +206,7 @@ function Country({ country, isCurrent, ...props }) {
               country={country}
             />
           );
-        } else return <DisplayContainer style={style} />;
+        } else return <DisplayContainer country={country} style={style} />;
       })}
     </animated.div>
   );
@@ -254,8 +254,8 @@ function MainContainer({
     {
       ref: transRef,
       trail: 400 / votes.length,
-      from: { opacity: 0, scale: 0, width: "0px", height: "0px" },
-      enter: { opacity: 1, scale: 1, width: "50px", height: "50px" },
+      from: { opacity: 0, scale: 0, width: "0px", height: "0px", background : country.flagColor1, color : country.flagColor2 },
+      enter: { opacity: 1, scale: 1, width: "50px", height: "50px", background : country.flagColor1, color : country.flagColor2 },
       leave: { opacity: 0, scale: 0, width: "0px", height: "0px" },
     }
   );
@@ -266,8 +266,8 @@ function MainContainer({
   ]);
 
   const displayTransition = useTransition(displayVotes ? 1 : 0, {
-    from: { opacity: 0, scale: 0, height: "0%" },
-    enter: { opacity: 1, scale: 1, height: "100%" },
+    from: { opacity: 0, scale: 0, height: "0%", background : displayVotes ? country.flagColor2 : country.flagColor1, color : country.flagColor2 },
+    enter: { opacity: 1, scale: 1, height: "100%", background : displayVotes ? country.flagColor2 : country.flagColor1, color : country.flagColor2 },
     leave: { opacity: 0, scale: 0, height: "0%" },
   });
 
@@ -324,9 +324,10 @@ function MainContainer({
               style={displayStyle}
               className="display-total-votes-container"
             >
-              <UpdateEffectText className="display-total-votes">
+              <div className="display-total-votes"
+                                style={{color:country.flagColor2}}>
                 <span>{country.totalVotes}</span>
-              </UpdateEffectText>
+              </div>
             </animated.div>
           );
         }
@@ -341,9 +342,7 @@ function UpperContainer({
   ...props
 }) {
 
-  const {runningOrder, name, totalVotes} = country;
-  const flagColor1 = "#0d5eaf";
-  const flagColor2 = "white";
+  const {flagColor1, flagColor2, runningOrder, name, totalVotes} = country;
 
   const containerStyle = useSpring({
     config: { tension: 300, friction: 10 },
@@ -380,11 +379,11 @@ function UpperContainer({
       height: "100%",
       position: "absolute",
       display: "flex",
-      backgroundColor: "white",
+      backgroundColor: flagColor2,
     },
     to: {
       // opacity : isOpen ? 1 : 0,
-      backgroundColor: isCurrent ? "transparent" : "white",
+      backgroundColor: isCurrent ? "transparent" : flagColor2,
     },
   });
 
@@ -396,7 +395,7 @@ function UpperContainer({
       fontSize: "0em",
       fontWeight: 800,
       padding: "0em 0.1em",
-      color: "#0d5eaf",
+      color: flagColor1,
       padding: "0em 0em",
     },
     to: {
@@ -412,13 +411,13 @@ function UpperContainer({
       marginLeft: "0px",
       width: "50px",
       background:
-        "linear-gradient(to bottom right, transparent 50%, #0d5eaf 50%)",
+        `linear-gradient(to bottom right, transparent 50%, ${flagColor1} 50%)`,
     },
     to: {
       marginLeft: isCurrent ? "20px" : "0px",
       width: isCurrent ? "50px" : "0px",
       background:
-        "linear-gradient(to bottom right, transparent 50%, #0d5eaf 50%)",
+        `linear-gradient(to bottom right, transparent 50%, ${flagColor1} 50%)`,
     },
   });
 
@@ -453,7 +452,7 @@ function UpperContainer({
       textAlign: "center",
       fontSize: "0em",
       fontWeight: "800",
-      color: "#0d5eaf",
+      color: flagColor1,
       margin: "auto",
     },
     to: {
@@ -468,7 +467,7 @@ function UpperContainer({
     config: config.stiff,
     from: {
       width: "50px",
-      background: "linear-gradient(to top left, transparent 50%, #0d5eaf 50%)",
+      background: `linear-gradient(to top left, transparent 50%, ${flagColor1} 50%)`,
     },
     to: {
       background: isCurrent
@@ -477,12 +476,12 @@ function UpperContainer({
     },
     delay: 1000,
   });
-
+  
   return (
     <animated.div className="voting-upper-container" style={containerStyle}>
       <animated.img
         className="country-image"
-        src={require("../../images/flags/GRE.svg").default}
+        src={`../../images/flags/${country.code}.svg`}
         height="30px"
         style={countryImageStyle}
       />
@@ -520,7 +519,7 @@ function UpperContainer({
   );
 }
 
-function DisplayContainer({ ...props }) {
+function DisplayContainer({country, ...props }) {
   const [showDisplayText, setShowDisplayText] = useState(true);
   const [text, setText] = useState("Moving to");
   const [showSinger, setShowSinger] = useState(false);
@@ -554,11 +553,14 @@ function DisplayContainer({ ...props }) {
       <FadeOutSpan className="display-text" show={showDisplayText}>
         {text}
       </FadeOutSpan>
-      <span className="country-name">Greece</span>
+      <span className="country-name">{country.name}</span>
       <div className="details-container">
-        <FadeOutSpan show={showSinger}>Singer</FadeOutSpan>
-        <FadeOutSpan show={showSong}>Song</FadeOutSpan>
+        <FadeOutSpan show={showSinger}>{country.artist}</FadeOutSpan>
+        <FadeOutSpan show={showSong}>{country.song}</FadeOutSpan>
       </div>
+      <FadeOutSpan show={true}>
+        <Heart color1={country.flagColor1} color2={country.flagColor2} color3={country.flagColor3} color4={country.flagColor1}/>
+      </FadeOutSpan>
     </animated.div>
   );
 }

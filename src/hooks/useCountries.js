@@ -30,7 +30,7 @@ export function useCountries() {
         const response = await CountryRequests.getAllCountriesWithVotes();
 
         if (response.success) {
-            setCountries(response.jsonData.countries);
+            setCountries(response.jsonData.countries?.sort((a, b) => a?.runningOrder - b?.runningOrder));
             setInitialized(true);
         }
     }

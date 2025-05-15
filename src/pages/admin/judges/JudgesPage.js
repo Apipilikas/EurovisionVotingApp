@@ -42,8 +42,8 @@ export const JudgesPage = forwardRef((props, ref) => {
 
         switch(buttonID) {
             case "save":
-                const isNew = item?.state == "new";
-                if (isNew) delete item.state;
+                const isNew = item.isNew;
+                delete item.isNew;
 
                 if (isNew) {
                     promise = JudgeRequests.createJudge(judgeCode, item);

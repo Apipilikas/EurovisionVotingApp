@@ -70,10 +70,6 @@ function App() {
     showDialog(config);
   }
 
-  const onPageLoaded = () => {
-    loaderRef.current.revealScreen();
-  }
-
   const getActivateJudgeDialogConfig = () => {
     const config = new DialogConfig("Activation success!", DialogType.SUCCESS);
     config.content = <p>Account activated successfully!</p>
@@ -132,9 +128,9 @@ function App() {
         <NotificationCollectionProvider>
           <Header hideNavigation={hideNavigation}/>
           <Routes>
-            <Route path='/' element={<RegisterPage ref={registerRef} onPageLoaded={onPageLoaded}/>}/>
-            <Route path='/voting' element={<VotingPage ref={votingRef} onPageLoaded={onPageLoaded}/>}/>
-            <Route path='/leaderboard' element={<LeaderboardPage ref={votingRef} onPageLoaded={onPageLoaded}/>}/>
+            <Route path='/' element={<RegisterPage ref={registerRef}/>}/>
+            <Route path='/voting' element={<VotingPage ref={votingRef}/>}/>
+            <Route path='/leaderboard' element={<LeaderboardPage ref={votingRef}/>}/>
             <Route path='/admin/voting' element={<AdminVotingPage ref={adminVotingRef}/>}/>
             <Route path='/admin/countries' element={<AdminCountriesPage/>}/>
             <Route path='/admin/judges' element={<AdminJudgesPage/>}/>

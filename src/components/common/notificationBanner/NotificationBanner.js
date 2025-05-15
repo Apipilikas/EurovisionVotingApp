@@ -38,9 +38,9 @@ export function NotificationBanner() {
 
     const notificationTransition = useTransition(notification, {
         config : {tension : 120, friction : 26},
-        from : {transform : "scale(0.0)"},
-        enter : {transform : "scale(1.0)"},
-        leave : {transform : "scale(0.0)"}
+        from : {transform : "scale(0.0)", fontSize : "0em", height : "0px"},
+        enter : {transform : "scale(1.0)", fontSize : "1em", height : "100px"},
+        leave : {transform : "scale(0.0)", fontSize : "0em", height : "0px"}
     });
 
     // Session Listeners

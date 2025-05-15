@@ -45,8 +45,8 @@ export const CountriesPage = forwardRef((props, ref) => {
 
         switch(buttonID) {
             case "save":
-                const isNew = item?.state == "new";
-                if (isNew) delete item.state;
+                const isNew = item.isNew;
+                delete item.isNew;
 
                 if (isNew) {
                     promise = CountryRequests.createCountry(judgeCode, item);
@@ -99,7 +99,6 @@ function CountryForm({data = null, onChange}) {
     const flagColor3Input = useInput(data?.flagColor3, undefined, true);
 
     const getData = () => {
-        debugger
         return {
             code : codeInput.value,
             name : nameInput.value,

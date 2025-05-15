@@ -1,13 +1,5 @@
 /* #region Override general containers */
 
-body {
-    background-image: url("../../images/eu.png");
-    background-position: center; 
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    /* background-size: cover;  */
-}
-
 #logo-container p {
     color: white;
 }

@@ -4,7 +4,7 @@ import './SimpleButtonStyles.css';
 export default function SimpleButton({caption, onButtonClicked, ...props}) {
     
     const handleButtonClicked = (e) => {
-        onButtonClicked(e);
+        if (onButtonClicked) onButtonClicked(e);
     }
     
     return (

@@ -92,9 +92,12 @@
 
 /* #region body, html, header, main, footer */
 
+
 body {
-    background: linear-gradient(45deg, var(--seventh-color), var(--forth-color));
-    background-size: 300% 300%;
+    background-image: url("/public/images/eu_simple.png");
+    background-position: center; 
+    background-size: cover; 
+    background-size: 100% 100%;
     font-family: 'Onest', 'Geologica';
     margin: 0em;
     display: grid;
@@ -518,6 +521,15 @@ flex-direction: column;
 
 /* TABLET-BASED LAYOUT */
 @media only screen and (min-width: 425px) {
+    body {
+        background-image: url("/public/images/eu_no_logo.png");
+        background-position: center; 
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        /* background-size: cover;  */
+        background-size: 200% 200%;
+    }
+
     /* menu button */
     #menu-button {
         display: none;

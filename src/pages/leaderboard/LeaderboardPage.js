@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useState } from "react"
 import { BasePage } from "../BasePage";
 import { useTransition, animated, useSpring } from "react-spring";
 import { CountryRequests, JudgeRequests } from "../../utils/requestUtils";
-import { SimpleSortTableCell, SimpleTableCell, SortTableRow, TableBody, TableContainer, TableHeader, TableRow } from "../../components/containers/tableContainer/TableContainer";
+import { ButtonTableCell, SimpleSortTableCell, SimpleTableCell, SortTableRow, TableBody, TableCell, TableContainer, TableHeader, TableRow } from "../../components/containers/tableContainer/TableContainer";
 import { useSession } from '../../components/common/session/SessionProvider';
 import { useCountries } from '../../hooks/useCountries';
 import { useJudges } from '../../hooks/useJudges';
@@ -13,13 +13,6 @@ export const LeaderboardPage = forwardRef((props, ref) => {
 
     const {countries} = useCountries();
     const {judges} = useJudges();
-    const {runningOrder} = useRunningOrder();
-
-
-    // Initialize
-    useEffect(() => {
-        // fetchData();
-    }, []);
 
     return (
         <BasePage {...props} ref={ref}>
@@ -82,17 +75,16 @@ function LeaderboardTable({countries, judges}) {
         setSortValue(value);
     }
 
-    console.log(judges)
-
     return (
         <TableContainer style={{color:"white"}} id="leaderboard-table">
             <TableHeader>
                 <SortTableRow className="leaderboard-table-row leaderboard-table-head-row" onSortButtonClicked={handleSortButtonClicked}>
-                    <SimpleSortTableCell caption={"RO"} cellID={"runningOrder"}/>
+                    <SimpleSortTableCell caption={"R/O"} cellID={"runningOrder"} className={"running-order-cell"}/>
                     <SimpleSortTableCell caption={"Country"} cellID={"name"}/>
                     {judges.map(judge => <SimpleSortTableCell caption={judge.name} cellID={`judge-${judge.code}`}/>)}
-                    <SimpleSortTableCell caption={"Total points"} cellID={"totalVotes"}/>
+                    <SimpleSortTableCell caption={"Total points"} cellID={"totalVotes"} className={"total-votes-table-cell"}/>
                     <SimpleTableCell caption={"Status"} className="voting-status-table-cell" cellID={"votingStatus"}/>
+                    <SimpleTableCell caption={"Vote"} cellID={"vote"}/>
                 </SortTableRow>
             </TableHeader>
             <TableBody>
@@ -116,9 +108,13 @@ function CountryRow({country, judges, style}) {
         config: { tension: 300, friction: 30 },
     })
 
+    const handleOnButtonClicked = () => {
+        
+    }
+
     return (
-        <TableRow style={style} className="leaderboard-table-row">
-            <SimpleTableCell caption={country.runningOrder}/>
+        <TableRow style={style} className="leaderboard-table-row leaderboard-table-body-row">
+            <SimpleTableCell caption={country.runningOrder} className={"running-order-cell"}/>
             <SimpleTableCell caption={country.name}/>
             {judges.map((judge) => {
                 let vote = country.votes[judge.code];
@@ -126,8 +122,9 @@ function CountryRow({country, judges, style}) {
 
                 return <SimpleTableCell caption={points}/>;
             })}
-            <SimpleTableCell caption={country.totalVotes}/>
+            <SimpleTableCell caption={country.totalVotes} className={"total-votes-table-cell"}/>
             <SimpleTableCell caption={country.votingStatus} style={{backgroundColor : backgroundColor}} className="voting-status-table-cell"/>
+            <ButtonTableCell buttonCaption={"Vote"} className={"vote-table-cell"} onButtonClicked={handleOnButtonClicked}/>
         </TableRow>
     )
 }

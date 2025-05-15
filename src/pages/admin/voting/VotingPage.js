@@ -24,7 +24,7 @@ export const VotingPage = forwardRef((props, ref) => {
 
     // Listeners
     const handleNextCountryClick = () => {
-        let arg = {runningCountry : runningOrder + 1, votingStatus : "OPEN"};
+        let arg = {runningCountry : ((runningOrder + 1) % (countries.length + 1)), votingStatus : "CLOSED"};
         emitMessage(EventID.NEXTCOUNTRY, arg);
     }
 
@@ -219,7 +219,7 @@ const points = [1,2,3,4,5,6,7,8,10,12];
 function CountryContent({country, judges}) {
 
     return (
-        <table className="voting-country-table" id={`voting-$${"test"}-table`}>
+        <table className="voting-country-table" id={`voting-$${country.code}-table`}>
             <thead>
                 <tr>
                     <th rowSpan={2}>Judges</th>

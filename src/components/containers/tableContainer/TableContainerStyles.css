@@ -19,6 +19,11 @@
     display: table-row-group;
 }
 
+.button-table-cell button {
+    margin: 0em;
+    border: 5px solid var(--eleventh-color);
+}
+
 .simple-table-cell p {
     text-wrap: nowrap;
 }

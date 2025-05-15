@@ -1,12 +1,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import icon from '../../../images/eurovision-icon.png';
 
 export default function Head({title}) {
     return (
         <Helmet>
             <title translation-id="head_title" >{title} | ESCV 2025</title>
-            <link rel="icon" href={icon}/>
+            <link rel="icon" href={'/images/eurovision-icon.png'}/>
             <meta name="description" content="Eurovision Voting App"/>
             <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest"/>
             <meta name="author" content="Aggelos Pipilikas"/>

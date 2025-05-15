@@ -5,6 +5,12 @@ import { ToolbarContainer } from "../../containers/toolbarContainer/ToolbarConta
 import "./ListEditDashboardStyles.css"
 import { ReactListUtils } from "../../../utils/react/listUtils";
 
+const ButtonIDs = {
+    NEW : "new",
+    SAVE : "save",
+    DELETE : "delete"
+}
+
 export function ListEditDashboard({data, valueMember, ItemContainer, children, MainContainer, onDataChanged, onToolbarButtonClicked}) {
 
     const [bindedData, setBindedData] = useState([]);
@@ -17,9 +23,9 @@ export function ListEditDashboard({data, valueMember, ItemContainer, children, M
     },[data]);
 
     const config = new ToolbarConfig();
-    config.addToolbarItem("new", "New", "add");
-    config.addToolbarItem("save", "Save", "save");
-    config.addToolbarItem("delete", "Delete", "delete");
+    config.addToolbarItem(ButtonIDs.NEW, "New", "add");
+    config.addToolbarItem(ButtonIDs.SAVE, "Save", "save");
+    config.addToolbarItem(ButtonIDs.DELETE, "Delete", "delete");
 
     const handleOnSelectedItemChanged = (selectedItem) => {
         setSelectedItem(selectedItem);
@@ -34,13 +40,20 @@ export function ListEditDashboard({data, valueMember, ItemContainer, children, M
 
     const handeOnToolbarButtonClicked = (buttonID) => {
         let item = selectedItem;
-
+        
+        debugger
         switch(buttonID) {
-            case "new":
-                item = {[valueMember] : "New Item", state : "new"};
+            case ButtonIDs.NEW:
+                item = {[valueMember] : "New Item"};
                 ReactListUtils.pushItem(item, setBindedData);
                 break;
-            case "delete":
+
+            case ButtonIDs.SAVE:
+                const isNew = data.find(item => item[valueMember] == selectedItem[valueMember]) == null;
+                item.isNew = isNew;
+                break;
+            
+                case ButtonIDs.DELETE:
                 setBindedData(list => list.filter(item => item[valueMember] != selectedItem[valueMember]));
                 break;
         }

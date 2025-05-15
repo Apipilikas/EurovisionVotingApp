@@ -5,29 +5,30 @@ import { useSession } from '../session/SessionProvider';
 
 export default function Navigation({isAdmin, isOpen, onNavItemClick}) {
 
-    const [judgeParam, setJudgeParam] = useState("");
-    const {judge} = useSession();
-
-    useEffect(() => {
-        if (judge != null) {
-            setJudgeParam(`?judgeCode=${judge.code}`)
-        }
-    }, [judge]);
-
-    const showAdminPages = (isAdmin != null || isAdmin);
-
-    const pages = [
+    const mainPages = [
         {to : "/", caption : "Register"},
         {to : "/voting", caption : "Voting"},
         {to : "/leaderboard", caption : "Leaderboard"}
     ]
 
     const adminPages = [
-        {to : "/admin/voting", caption : "Voting"},
-        {to : "/admin/Judges", caption : "Judges"}
+        {to : "/admin/voting", caption : "Admin Voting"},
+        {to : "/admin/Judges", caption : "Judges"},
+        {to : "/admin/Countries", caption : "Countries"}
     ]
 
-    const mapAdminPages = () => adminPages.map(item => <li onClick={onNavItemClick}><Link to={item.to + judgeParam}>{item.caption}</Link></li>);
+    const [judgeParam, setJudgeParam] = useState("");
+    const [pages, setPages] = useState(mainPages);
+    const {judge} = useSession();
+
+    useEffect(() => {
+        if (judge != null) {
+            setJudgeParam(`?judgeCode=${judge.code}`);
+            if (judge.admin) {
+                setPages(pages => [...pages, ...adminPages]);
+            }
+        }
+    }, [judge]);
 
     const mapPages = () => pages.map(item => <li onClick={onNavItemClick}><Link to={item.to + judgeParam}>{item.caption}</Link></li>);
 
@@ -36,7 +37,7 @@ export default function Navigation({isAdmin, isOpen, onNavItemClick}) {
             <ul id="header-navigation-bar" 
                 className={isOpen ? "" : "hide-nav"}
                 style={{display:(isOpen ? "flex" : "none")}}>
-                {showAdminPages ? mapAdminPages() : mapPages()}
+                {mapPages()}
             </ul>
         </nav>
     );

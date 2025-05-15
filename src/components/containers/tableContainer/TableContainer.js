@@ -2,6 +2,7 @@ import { Children, cloneElement, createContext, forwardRef, useContext, useEffec
 import { joinProps } from '../../../utils/react/propsUtils';
 import './TableContainerStyles.css'
 import { animated } from "react-spring";
+import SimpleButton from '../../inputs/buttons/simpleButton/SimpleButton';
 
 
 export function TableContainer({children, ...props}) {
@@ -33,6 +34,7 @@ export function SortTableRow({children, onSortButtonClicked, ...props}) {
     const cellRefs = useRef({});
 
     const handleCellSortValueChanged = (cellID, value) => {
+        debugger
         Object.entries(cellRefs.current).forEach((value) => {
             if (cellID != value[0]) {
                 // Reset all icons!
@@ -46,6 +48,7 @@ export function SortTableRow({children, onSortButtonClicked, ...props}) {
     }
 
     const elements = Children.map(children, (child, index) => {
+        debugger
         let cellID = child.props.cellID;
         return cloneElement(child, {
             ref : (rf) => (cellRefs.current[cellID] = rf),
@@ -73,6 +76,14 @@ export function TableCell({children, cellID, ...props}) {
         <animated.div {...props} className={joinProps("table-cell", props.className)}>
             {children}
         </animated.div>
+    )
+}
+
+export function ButtonTableCell({children, buttonCaption, cellID, onButtonClicked, ...props}) {
+    return (
+        <TableCell {...props} cellID={cellID} className={joinProps("button-table-cell", props.className)}>
+            <SimpleButton caption={buttonCaption} onButtonClicked={onButtonClicked}/>
+        </TableCell>
     )
 }
 
@@ -128,11 +139,11 @@ export const SortTableCell = forwardRef(({children, cellID, onSortButtonClicked,
     )
 })
 
-export function SimpleSortTableCell({caption, cellID, onSortButtonClicked, ...props}) {
+export const SimpleSortTableCell = forwardRef(({caption, cellID, onSortButtonClicked, ...props}, ref) => {
     
     return (
-        <SortTableCell {...props} cellID={cellID} onSortButtonClicked={onSortButtonClicked} className={joinProps("simple-table-cell", props.className)}>
+        <SortTableCell {...props} cellID={cellID} onSortButtonClicked={onSortButtonClicked} className={joinProps("simple-table-cell", props.className)} ref={ref}>
             <p>{caption}</p>
         </SortTableCell>
     )
-}
+})

@@ -1,5 +1,5 @@
 .eurovision-heart-1 {
-    fill: var(--tenth-color); /* Initial fill color (inside the heart) */
+    /* fill: var(--tenth-color); Initial fill color (inside the heart) */
     /* stroke-width: 10 !important; */
     animation: test-2-animation 3s 0.5s infinite;
     /* animation: color-animation 7s linear infinite; */
@@ -8,7 +8,7 @@
 }
 
 .eurovision-heart-2 {
-    fill: var(--secondary-color); /* Initial fill color (inside the heart) */
+    /* fill: var(--secondary-color); Initial fill color (inside the heart) */
     /* stroke-width: 10 !important; */
     animation: test-1-animation 3s 1s infinite;
     transform-origin: center;
@@ -18,7 +18,7 @@
 }
 
 .eurovision-heart-3 {
-    fill: var(--forth-color); /* Initial fill color (inside the heart) */
+    /* fill: var(--forth-color); Initial fill color (inside the heart) */
     animation: test-1-animation 3s 1.5s infinite;
     /* animation: name duration timing-function delay iteration-count direction fill-mode; */
     transform-origin: center;
@@ -26,7 +26,7 @@
 }
 
 .eurovision-heart-4 {
-    fill: var(--seventh-color); /* Initial fill color (inside the heart) */
+    /* fill: var(--seventh-color); Initial fill color (inside the heart) */
     animation: test-1-animation 3s 2s infinite;
     /* animation: name duration timing-function delay iteration-count direction fill-mode; */
     transform-origin: center;

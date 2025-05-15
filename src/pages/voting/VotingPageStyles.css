@@ -71,7 +71,7 @@
 /* Display total votes container */
 .display-total-votes-container {
     display : flex;
-    background: #0d5eaf;
+    /* background: #0d5eaf; */
 }
 
 .display-total-votes {
@@ -79,8 +79,6 @@
     margin: auto;
     height: 50px;
     width: 50px;
-    background: #0d5eaf;
-    border-radius: 5px;
     color: white;
 }
 

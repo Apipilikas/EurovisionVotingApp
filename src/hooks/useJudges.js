@@ -4,6 +4,7 @@ import { JudgeRequests } from "../utils/requestUtils";
 export function useJudges() {
 
     const [judges, setJudges] = useState([]);
+    const [initialized, setInitialized] = useState(false);
 
     // Initialize
     useEffect(() => {
@@ -15,10 +16,12 @@ export function useJudges() {
 
         if (response.success) {
             setJudges(response.jsonData.judges);
+            setInitialized(true);
         }
     }
 
     return {
-        judges
+        judges,
+        initialized
     }
 }

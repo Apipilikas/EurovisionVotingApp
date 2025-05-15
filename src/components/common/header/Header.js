@@ -1,4 +1,3 @@
-import eu_logo from '../../../images/eurovision-logo-white-cropped.svg';
 import { NotificationBanner } from '../notificationBanner/NotificationBanner';
 import Navigation from '../navigation/Navigation';
 import './HeaderStyles.css';
@@ -18,7 +17,7 @@ export default function Header({hideNavigation}) {
             <div id="header-container">
                 <div id="main-logo-container">
                     <div id="logo-container">
-                        <img src={eu_logo}/>
+                        <img src={"/images/eurovision-logo-white-cropped.svg"}/>
                         <p>2025</p>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ import { EventID, useSession } from "../components/common/session/SessionProvide
 export function useRunningOrder() {
 
     const [runningOrder, setRunningOrder] = useState(-1);
+    const [initialized, setInitialized] = useState(false);
 
     const {addListener} = useSession();
 
@@ -19,6 +20,7 @@ export function useRunningOrder() {
 
         if (response.success) {
             setRunningOrder(response.jsonData.currentRunningOrder);
+            setInitialized(true);
         }
     }
 
@@ -32,6 +34,7 @@ export function useRunningOrder() {
     }
 
     return {
-        runningOrder
+        runningOrder,
+        initialized
     }
 }
