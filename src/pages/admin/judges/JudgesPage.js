@@ -13,6 +13,7 @@ import { ListEditDashboard } from "../../../components/dashboards/listEditDashbo
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
 import { DialogType } from "../../../components/dialogs/baseDialog/BaseDialog";
 import { useDialog } from "../../../components/dialogs/baseDialog/DialogProvider";
+import { getValueOrNull } from "../../../utils/react/propsUtils";
 
 export const JudgesPage = forwardRef((props, ref) => {
 
@@ -38,7 +39,6 @@ export const JudgesPage = forwardRef((props, ref) => {
 
     const handleOnToolbarButtonClicked = (buttonID, item) => {
         let promise = null;
-        debugger
 
         switch(buttonID) {
             case "save":
@@ -98,7 +98,7 @@ function JudgeForm({data = null, onChange}) {
             name : nameInput.value,
             originCountry : originCountryInput.value,
             admin : adminInput.value,
-            policyCode : policyCodeInput.value,
+            policyCode : getValueOrNull(policyCodeInput.value),
             active : activeInput.value
         }
     }

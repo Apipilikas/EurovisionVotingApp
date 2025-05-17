@@ -8,6 +8,11 @@ import { useSession } from '../../components/common/session/SessionProvider';
 import { useCountries } from '../../hooks/useCountries';
 import { useJudges } from '../../hooks/useJudges';
 import { useRunningOrder } from '../../hooks/useRunningOrder';
+import { DialogConfig } from '../../components/dialogs/baseDialog/dialogConfig';
+import { DialogResult, DialogType } from '../../components/dialogs/baseDialog/BaseDialog';
+import { Dropdown } from '../../components/inputs/dropdown/Dropdown';
+import { useDialog } from '../../components/dialogs/baseDialog/DialogProvider';
+import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
 
 export const LeaderboardPage = forwardRef((props, ref) => {
 
@@ -98,6 +103,9 @@ function LeaderboardTable({countries, judges}) {
 
 function CountryRow({country, judges, style}) {
 
+    const {showDialog} = useDialog();
+    const {judge} = useSession();
+
     const {backgroundColor} = useSpring({
         from : {
             backgroundColor : "#f75252"
@@ -108,8 +116,38 @@ function CountryRow({country, judges, style}) {
         config: { tension: 300, friction: 30 },
     })
 
-    const handleOnButtonClicked = () => {
+    const showVotingDialog = () => {
+        let points;
+        const title = `Vote for ${country.name}`;
+        const config = new DialogConfig(title, DialogType.INFO);
+
+        config.content = <Dropdown  initialValue={country.votes[judge.code]}
+                                    onChange={(e) => points = e.target.value} 
+                                    caption={"Votes"} 
+                                    list={[1,2,3,4,5,6,7,8,10,12]}/>
         
+        config.addButton("Vote", DialogResult.OK, true);
+        
+        showDialog(config).then(result => {
+            if (result == DialogResult.OK) {
+                let message;
+                let description;
+                CountryRequests.voteCountry(country.code, judge.code, parseInt(points)).then(response => {
+                    if (response.success) {
+                        message = "Vote submitted successfully!"
+                        description = `You voted ${points} points for ${country.name}. Great choise!`;
+                    }
+                    else {
+                        message = "Something went wrong..."
+                        description = response.jsonData.error.description;
+                    }
+
+                    let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
+                    const notificationConfig = new NotificationBoxConfig(message, type, description);
+                    showDialog(notificationConfig);
+                })
+            }
+        })
     }
 
     return (
@@ -124,7 +162,7 @@ function CountryRow({country, judges, style}) {
             })}
             <SimpleTableCell caption={country.totalVotes} className={"total-votes-table-cell"}/>
             <SimpleTableCell caption={country.votingStatus} style={{backgroundColor : backgroundColor}} className="voting-status-table-cell"/>
-            <ButtonTableCell buttonCaption={"Vote"} className={"vote-table-cell"} onButtonClicked={handleOnButtonClicked}/>
+            <ButtonTableCell buttonCaption={"Vote"} className={"vote-table-cell"} onButtonClicked={showVotingDialog}/>
         </TableRow>
     )
 }

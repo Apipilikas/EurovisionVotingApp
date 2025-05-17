@@ -119,6 +119,9 @@ function Carousel() {
 }
 
 function Country({ country, isCurrent, ...props }) {
+
+  const VOTE_TEXT = "VOTE";
+
   const [isOpen, setIsOpen] = useState(false);
   const [isDisplayTime, setIsDisplayTime] = useState(false);
   const [selectedVote, setSelectedVote] = useState(0);
@@ -153,7 +156,7 @@ function Country({ country, isCurrent, ...props }) {
   useEffect(() => {
     if (judge != null) {
       let vote = country.votes[judge.code];
-      let points = vote == null ? "VOTE" : vote;
+      let points = vote == null ? (isCurrent ? VOTE_TEXT : 0) : vote;
       setSelectedVote(points);
     }
   }, [judge]);
@@ -177,14 +180,12 @@ function Country({ country, isCurrent, ...props }) {
 
   // Displayed container transition
   const displayTransition = useTransition(isDisplayTime ? 1 : 0, {
-    from: { opacity: 0, scale: 0 },
-    enter: { opacity: 1, scale: 1 },
-    leave: { opacity: 0, scale: 0 },
+
   });
 
   // Listeners
   const handleVotingItemClick = (vote) => {
-    if (vote === selectedVote || vote === "VOTE") return;
+    if (vote === selectedVote || vote === VOTE_TEXT) return;
     setSelectedVote(vote);
     CountryRequests.voteCountry(country.code, judge.code, vote);
   };
@@ -246,11 +247,14 @@ function MainContainer({
       width: isOpen ? "100%" : "10%",
       height: isOpen ? "100%" : "10%",
     },
+    // delay : 1000
   });
+
+  const f = selectedVote == "VOTE"
 
   const transRef = useSpringRef();
   const votingTransition = useTransition(
-    isOpen ? votes : isCurrent && selectedVote == 0 ? 1 : [selectedVote],
+    isOpen ? (isCurrent ? votes : [selectedVote]) : isCurrent && selectedVote == 0 ? 1 : [selectedVote],
     {
       ref: transRef,
       trail: 400 / votes.length,
@@ -260,9 +264,14 @@ function MainContainer({
     }
   );
 
+  const {margin} = useSpring({
+    from : {margin : "0em 0em"},
+    to : {margin : isOpen ? "1em 0em" : "0em 0em"}
+  })
+
   useChain(isOpen ? [springRef, transRef] : [transRef, springRef], [
     0,
-    isOpen ? 0.0 : 0.2,
+    isOpen ? -100.0 : 0.2,
   ]);
 
   const displayTransition = useTransition(displayVotes ? 1 : 0, {
@@ -291,7 +300,7 @@ function MainContainer({
       {displayTransition((displayStyle, item) => {
         if (item == 1) {
           if (displayCannotVote) {
-            return <p className="cannot-vote-caption">Cannot vote!</p>;
+            return <p className="cannot-vote-caption" style={{color : country.flagColor1}}>Cannot vote!</p>;
           } else {
             return (
               <animated.div
@@ -308,7 +317,7 @@ function MainContainer({
                     className="voting-item"
                     style={{
                       ...style,
-                      margin: isCurrent ? style.margin : "auto",
+                      margin: isCurrent ? margin : "auto",
                     }}
                     onClick={() => onVoteClicked(item)}
                   >
@@ -548,15 +557,28 @@ function DisplayContainer({country, ...props }) {
     }, 7000);
   };
 
+  const backgroundStyle = `
+  .country-display-container .country-name {
+    background: linear-gradient(to right, ${country.flagColor1} 20%, ${country.flagColor2} 30%, ${country.flagColor3} 70%, ${country.flagColor1} 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 500% auto;
+    animation: text-animation 5s ease-in-out infinite alternate;
+  }
+`;
+
   return (
     <animated.div style={props.style} className="country-display-container">
       <FadeOutSpan className="display-text" show={showDisplayText}>
         {text}
       </FadeOutSpan>
-      <span className="country-name">{country.name}</span>
+      <style>{backgroundStyle}</style>
+      <span className="country-name" 
+            >{country.name}</span>
       <div className="details-container">
-        <FadeOutSpan show={showSinger}>{country.artist}</FadeOutSpan>
-        <FadeOutSpan show={showSong}>{country.song}</FadeOutSpan>
+        <FadeOutSpan className="artist-text" show={showSinger}>{country.artist}</FadeOutSpan>
+        <FadeOutSpan className="song-text" show={showSong}>{country.song}</FadeOutSpan>
       </div>
       <FadeOutSpan show={true}>
         <Heart color1={country.flagColor1} color2={country.flagColor2} color3={country.flagColor3} color4={country.flagColor1}/>

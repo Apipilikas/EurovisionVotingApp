@@ -34,6 +34,10 @@
     display: none;
 }
 
+.country-container .cannot-vote-caption {
+    font-weight: 800;
+}
+
 .country-container.current-running .voting-upper-container .country-image {
     display: initial;
     height: 50px;
@@ -92,8 +96,7 @@
     float: none;
     display: flex;
     margin: 0em;
-    background: #0d5eaf;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: white;
     will-change: transform, opacity;
 }
@@ -111,9 +114,25 @@
     display: flex;
     flex-direction: column;
 }
+
 .country-display-container .country-name {
-    font-size: 1.5em;
+    font-size: 1.7em;
     font-weight: 600;
+    /* Moved to code to suppoert inline gradient */
+    /* -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 500% auto;
+    animation: text-animation 5s ease-in-out infinite alternate; */
+}
+
+@keyframes text-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
 }
 
 .country-display-container .details-container {
@@ -121,6 +140,16 @@
     display: flex;
     margin: 1em auto;
     justify-content: space-between;
+}
+
+.country-display-container .eurovision-heart {
+    height: 70px;
+    width : 70px;
+}
+
+.country-display-container .artist-text,
+.country-display-container .song-text {
+    font-weight: 700;
 }
 
 /* Cannot display container */

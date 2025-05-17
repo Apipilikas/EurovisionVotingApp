@@ -34,7 +34,6 @@ export function SortTableRow({children, onSortButtonClicked, ...props}) {
     const cellRefs = useRef({});
 
     const handleCellSortValueChanged = (cellID, value) => {
-        debugger
         Object.entries(cellRefs.current).forEach((value) => {
             if (cellID != value[0]) {
                 // Reset all icons!
@@ -48,7 +47,6 @@ export function SortTableRow({children, onSortButtonClicked, ...props}) {
     }
 
     const elements = Children.map(children, (child, index) => {
-        debugger
         let cellID = child.props.cellID;
         return cloneElement(child, {
             ref : (rf) => (cellRefs.current[cellID] = rf),

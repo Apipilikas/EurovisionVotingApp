@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getValueOrEmpty } from "../utils/react/propsUtils";
 
 const Checkbox_INPUT = "checkbox";
 
@@ -7,13 +8,13 @@ const Checkbox_INPUT = "checkbox";
  * @param {*} defaultValue 
  * @returns 
  */
-export function useInput(defaultValue, onValueChanged, observeDefaultValueChanges = false) {
+export function useInput(defaultValue, onValueChanged = null, observeDefaultValueChanges = false) {
 
     const [value, setValue] = useState(defaultValue);
 
     useEffect(() => {
         if (observeDefaultValueChanges) {
-            setValue(defaultValue);
+            setValue(getValueOrEmpty(defaultValue));
         }
     }, [defaultValue])
 

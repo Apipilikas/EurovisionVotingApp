@@ -6,6 +6,7 @@ import { DialogResult, DialogType } from "../../dialogs/baseDialog/BaseDialog";
 import { DialogConfig } from "../../dialogs/baseDialog/dialogConfig";
 import { useDialog } from "../../dialogs/baseDialog/DialogProvider";
 import { ErrorBoxConfig } from "../../boxes/errorBox/errorBoxConfig";
+import { DocumentUtils } from "../../../utils/document/documentUtils";
 
 const SessionContext = createContext();
 
@@ -133,7 +134,7 @@ export default function SessionProvider({children}) {
             let config = new DialogConfig("Inform", type, content, closeAfterMs);
             config.addButton("Close", DialogResult.CLOSE, true);
             showDialog(config).then(result => {
-                
+                DocumentUtils.reloadPage();
             })
         });
     }

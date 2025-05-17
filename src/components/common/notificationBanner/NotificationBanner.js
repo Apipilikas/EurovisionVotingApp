@@ -8,11 +8,12 @@ import {useCountries} from '../../../hooks/useCountries';
 
 export function NotificationBanner() {
 
-    const [notification, setNotification] = useState("tes");
+    const [notification, setNotification] = useState(null);
 
     const {addNotification, getNextNotification, hasMoreNotifications} = useNotificationCollection();
     const {addListener} = useSession();
     const {runningCountry} = useCountries();
+    const [showNow, setShowNow] = useState(true);
 
     useEffect(() => {
         init();
@@ -34,6 +35,10 @@ export function NotificationBanner() {
                 setNotification(nextAnnouncement);
             }, 1000);
         }, 3000);
+
+        setInterval(() => {
+            setShowNow(value => !value)
+        }, 5000)
     }
 
     const notificationTransition = useTransition(notification, {
@@ -54,14 +59,31 @@ export function NotificationBanner() {
         addNotification(NotificationPriority.MEDIUM, message);
     }
 
+    const transition = useTransition(showNow ? 1 : 0, {
+    from: { opacity: 0, scale: 0, width : "0px", fontSize : "0em"},
+    enter: { opacity: 1, scale: 1, width : "200px", fontSize : "1em" },
+    leave: { opacity: 0, scale: 0, width : "0px", fontSize : "0em" },
+    })
+
     return (
         <div id="live-notification-container">
             <Heart/>
             <div id="live-box-content">
-                <div className='now-container'>
-                    <p className='now-caption'>NOW</p>
-                </div>
-                <p className='running-country-name'>{runningCountry?.name}</p>
+                <animated.div className='now-container'>
+                    {transition((style, item) => {
+                        if (item == 1) {
+                            return <animated.p style={style} className='now-caption'>NOW</animated.p>
+                        }
+                        else {
+                            return (
+                                  <animated.div style={style} className='running-country-container'>
+                                    {runningCountry == null ? null : <animated.img src={`../../../images/flags/${runningCountry?.code}.svg`}/>}
+                                    <animated.p className='running-country-name'>{runningCountry == null ? "Not started" : runningCountry?.name}</animated.p>
+                                   </animated.div>
+                            );
+                        }
+                    })}
+                </animated.div>
             </div>
             <div id="notification-content">
                 {notificationTransition((style, caption) => {

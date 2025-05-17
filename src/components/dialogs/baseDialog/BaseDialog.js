@@ -34,7 +34,12 @@ export function BaseDialog() {
 
     const [time, setTime] = useState(0);
     const {isDialogOpen, showDialog, closeDialog, registerEvent, dialogConfig} = useDialog();
+    const [display, setDisplay] = useState("flex");
     const [show, setShow] = useState(true);
+
+    useEffect(() => {
+        setDisplay("flex");
+    }, [isDialogOpen])
 
     useEffect(() => {
         if (dialogConfig) {
@@ -51,7 +56,6 @@ export function BaseDialog() {
 
     const closeDialogAfterMs = (ms) => {
         ms += 3000; // animation delay
-
         // Animation
         let totalMs = 0;
         let interval = setInterval(() => {
@@ -69,17 +73,17 @@ export function BaseDialog() {
         }, ms);
     }
 
-    const handleCloseDialog = (dialogResult) => {
-        closeDialog(dialogResult);
+    const handleCloseDialog = (result) => {
+        closeDialog(result)
         setTimeout(() => {
-            setShow(false);
+            setDisplay("none")
         }, 500);
     }
     
     const showTimerContainer = closeAfterMs > 0;
 
     return (
-        <div className={`base-dialog ${DialogUtils.getDialogClassName(type)} ${isDialogOpen ? "" : closeBaseDialogclassNameName}`} style={{display : (show ? "flex" : "none")}}>
+        <div className={`base-dialog ${DialogUtils.getDialogClassName(type)} ${isDialogOpen ? "" : closeBaseDialogclassNameName}`} style={{display : display}}>
             <div className="top-container">
                 <div className="icon-container">
                     <i className="material-icons">{DialogUtils.getDialogIcon(type)}</i>

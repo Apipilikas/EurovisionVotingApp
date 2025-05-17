@@ -6,8 +6,8 @@ export function ListContainer({data, initialValue, valueMember, ItemContainer, o
     const id = `list-container-${useId()}`;
 
     const handleOnChange = (e) => {
-        const countryCode = e.target.value;
-        const selectedItem = data.find(item => item[valueMember] == countryCode);
+        const value = e.target.value;
+        const selectedItem = data.find(item => item[valueMember] == value);
         if (onSelectedItemChanged) onSelectedItemChanged(selectedItem);
     }
 
@@ -17,7 +17,7 @@ export function ListContainer({data, initialValue, valueMember, ItemContainer, o
                 return (
                     <div className="list-container-item">
                         <input type="radio" id={item[valueMember]} name={id} value={item[valueMember]} defaultChecked={item[valueMember] == initialValue} onChange={handleOnChange} />
-                        <label for={item.code}>
+                        <label for={item[valueMember]}>
                         <ItemContainer item={item} className="list-container-item-content"/>
                         </label>
                     </div>

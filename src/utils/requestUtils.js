@@ -156,6 +156,10 @@ CountryRequests.clearCountryTotalVotes = async function(adminCode, code) {
     return sendRequest(Method.PATCH, "countries/totalVotes/clear/" + code, null, adminCode);
 }
 
+CountryRequests.recalculateCountryTotalVotes = async function(adminCode, code) {
+    return sendRequest(Method.PATCH, "countries/totalVotes/recalculate/" + code, null, adminCode);
+}
+
 // #endregion
 
 //#region Admin requests
