@@ -1,0 +1,7 @@
+.number-input-container .input-help-icon {
+    right: 1.8em;
+}
+
+.number-input-container .input-help-caption::after {
+    right: 3.3em;
+}

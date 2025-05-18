@@ -1,0 +1,220 @@
+/* #region Admin dashboard container */
+
+.upper-container {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+}
+
+.dashboard-container {
+    margin: 1em;
+    width: 25%;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    background-color: var(--forth-color);
+}
+
+.dashboard-container h1 {
+    grid-row: 1/2;
+    /* width: 100%; */
+    border-bottom: 3px solid var(--third-color);
+    /* margin: 0em; */
+    height: 2em;
+    margin: auto;
+}
+
+.dashboard-container .dashboard-content {
+    grid-row: 2/3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-container .dashboard-content h2 {
+    margin: 0em auto;
+}
+
+.dashboard-container .dashboard-caption-container {
+    margin: 0.5em auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-container .dashboard-caption-container > h3 {
+    margin: 0em auto;
+}
+
+.dashboard-container .dashboard-caption-container > p {
+    margin: 0em auto;
+}
+
+.dashboard-total-votes-container span {
+    font-size: 5.5em;
+    margin: 0em auto;
+    font-weight: 700;
+}
+
+/* #endregion */
+
+/* #region Admin settings */
+
+#admin-settings-container > .details-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 0.5em;
+}
+
+#reset-running-country-container {
+    grid-row: 1/2;
+    grid-column: 1/2;
+}
+
+.button-container > button {
+    height: 60px;
+    border: 5px solid var(--third-color);
+}
+
+/* #endregion */
+
+/* #region Country Container */
+
+details.voting-country-container > summary::-webkit-details-marker {
+    display: none; 
+}
+
+details.voting-country-container > summary {
+    height: 70px;
+    padding: 0em;
+    background-color: var(--forth-color);
+}
+
+details.voting-country-container > summary > div {
+    padding: 0em;
+    background-color: var(--forth-color);
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+details.voting-country-container > summary .left-container {
+    /* width: 100%; */
+    display: flex; 
+}
+
+details.voting-country-container > summary p {
+    /* width: 100%; */
+    margin: 0em;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+}
+
+details.voting-country-container > summary p.running-order-txt,
+details.voting-country-container > summary p.total-votes-txt {
+    min-width: 50px;
+    color: var(--forth-color);
+    background-color: var(--third-color);
+    font-weight: 700;
+}
+
+details.voting-country-container > summary img {
+    margin: auto 0.5em;
+}
+
+details.voting-country-container > summary .code-txt {
+    color: var(--fifth-color);
+    font-weight: 600;
+}
+
+details.voting-country-container > summary .name-txt {
+    color: var(--third-color);
+    font-weight: 600;
+}
+
+details.voting-country-container > summary .right-container {
+    display: flex; 
+}
+
+details.voting-country-container > summary .right-container .toggle-switch {
+    /* width: 100%; */
+    margin: auto 0.5em;
+}
+
+details.voting-country-container > .details-content {
+    background-color: var(--third-color);
+    display: flex;
+    justify-content: center;
+}
+
+/* Table */
+table.voting-country-table {
+    /* border-collapse: collapse; */
+    table-layout: fixed;
+    border-spacing: 0.5em 0.5em;
+}
+
+table.voting-country-table thead tr:first-child th {
+    color: var(--third-color);
+}
+
+table.voting-country-table thead th,
+table.voting-country-table th.judge-name-caption {
+    background-color: var(--forth-color);
+    padding: 0.5em;
+}
+
+table.voting-country-table thead th.point-caption {
+    width: 50px;
+}
+
+table.voting-country-table tbody tr td {
+    /* padding: 0.5em; */
+    background-color: var(--forth-color);
+    /* display: flex; */
+}
+
+/* Vote radio button */
+table.voting-country-table tbody input[type="radio"] {
+    display: none;
+}
+
+table.voting-country-table tbody input[type="radio"] + label {
+    text-align: center;
+    display: table;
+    height: 45px;
+    width: 100%;
+    /* padding: 1em; */
+    color: black;
+    transition-duration: 0.5s;
+}
+
+table.voting-country-table tbody input[type="radio"] + label > i {
+    display: none;
+    color: var(--forth-color);
+    font-weight: 900;
+}
+
+table.voting-country-table tbody input[type="radio"]:checked + label > i {
+    display: initial;
+}
+
+table.voting-country-table tbody input[type="radio"]:checked + label {
+    background-color: var(--fifth-color);
+}
+
+/* Update vote button */
+table.voting-country-table tbody button {
+    height: 45px;
+}
+
+/* #endregion */
+
+#next-country-btn {
+    position: fixed;
+    top: 80%;
+    right: 0;
+    width: 140px;
+}

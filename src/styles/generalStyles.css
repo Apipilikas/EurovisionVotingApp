@@ -1,0 +1,714 @@
+@font-face {
+    font-family: 'Onest';
+    font-weight: 100;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 200;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 300;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 400;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 500;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 600;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 700;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 800;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-weight: 900;
+    src: url(fonts/Onest-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: 'Geologica';
+    font-weight: 100;
+    src: url(fonts/Geologica-VariableFont_CRSV\,SHRP\,slnt\,wght.ttf);
+}
+
+@font-face {
+    font-family: 'Geologica';
+    font-weight: 200;
+    src: url(fonts/Geologica-VariableFont_CRSV\,SHRP\,slnt\,wght.ttf);
+}
+
+@font-face {
+    font-family: 'Geologica';
+    font-weight: 300;
+    src: url(fonts/Geologica-VariableFont_CRSV\,SHRP\,slnt\,wght.ttf);
+}
+
+:root {
+    --main-color: #f2dc14;
+    --secondary-color: #ff751b;
+    --third-color: #ff48da;
+    --forth-color: #6e45ec;
+    --fifth-color: #1dc0df;
+    --sixth-color: #3d47f7;
+    --seventh-color: #3f1c71;
+    --eighth-color : #1dc1df;
+    --ninth-color: #75cc8b;
+    --tenth-color : #f80506;
+    --eleventh-color : #d8ccfc;
+    --success-color: #57e45e;
+    --info-color: #1b85fd;
+    --warning-color: #fdb51b;
+    --error-color: #fc3c3c;
+    --green-color: #31cc39;
+    --red-color: #f75252;
+}
+
+/* #region body, html, header, main, footer */
+
+
+body {
+    background-image: url("/public/images/eu_simple.png");
+    background-position: center; 
+    background-size: cover; 
+    background-size: 100% 100%;
+    font-family: 'Onest', 'Geologica';
+    margin: 0em;
+    display: grid;
+    height: 100%;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "header"
+                         "main"
+                         "footer";
+}
+
+html {
+    height: 100%;
+}
+
+header {
+    grid-area: header;
+}
+
+main {
+    width: 100%;
+    /* height: 100%; */
+    grid-area: main;
+}
+
+footer {
+    grid-area: footer;
+}
+
+#blur-screen {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    z-index: 9;
+}
+
+/* header container */
+
+/* logo container */
+
+#logo-container {
+    width: 200px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#logo-container p {
+    font-size: 1.1em;
+    padding-top: 0.2em;
+    font-weight: 800;
+    margin: auto;
+}
+
+/* menu button */
+
+
+
+/* header navigation bar container */
+
+
+
+/* Language switcher */
+#language-switcher-container input[type="radio"] {
+    display: none;
+}
+
+#language-switcher-container input[type="radio"] + label {
+    display: inline-block;
+    padding: 0.5em;
+}
+
+#language-switcher-container input[type="radio"] + label > img {
+    opacity: 0.3;
+    transition: opacity .5s ease-in-out;
+}
+
+#language-switcher-container input[type="radio"]:checked + label > img {
+    opacity: 1;
+}
+
+#header-navigation-bar.hide-nav #language-switcher-container input[type="radio"] + label > img  {
+    opacity: 0;
+}
+
+/* Footer */
+
+
+/* #endregion */
+
+/* #region Loader */
+
+
+
+/* #endregion */
+
+/* #region input containers */
+
+/* Number / Text / Checkbox / Button input */
+
+
+/* toggle switch */
+
+
+/* Button container */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.button-container > label {
+    margin: auto;
+}
+
+.button-container > button {
+    width: 50%;
+    margin: auto;
+}
+
+/* #endregion */
+
+/* #region admin details containers */
+
+details.admin-details-container {
+    margin: 1em auto;
+    width: 80%;
+}
+
+.admin-details-container summary {
+    height: 40px;
+    padding: 0.5em;
+    background-color: var(--third-color);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    font-size: 2em;
+    color: var(--forth-color);
+    font-weight: 700;
+}
+
+.admin-details-container summary::-webkit-details-marker { 
+    display: none; 
+}
+
+.admin-details-container .admin-details-content {
+    background-color: var(--forth-color);
+    overflow: auto;
+    border: 5px solid var(--third-color);
+}
+
+/* #endregion */
+
+/* #region admin modify content */
+
+.admin-modify-content {
+    display: flex;
+}
+
+/* #endregion */
+
+/* #region admin modify list containers */
+.admin-modify-list-container {
+    flex-basis: 50%;
+    overflow-y: auto;
+    max-height: 250px;
+}
+/* #endregion */
+
+/* #region admin buttons area */
+
+.admin-buttons-area {
+    display: flex;
+    
+    width: 75%;
+    margin: 0.5em auto;
+}
+
+.admin-buttons-area > button {
+    width: 75%;
+    height: 3em;
+    margin: 0em 1em;
+}
+
+/* #endregion */
+
+/* #region simple button */
+
+
+
+/* #endregion */
+
+/* #region live announcements container */
+
+/* #endregion */
+
+/* #region voting / leaderboard panel container */
+
+.voting-country-content,
+#voting-country-panel-content {
+    height: 100%;
+    width: 100%;
+    color: var(--secondary-color);
+    background-color: var(--forth-color);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    overflow: hidden;
+}
+  
+.voting-country-content input[type="radio"],
+#voting-country-panel-content input[type="radio"] {
+    display: none;
+}
+  
+.voting-country-content input[type="radio"]:focus + label,
+#voting-country-panel-content input[type="radio"]:focus + label {
+    background-color: #7c7c99;
+}
+  
+.voting-country-content input[type="radio"]:checked + label,
+#voting-country-panel-content input[type="radio"]:checked + label {
+    border: 2px solid var(--secondary-color);
+    background-color: var(--secondary-color);
+}
+
+.voting-country-content label,
+#voting-country-panel-content label {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    border: 2px solid black;
+    color: black;
+    font-weight: 900;
+    font-size: 15px;
+    padding: 1em;
+    margin: 0.5em auto;
+    text-align: center;
+    transition-duration: 0.5s;
+}
+  
+.voting-country-content > button,
+#voting-country-panel-content > button {
+    font-size: 20px;
+    padding: 0em;
+    margin: 0.5em auto;
+    height: 30px;
+    /* border: 2px solid black; */
+    font-family: 'Onest', sans-serif;
+    color: black;
+    font-weight: 800;
+    width: 80%;
+    /* background-color: var(--secondary-color); */
+    grid-column: 1/6;
+}
+
+/* #endregion */
+
+/* #region Notification box */
+
+
+
+/* #endregion */
+
+/* #region Error box */
+
+
+
+/* #endregion */
+
+/* #region Base dialog */
+
+
+
+/* #endregion */
+
+/* #region Circular progress dialog */
+
+.base-dialog.circular-progress-dialog {
+    width: 250px !important;
+    height: 250px !important;
+}
+
+/* #endregion */
+
+/* #region Circular progress bar */
+  
+.circular-progress-bar {
+position: relative;
+height: 170px;
+width: 170px;
+border-radius: 50%;
+background: conic-gradient(var(--info-color) 3.6deg, #ededed 0deg);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.circular-progress-bar.completed {
+    background: var(--green-color) !important;
+}
+
+.circular-progress-bar.canceled {
+    background: var(--error-color) !important;
+}
+
+.circular-progress-bar::before {
+content: "";
+position: absolute;
+height: 150px;
+width: 150px;
+border-radius: 50%;
+background-color: #fff;
+}
+
+.circular-progress-bar > div {
+position: relative;
+font-size: 20px;
+font-weight: 600;
+color: var(--info-color);
+display: flex;
+flex-direction: column;
+}
+
+.circular-progress-bar.completed > div {
+    color: var(--green-color);
+}
+
+.circular-progress-bar.canceled > div {
+    color: var(--error-color);
+}
+
+.circular-progress-bar > .content > * {
+    margin: auto;
+}
+
+.circular-progress-bar > .content > i {
+    font-size: 40px;
+    
+}
+
+.circular-progress-bar > .content > .percentage {
+    font-size: 20px;
+    display: none;
+}
+
+  @keyframes circular-progress-bar-flickering-animation {
+    from {
+
+    }
+  }
+
+/* #endregion */
+
+/* #region Linear progress bar */
+
+.linear-progress-bar {
+    width: 80%;
+}
+
+.linear-progress-bar-container {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+    background-color: #ededed;
+}
+
+.linear-progress-bar .bar {
+    width: 0%;
+    height: 20px;
+    background-color: var(--info-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.linear-progress-bar.completed .bar {
+    background-color: var(--green-color);
+}
+
+.linear-progress-bar.warning .bar {
+    background-color: var(--warning-color);
+}
+
+.linear-progress-bar.canceled .bar {
+    background-color: var(--error-color);
+}
+
+.linear-progress-bar .bar-details {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.linear-progress-bar .bar-details .percentage {
+    display: none;
+}
+
+.linear-progress-bar i {
+    font-size: 1.3em;
+}
+
+.linear-progress-bar.completed i {
+    color: var(--green-color);
+}
+
+.linear-progress-bar.warning i {
+    color: var(--warning-color);
+}
+
+.linear-progress-bar.canceled i {
+    color: var(--error-color);
+}
+
+/* #endregion */
+
+/* TABLET-BASED LAYOUT */
+@media only screen and (min-width: 425px) {
+    body {
+        background-image: url("/public/images/eu_no_logo.png");
+        background-position: center; 
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        /* background-size: cover;  */
+        background-size: 200% 200%;
+    }
+
+    /* menu button */
+    #menu-button {
+        display: none;
+    }
+
+    #header-navigation-bar {
+        display: flex !important;
+        margin-bottom: 0em;
+        flex-direction: row;
+        position: initial;
+        background-color: transparent;
+    }
+
+    #header-navigation-bar > li {
+        flex-basis: 50%;
+        transition: 0.5s;
+    }
+
+    /* >!< Quick fix */
+    #header-navigation-bar > li:last-child {
+        margin-bottom: initial;
+    }
+
+    .hide-nav#header-navigation-bar > li > a {
+        opacity: 1;
+    }
+
+    #header-navigation-bar > li:hover {
+        background:  var(--eighth-color);
+        transition: 0.5s;
+        background-size: 200% 200%;
+    }
+
+    /* header */
+
+    nav {
+        display: flex;
+    }
+
+    #logo-container {
+        margin: auto;
+    }
+
+    #main-logo-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #main-logo-container > h2 {
+        margin: auto;
+    }
+
+    /* Language switcher */
+    #language-switcher-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    /* Announcement container */
+
+    
+    /* #region Notification box */
+
+    .notification-box {
+        width: 150px;
+        height: 100px;
+    }
+
+    @keyframes notification-box-open-animation {
+        0% {
+            width: 150px;
+        }
+        100% {
+            width: 50%;
+        }
+    }
+
+    @keyframes notification-box-close-animation {
+        0% {
+            width: 50%;
+        }
+        100% {
+            width: 150px;
+        }
+    }
+
+    .notification-box .icon-container {
+        height: 100%;
+        width: 150px;
+    }
+
+    .notification-box .icon-container i {
+        font-size: 3em;
+    }
+
+    .notification-box .icon-container span {
+        font-size: initial;
+        display: initial;
+    }
+
+    .notification-box .message-container h1 {
+        font-size: 1.5em;
+    }
+
+    .notification-box .message-container p {
+        font-size: 1em;
+    }
+
+    /* Close button */
+    .notification-box .close-btn {
+        margin: 0em 0.2em 0em 0em;
+    }
+
+    /* #endregion */
+
+    /* #region Error box */
+
+    .error-box {
+    width: 120px;
+    height: 100px;
+    }
+
+    /* Icon container */
+    .error-box .icon-container {
+        height: 100px;
+        width: 120px;
+    }
+
+    .error-box .icon-container i {
+        font-size: 2.5em;
+    }
+
+    .error-box .icon-container span {
+        font-size: 1.5em;
+    }
+
+    .error-box .message-container h1 {
+        font-size: 1.4em;
+    }
+
+    .error-box .message-container p {
+        font-size: 1em;
+    }
+
+    /* #region Base dialog */
+
+    .base-dialog.show-dialog.simple-animation {
+        bottom: 50%;
+        height: 200px;
+        width: 40%;
+    }
+
+    /* #endregion */
+
+    /* Animations */
+
+    @keyframes error-box-open-animation {
+        0% {
+            height: 100px;
+            width: 120px;
+        }
+        100% {
+            height: 250px;
+            width: 60%;
+        }
+    }
+
+    @keyframes error-box-close-animation {
+        0% {
+            width: 60%;
+            height: 250px;
+        }
+        100% {
+            height: 100px;
+            width: 120px;
+        }
+    }
+    
+    /* #endregion */
+}

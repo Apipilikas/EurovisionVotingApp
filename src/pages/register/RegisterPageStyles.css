@@ -1,0 +1,201 @@
+/* #region Override general containers */
+
+#logo-container p {
+    color: white;
+}
+
+#menu-button:before, 
+#menu-button:after, 
+#menu-button div {
+    background: white;
+}
+
+/* #endregion */
+
+#connect-page-content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 1em auto;
+    border: 4px solid var(--forth-color);
+}
+
+.color-segment {
+    /* width: 100%; */
+    /* background: linear-gradient( var(--main-color), var(--secondary-color), var(--third-color), var(--secondary-color), var(--main-color)); */
+    background: linear-gradient( var(--sixth-color), var(--fifth-color) 10%, var(--third-color), var(--fifth-color), var(--sixth-color));
+    /* background-size: 200% 200% !important; */
+    /* animation: color-animation 7s ease infinite; */
+}
+
+fieldset {
+    position: relative;
+    z-index: 2;
+    margin: 0em;
+    height: 410px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--eleventh-color);
+    border: 0px;
+}
+
+#registration-fs-tab-area {
+    margin: 0em;
+    /* margin-left: 2px; */
+    background-color: var(--forth-color);
+    
+}
+
+/* Tab group */
+input[name="registration-fs-tab-group"] {
+    display: none;
+}
+
+input[name="registration-fs-tab-group"] + label {
+    display: inline-block;
+    color: var(--eleventh-color);
+    padding: 1em;
+    font-weight: 800;
+    transition: background-color 0.2s ease-in;
+}
+
+input[name="registration-fs-tab-group"]:checked + label {
+    color: var(--forth-color);
+    background-color: var(--eleventh-color);
+}
+
+/* Registration form */
+#registration-fs-header {
+    display: flex;
+    flex-direction: column;
+}
+
+#registration-fs-header > h2 {
+    color: var(--forth-color);
+    margin: 0em auto;
+}
+
+#registration-fs-header > p {
+    color: var(--seventh-color);
+    margin: 0em auto;
+    font-weight: 600;
+}
+
+#sign-up-description {
+    display: none;
+}
+
+legend {
+    font-weight: 700;
+    color: var(--eleventh-color);
+    background-color: var(--forth-color);
+    padding: 0.5em 2em;
+}
+
+#registration-fs-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Judge list container */
+#judges-list-container {
+    margin: 2em 0em;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.judge-container > input[type="radio"] {
+    display: none;
+}
+
+.judge-container > input[type="radio"]:focus + label {
+    background-color: #7c7c99;
+}
+
+.judge-container > input[type="radio"]:checked + label {
+    border: 2px solid black;
+    color: black;
+}
+
+.judge-container > input[type="radio"]:checked + label .online-status-container {
+    background: linear-gradient(90deg, black, var(--seventh-color) 100%);
+}
+
+.judge-container > label {
+    display: inline-block;
+    width: 80%;
+    border: 2px solid var(--forth-color);
+    color: var(--forth-color);
+    font-weight: 700;
+    padding: 0em 0em;
+    margin: 0.5em auto;
+    transition-duration: 0.5s;
+}
+
+.judge-container > input[type="radio"] + label:hover {
+    border: 2px solid black;
+    color: black;
+}
+
+.judge-content {
+    display: grid;
+    grid-template-columns: 0.5fr 2.5fr;
+}
+
+.judge-content > .online-status-container {
+    width: 70px;
+    height: 100%;
+    /* margin: auto 0em; */
+    /* border: 2px solid black; */
+}
+
+.judge-content > span {
+    padding: 1em;
+}
+
+.judge-content > .online-status-container.online {
+    background: linear-gradient(90deg, var(--green-color), var(--forth-color) 100%);
+}
+
+.judge-content > .online-status-container.offline {
+    background: linear-gradient(90deg, var(--red-color), var(--forth-color) 100%);
+}
+
+/* Buttons area */
+#buttons-area {
+    display: flex;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    flex-direction: column;
+}
+
+#sign-up-btn {
+    display: none;
+}
+
+#main {
+    position: relative;
+}
+
+/* Sign up container */
+#sign-up-container {
+    display: none;
+    margin: 2em 0em;
+    height: 220px;
+}
+
+
+/* TABLET-BASED LAYOUT */
+@media only screen and (min-width: 425px) {
+    #connect-page-content {
+        width: 45%;
+    }
+
+    .judge-container > label {
+        width: 50%;
+    }
+}

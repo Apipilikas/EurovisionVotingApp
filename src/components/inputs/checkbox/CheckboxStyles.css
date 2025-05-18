@@ -1,0 +1,37 @@
+.checkbox-input-container > label {
+    margin: auto 0em;
+    font-weight: 500;
+}
+
+.checkbox-input-container {
+    display: flex;
+}
+
+.checkbox {
+  -webkit-appearance: none;
+  appearance: none;
+
+  font: inherit;
+  width: 2em;
+  height: 2em;
+  border: 0.15em solid;
+  margin: auto 0em auto 1em;
+}
+
+.checkbox:checked {
+    color: #fff;
+    background: var(--third-color);
+}
+
+/* Checkbox */
+/* .checkbox-input-container .input-help-icon {
+    left: 4.5em;
+}
+
+.checkbox-input-container .input-help-caption::after {
+    right: 1em;
+}
+
+.checkbox-input-container .input-help-caption {
+    right: 7em;
+} */

@@ -1,0 +1,25 @@
+.list-container {
+    overflow-x: auto;
+}
+
+.list-container-item {
+    display: flex;
+    width: 100%;
+}
+
+.list-container-item > input[type="radio"] {
+    display: none;
+}
+
+.list-container-item > label {
+    transition-duration: 0.5s;
+    border-left: 5px solid transparent;
+}
+
+.list-container-item > input[type="radio"] + label:hover {
+    border-left: 5px solid var(--forth-color);
+}
+
+.list-container-item > input[type="radio"]:checked + label {
+    border-left: 5px solid black;
+}

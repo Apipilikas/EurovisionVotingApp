@@ -1,0 +1,21 @@
+.list-edit-dashboard {
+    margin: auto 1em;
+    display: flex;
+    border: 5px solid var(--seventh-color);
+    height: 350px;
+    background-color: var(--forth-color);
+}
+
+.list-edit-dashboard > .list-container {
+    background-color: var(--eleventh-color);
+}
+
+.list-edit-dashboard-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.list-edit-dashboard > .list-container {
+    width: 20%;
+}

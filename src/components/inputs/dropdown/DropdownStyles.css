@@ -1,0 +1,10 @@
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-container > label {
+    color: black;
+    font-weight: 700;
+    white-space: nowrap;
+}

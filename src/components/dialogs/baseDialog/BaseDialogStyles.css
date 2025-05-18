@@ -1,0 +1,338 @@
+.base-dialog {
+    opacity: 1;
+    z-index: 9;
+    /* display: flex; */
+    flex-direction: column;
+    /* justify-content: space-between; */
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 50%;
+    width: 250px;
+    height: 50px;
+    background-color: white;
+    overflow: hidden;
+    animation: dialog-open-animation 1s ease-in-out 2s, show-dialog-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+.base-dialog.simple-animation {
+    animation: dialog-open-simple-animation 1s ease-in-out;
+    bottom: 50%;
+    height: 200px;
+    width: 80%;
+    animation-fill-mode: forwards; 
+}
+
+.base-dialog.success {
+    border: 5px solid var(--success-color);
+}
+
+.base-dialog.info {
+    border: 5px solid var(--info-color);
+}
+
+.base-dialog.warning {
+    border: 5px solid var(--warning-color);
+}
+
+.base-dialog.error {
+    border: 5px solid var(--error-color);
+}
+
+/* Close base dialog */
+.base-dialog.close-dialog  {
+    display: flex;
+    animation: dialog-close-animation 0.4s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+/* Confirm / Message dialogs main containers */
+.base-dialog .top-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.base-dialog .top-container .close-btn {
+    font-size: 1.5em;
+    margin: auto 0em;
+}
+
+.base-dialog.success .top-container {
+    background-color: var(--success-color);
+}
+
+.base-dialog.info .top-container {
+    background-color: var(--info-color);
+}
+
+.base-dialog.warning .top-container {
+    background-color: var(--warning-color);
+} 
+
+.base-dialog.error .top-container {
+    background-color: var(--error-color);
+} 
+
+
+/* Icon container */
+.base-dialog .icon-container {
+    display: flex;
+    height: 50px;
+    width: 250px;
+    color: white;
+    /* justify-content: center; */
+}
+
+.base-dialog .icon-container i {
+    font-size: 2em;
+    text-align: center;
+    margin: auto 0.5em;
+}
+
+.base-dialog .icon-container p  {
+    font-weight: 700;
+    margin: auto 0em;
+}
+
+/* Bottom container */
+.base-dialog .bottom-container {
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto 1em;
+}
+
+.base-dialog .buttons-area {
+    /* display: none; */
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5em 0em 0.5em 0em;
+    margin: 0em 0.5em;
+}
+
+.base-dialog.success .buttons-area {
+    border-top: 2px solid var(--success-color);
+}
+
+.base-dialog.info .buttons-area {
+    border-top: 2px solid var(--info-color);
+}
+
+.base-dialog.warning .buttons-area {
+    border-top: 2px solid var(--warning-color);
+}
+
+.base-dialog.error .buttons-area {
+    border-top: 2px solid var(--error-color);
+}
+
+/* Buttons */
+.base-dialog .buttons-area button {
+    padding: 0.5em 2em;
+    /* outline:none; */
+    font-family: 'Onest', sans-serif;
+    font-weight: 800;
+    transition: all 0.4s;
+}
+
+.base-dialog.success .buttons-area button {
+    border: 4px solid var(--success-color);
+    color: var(--success-color);
+}
+
+.base-dialog.info .buttons-area button {
+    border: 4px solid var(--info-color);
+    color: var(--info-color);
+}
+
+.base-dialog.warning .buttons-area button {
+    border: 4px solid var(--warning-color);
+    color: var(--warning-color);
+}
+
+.base-dialog.error .buttons-area button {
+    border: 4px solid var(--error-color);
+    color: var(--error-color);
+}
+
+/* .base-dialog .buttons-area button:hover {
+    color: black;
+} */
+
+.base-dialog.success .buttons-area button.selected {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.base-dialog.info .buttons-area button.selected {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.base-dialog.warning .buttons-area button.selected {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.base-dialog.error .buttons-area button.selected {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.base-dialog .bottom-container > :first-child {
+    /* display: flex; */
+    overflow: hidden;
+    /* text-align: center; */
+    /* padding: 0.5em 0em 0.5em 0em; */
+    margin: auto;
+    font-weight: 700;
+}
+
+.base-dialog.success .bottom-container p {
+    color: var(--success-color);
+}
+
+.base-dialog.info .bottom-container p {
+    color: var(--info-color);
+}
+
+.base-dialog.warning .bottom-container p {
+    color: var(--warning-color);
+}
+
+/* Message dialog timer container */
+.base-dialog .right-container {
+    display: flex;
+    overflow: hidden;
+    opacity: 0;
+    width: 0;
+    animation: timer-fadein-animation 2s ease-in 2s;
+    animation-fill-mode: forwards; 
+}
+
+.base-dialog .right-container .timer-container {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.base-dialog .right-container .timer-container.show {
+    display: flex;
+}
+
+.base-dialog .right-container .timer-container p {
+    margin: auto;
+    font-size: .7em;
+    text-align: center;
+}
+
+.base-dialog .right-container .timer-container p.timer-caption {
+    padding: 0em 1em;
+}
+
+.base-dialog .right-container .timer-container p.timer-txt {
+    font-weight: 700;
+    font-size: .9em;
+}
+
+@keyframes timer-fadein-animation {
+    0% {
+        opacity: 0;
+        width: 0;
+    }
+    100% {
+        opacity: 1.0;
+        width: initial;
+    }
+}
+
+@keyframes show-dialog-animation {
+    0% {
+        bottom: -50%;
+    }
+
+    100% {
+        bottom: 50%;
+    }
+}
+
+@keyframes dialog-open-animation {
+    0% {
+        height: 50px;
+        width: 250px;
+    }
+    100% {
+        height: 200px;
+        width: 80%;
+    }
+}
+
+@keyframes dialog-open-simple-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    } 
+}
+
+@keyframes dialog-close-animation {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    } 
+}
+
+@media only screen and (min-width: 425px) {
+    /* #region Base dialog */
+
+    .base-dialog.simple-animation {
+        bottom: 50%;
+        height: 200px;
+        width: 40%;
+    }
+
+    /* #endregion */
+
+    /* Animations */
+
+    
+    /* #endregion */
+
+    /* #region Confirm dialog */
+    @keyframes dialog-open-animation {
+        0% {
+            height: 50px;
+            width: 250px;
+        }
+        100% {
+            height: 200px;
+            width: 40%;
+        }
+    }
+    
+    @keyframes dialog-close-animation {
+        0% {
+            height: 200px;
+            width: 40%;
+            opacity: 1;
+        }
+    
+        100% {
+            height: 200px;
+            width: 40%;
+            opacity: 0;
+        } 
+    }
+    /* #endregion */
+}

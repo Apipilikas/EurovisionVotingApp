@@ -1,0 +1,51 @@
+
+#leaderboard-table {
+    width: 100vw;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.leaderboard-table-row.leaderboard-table-body-row .running-order-cell {
+    background: linear-gradient(270deg, var(--eleventh-color) 0%, var(--third-color) 80%);
+    font-weight: 900;
+    color: var(--forth-color);
+}
+
+.leaderboard-table-row .total-votes-table-cell {
+    background: var(--third-color);
+    color: var(--forth-color);
+}
+
+#leaderboard-table .simple-table-cell {
+    padding: 0em 0.5em;
+}
+
+.table-cell {
+    text-align: center;
+}
+
+#leaderboard-table .table-body {
+    font-weight: 700;
+    color: var(--forth-color);
+}
+
+.leaderboard-table-row.leaderboard-table-body-row .voting-status-table-cell {
+    color: white;
+}
+
+.button-table-cell.vote-table-cell {
+    padding: 0em;
+}
+
+.leaderboard-table-row.leaderboard-table-head-row {
+    z-index: 1;
+    position: sticky;
+    top: 0;
+    font-weight: 700;
+    background-color: var(--forth-color);
+    color: var(--eleventh-color);
+}
+
+.leaderboard-table-body-row {
+    background-color: var(--eleventh-color);
+}

@@ -1,0 +1,37 @@
+/* .table-container {
+    display: table;
+  } */
+  
+.table-row, .sort-table-row {
+    display: table-row;
+}
+
+.table-cell {
+    display: table-cell;
+    padding-left: 5px;
+}
+
+.table-header {
+    display: table-header-group;
+}
+
+.table-body {
+    display: table-row-group;
+}
+
+.button-table-cell button {
+    margin: 0em;
+    border: 5px solid var(--eleventh-color);
+}
+
+.simple-table-cell p {
+    text-wrap: nowrap;
+}
+
+.sort-table-cell {
+    display: flex;
+}
+
+.sort-table-cell .sorting-icon {
+    margin: auto;
+}

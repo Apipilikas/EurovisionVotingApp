@@ -1,0 +1,271 @@
+.error-box {
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 25%;
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    overflow: hidden;
+    border: 5px solid var(--error-color);
+    animation: error-box-open-animation 1s ease-in-out 2s, show-error-box-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+/* Close error box */
+.error-box.close-error-box {
+    animation: error-box-close-animation 1s ease-in-out, hide-error-box-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards; 
+}
+
+/* Error box main containers */
+.error-box .top-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: var(--error-color)
+}
+
+.error-box .bottom-container {
+    overflow: hidden;
+    overflow-y: auto;
+    /* margin: 1em; */
+    width: 0%;
+    animation: error-message-container-fadein-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards; 
+}
+
+/* Icon container */
+.error-box .icon-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 80px;
+    width: 80px;
+}
+
+.error-box .icon-container i {
+    font-size: 2em;
+    margin: 0em auto;
+}
+
+.error-box .icon-container span {
+    font-weight: 700;
+    font-size: 1em;
+    margin: 0em auto;
+}
+
+.error-box .message-container {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0em;
+    width: 0%;
+    /* animation: width 1s ease-in-out; */
+    animation: error-message-container-fadein-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards; 
+}
+
+.error-box.close-error-box .message-container {
+    animation: error-message-container-fadeout-animation 1s ease-in-out;
+    animation-fill-mode: forwards; 
+}
+
+.error-box .message-container h1 {
+    margin: 0em;
+    font-size: 1em;
+    border-bottom: 2px solid white;
+    white-space: nowrap;
+}
+
+.error-box .message-container p {
+    margin: 0em;
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+/* More info container */
+
+.error-box .error-details-container {
+    margin: 1em;
+}
+
+.error-box .error-details-container > summary {
+    /* width: 100%; */
+    font-weight: 700;
+    border-bottom: 2px solid var(--error-color);
+}
+
+.error-box .help-container > summary {
+    border-bottom: 2px solid var(--info-color);
+}
+
+.error-box .error-details-container > summary::-webkit-details-marker {
+    display: none; 
+}
+
+.error-box .error-details-container p {
+    margin: 0em;
+}
+
+.error-box .error-details-container .error-caption {
+    margin-top: 0.5em;
+    color: var(--error-color);
+}
+
+.error-box .help-container .error-caption {
+    color: var(--info-color);
+}
+
+.error-box .error-details-container .error-text {
+    margin-top: 0.2em;
+    font-size: 0.8em;
+    overflow-y: auto;
+}
+
+/* Copy button */
+.error-box .copy-btn {
+    width: 50px;
+    border: 2px solid var(--error-color);
+}
+
+/* Close button */
+.error-box .close-btn {
+    /* display: none; */
+    font-size: 0em;
+    margin: auto 0.2em auto 0em;
+    animation: show-close-btn-animation 1s ease-in-out 2s;
+    animation-fill-mode: forwards;
+}
+
+.error-box.close-error-box .close-btn {
+    display: none;
+}
+
+/* Animations */
+@keyframes show-error-box-animation {
+    0% {
+        bottom: -50%;
+    }
+
+    100% {
+        bottom: 25%;
+    }
+}
+
+@keyframes hide-error-box-animation {
+    0% {
+        bottom: 25%;
+    }
+
+    100% {
+        bottom: -50%;
+    } 
+}
+
+@keyframes error-box-open-animation {
+    0% {
+        height: 80px;
+        width: 80px;
+    }
+    100% {
+        height: 250px;
+        width: 90%;
+    }
+}
+
+@keyframes error-box-close-animation {
+    0% {
+        width: 90%;
+        height: 250px;
+    }
+    100% {
+        height: 80px;
+        width: 80px;
+    }
+}
+
+@keyframes error-message-container-fadein-animation {
+    0% {
+        opacity: 0;
+        width: 0%;
+    }
+    100% {
+        opacity: 1.0;
+        width: 100%;
+        /* margin: 1em; */
+    }
+}
+
+@keyframes error-message-container-fadeout-animation {
+    0% {
+        opacity: 1.0;
+        width: 100%;
+        /* margin: auto 1em; */
+    }
+    100% {
+        opacity: 0;
+        width: 0%;
+        /* margin: 0em; */
+    }
+}
+
+@media only screen and (min-width: 425px) {
+    .error-box {
+    width: 120px;
+    height: 100px;
+    }
+
+    /* Icon container */
+    .error-box .icon-container {
+        height: 100px;
+        width: 120px;
+    }
+
+    .error-box .icon-container i {
+        font-size: 2.5em;
+    }
+
+    .error-box .icon-container span {
+        font-size: 1.5em;
+    }
+
+    .error-box .message-container h1 {
+        font-size: 1.4em;
+    }
+
+    .error-box .message-container p {
+        font-size: 1em;
+    }
+
+    /* Animations */
+
+    @keyframes error-box-open-animation {
+        0% {
+            height: 100px;
+            width: 120px;
+        }
+        100% {
+            height: 250px;
+            width: 60%;
+        }
+    }
+
+    @keyframes error-box-close-animation {
+        0% {
+            width: 60%;
+            height: 250px;
+        }
+        100% {
+            height: 100px;
+            width: 120px;
+        }
+    }
+    
+    /* #endregion */
+}

@@ -1,0 +1,127 @@
+.result-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    /* outline:none; */
+    font-family: 'Onest', sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
+    border:3px solid var(--fifth-color);
+    /* transition:0.2s linear;
+    animation: animate 1.4s linear infinite 0.2s; */
+}
+
+button.result-button:hover {
+    border:3px solid var(--fifth-color);
+}
+
+.result-button.result-button-animation:before {
+    animation: animate 1.4s linear infinite 0.2s;
+}
+
+.result-button:before {
+    content:"";
+    position:absolute;
+    z-index: 2;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    border: none;
+    box-shadow: none;
+    --color: white;
+    background-image: 
+    linear-gradient(var(--color), var(--color)), 
+    linear-gradient(var(--color), var(--color)), 
+    linear-gradient(var(--color), var(--color)), 
+    linear-gradient(var(--color), var(--color));
+
+    background-position: 0 0, 0 0, 0 100%, 0 100%;
+    background-size: 3px 0%, 0% 3px, 0% 3px, 3px 0%;
+    color: var(--eighth-color);
+    background-color: transparent;
+    background-repeat:no-repeat;
+    /* transition:0.2s linear; */
+    /* animation: animate 1.4s linear infinite 0.2s; */
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0 100%, 0 0, 0 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%;
+    }
+    40% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 100%;
+    }
+    60% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 100%;
+        background-size: 3px 0%, 0% 3px, 100% 3px,3px 100%
+    }
+    70% {
+        background-position: 0 100%, 100% 0, 0% 100%, 100% 100%;
+        background-size: 3px 100%, 0% 3px, 100% 3px,3px 0%;
+    }
+    80% {
+        background-position: 0% 0%, 0% 0, 0% 100%, 100% 100%;
+        background-size: 3px 100%, 0% 3px, 0% 3px,3px 0%;
+    }
+    100% {
+        background-position: 0% 0%, 0 0, 0 100%, 100% 100%;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%  
+    }
+}
+
+@keyframes animate-one {
+    0% {
+        background-position: 0 100%, 0 0, 0 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%;
+    }
+    40% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 0;
+        background-size: 3px 0%, 100% 3px, 0% 3px,3px 100%;
+    }
+    60% {
+        background-position: 0 100%, 100% 0, 100% 100%, 100% 100%;
+        background-size: 3px 0%, 100% 3px, 100% 3px,3px 100%
+    }
+    70% {
+        background-position: 0 100%, 100% 0, 0% 100%, 100% 100%;
+        background-size: 3px 100%, 100% 3px, 100% 3px,3px 100%;
+    }
+    80% {
+        background-position: 0% 0%, 100% 0, 100% 100%, 100% 100%;
+        background-size: 3px 100%, 0% 3px, 0% 3px,3px 100%;
+    }
+    100% {
+        background-position: 0% 0%, 0 0, 100% 100%, 100% 100%;
+        background-size: 3px 100%, 100% 3px, 100% 3px,3px 100%  
+    }
+}
+
+.rb-content-container {
+    font-weight: 700;
+    padding: 20px 50px;
+    z-index: 1;
+    transition: 0.5s;
+    align-items: center;
+}
+
+.result-button.success {
+    background-color: var(--success-color);
+}
+
+.result-button.loading {
+    background-color: var(--warning-color);
+}
+
+.result-button.failure {
+    background-color: var(--error-color);
+}
+
+.rb-status-transition {
+    opacity: 100%;
+    width: 100%;
+    left: 0%;
+}
