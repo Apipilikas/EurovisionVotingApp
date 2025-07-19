@@ -8,9 +8,9 @@ import SimpleButton from "../../../components/inputs/buttons/simpleButton/Simple
 import { AdminRequests, CountryRequests, JudgeRequests } from "../../../utils/requestUtils";
 import { EventID, useSession } from "../../../components/common/session/SessionProvider";
 import { useInput } from "../../../hooks/useInput";
-import { DialogConfig } from "../../../components/dialogs/baseDialog/dialogConfig";
-import { DialogResult, DialogType } from "../../../components/dialogs/baseDialog/BaseDialog";
-import { useDialog } from "../../../components/dialogs/baseDialog/DialogProvider";
+import { DialogConfig } from "../../../components/dialogs/dialogConfig";
+import { DialogResult, DialogType } from "../../../components/dialogs/DialogProvider";
+import { useDialog } from "../../../components/dialogs/DialogProvider";
 import { useCountries } from "../../../hooks/useCountries";
 import { useJudges } from "../../../hooks/useJudges";
 import { useRunningOrder } from "../../../hooks/useRunningOrder";

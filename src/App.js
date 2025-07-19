@@ -8,8 +8,8 @@ import { Loader } from './components/common/loader/Loader';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import { ErrorBox } from './components/boxes/errorBox/ErrorBox';
 import { MyError } from './utils/errorUtils';
-import { BaseDialog, DialogOrigin, DialogType } from './components/dialogs/baseDialog/BaseDialog';
-import { useDialog } from './components/dialogs/baseDialog/DialogProvider';
+import { DialogType, DialogResult } from './components/dialogs/DialogProvider';
+import { useDialog } from './components/dialogs/DialogProvider';
 import { NotificationBox } from './components/boxes/notificationBox/NotificationBox';
 import { ErrorBoxConfig } from './components/boxes/errorBox/errorBoxConfig';
 import { VotingPage } from './pages/voting/VotingPage';
@@ -17,8 +17,7 @@ import { VotingPage as AdminVotingPage } from './pages/admin/voting/VotingPage';
 import NotificationCollectionProvider from './components/common/notificationBanner/NotificationProvider';
 import { useSession } from './components/common/session/SessionProvider';
 import { LeaderboardPage } from './pages/leaderboard/LeaderboardPage';
-import { DialogConfig } from './components/dialogs/baseDialog/dialogConfig';
-import { DialogResult } from './components/dialogs/baseDialog/BaseDialog';
+import { DialogConfig } from './components/dialogs/dialogConfig';
 import { JudgeRequests } from './utils/requestUtils';
 import { DialogUtils } from './components/dialogs/dialogUtils';
 import { DocumentUtils } from './utils/document/documentUtils';
@@ -136,9 +135,6 @@ function App() {
             <Route path='/admin/judges' element={<AdminJudgesPage/>}/>
           </Routes>
         </NotificationCollectionProvider>
-          {dialogOrigin === DialogOrigin.BASEDIALOG && <BaseDialog/>}
-          {dialogOrigin === DialogOrigin.NOTIFICATIONBOX && <NotificationBox/>}
-          {dialogOrigin === DialogOrigin.ERRORBOX && <ErrorBox/>}
         <Footer/>
     </Router>
   );

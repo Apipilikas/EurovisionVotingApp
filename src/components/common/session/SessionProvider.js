@@ -2,9 +2,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { JudgeRequests, serverURL } from "../../../utils/requestUtils";
 import { EventRegistry } from "../../../utils/events/eventRegistry";
-import { DialogResult, DialogType } from "../../dialogs/baseDialog/BaseDialog";
-import { DialogConfig } from "../../dialogs/baseDialog/dialogConfig";
-import { useDialog } from "../../dialogs/baseDialog/DialogProvider";
+import { DialogResult, DialogType } from "../../dialogs/DialogProvider";
+import { DialogConfig } from "../../dialogs/dialogConfig";
+import { useDialog } from "../../dialogs/DialogProvider";
 import { ErrorBoxConfig } from "../../boxes/errorBox/errorBoxConfig";
 import { DocumentUtils } from "../../../utils/document/documentUtils";
 

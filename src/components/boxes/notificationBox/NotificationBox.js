@@ -1,5 +1,5 @@
-import { DialogResult } from "../../dialogs/baseDialog/BaseDialog";
-import { useDialog } from "../../dialogs/baseDialog/DialogProvider";
+import { DialogResult } from "../../dialogs/DialogProvider";
+import { useDialog } from "../../dialogs/DialogProvider";
 import { DialogUtils } from "../../dialogs/dialogUtils";
 import './NotificationBoxStyles.css';
 
@@ -10,7 +10,7 @@ export function NotificationBox() {
     const {isDialogOpen, showDialog, closeDialog, registerEvent, dialogConfig} = useDialog();
 
     if (!dialogConfig) return;
-    const {message, type, description} = dialogConfig;
+    const {title, type, description} = dialogConfig;
 
     return (
         <div class={`notification-box ${DialogUtils.getDialogClassName(type)} ${isDialogOpen ? "" : closeNotificationBoxClassName}`}>
@@ -20,7 +20,7 @@ export function NotificationBox() {
                     <span>{type}</span>
                 </div>
                 <div class="message-container">
-                    <h1 class="notification-message">{message}</h1>
+                    <h1 class="notification-message">{title}</h1>
                     <p class="notification-description">{description}</p>
                 </div>
             </div>

@@ -1,5 +1,5 @@
-import { DialogResult, DialogType } from "./baseDialog/BaseDialog";
-import { DialogConfig } from "./baseDialog/dialogConfig";
+import { DialogResult, DialogType } from "./DialogProvider";
+import { DialogConfig } from "./dialogConfig";
 
 var DialogUtils = {}
 

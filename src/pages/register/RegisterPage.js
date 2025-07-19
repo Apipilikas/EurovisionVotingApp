@@ -10,13 +10,19 @@ import { useInput } from '../../hooks/useInput';
 import { useSession } from '../../components/common/session/SessionProvider';
 import { useNavigate } from 'react-router-dom';
 import { DialogUtils } from '../../components/dialogs/dialogUtils';
-import { useDialog } from '../../components/dialogs/baseDialog/DialogProvider';
+import { useDialog } from '../../components/dialogs/DialogProvider';
+import { DialogType } from '../../components/dialogs/DialogProvider';
+import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
+import { BaseDialogConfig } from '../../components/dialogs/baseDialog/baseDialogConfig';
+import { ErrorBoxConfig } from '../../components/boxes/errorBox/errorBoxConfig';
+import { Dropdown } from '../../components/inputs/dropdown/Dropdown';
 
 export const RegisterPage = forwardRef((props, ref) => {
 
     return (
         <BasePage socketDependent={false} ref={ref}>
             <Main/>
+            <Dropdown list={[1,2]}/>
         </BasePage>
     );
 });

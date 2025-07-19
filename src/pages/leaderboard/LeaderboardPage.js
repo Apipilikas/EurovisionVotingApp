@@ -8,10 +8,10 @@ import { useSession } from '../../components/common/session/SessionProvider';
 import { useCountries } from '../../hooks/useCountries';
 import { useJudges } from '../../hooks/useJudges';
 import { useRunningOrder } from '../../hooks/useRunningOrder';
-import { DialogConfig } from '../../components/dialogs/baseDialog/dialogConfig';
-import { DialogResult, DialogType } from '../../components/dialogs/baseDialog/BaseDialog';
+import { DialogConfig } from '../../components/dialogs/dialogConfig';
+import { DialogResult, DialogType } from '../../components/dialogs/DialogProvider';
 import { Dropdown } from '../../components/inputs/dropdown/Dropdown';
-import { useDialog } from '../../components/dialogs/baseDialog/DialogProvider';
+import { useDialog } from '../../components/dialogs/DialogProvider';
 import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
 
 export const LeaderboardPage = forwardRef((props, ref) => {

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 // import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import DialogProvider from './components/dialogs/baseDialog/DialogProvider';
+import DialogProvider from './components/dialogs/DialogProvider';
 import SessionProvider from './components/common/session/SessionProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

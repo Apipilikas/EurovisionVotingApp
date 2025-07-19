@@ -11,8 +11,7 @@ import { useSession } from "../../../components/common/session/SessionProvider";
 import { useCountries } from "../../../hooks/useCountries";
 import { ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
-import { DialogType } from "../../../components/dialogs/baseDialog/BaseDialog";
-import { useDialog } from "../../../components/dialogs/baseDialog/DialogProvider";
+import { useDialog, DialogType } from "../../../components/dialogs/DialogProvider";
 
 export const CountriesPage = forwardRef((props, ref) => {
 
