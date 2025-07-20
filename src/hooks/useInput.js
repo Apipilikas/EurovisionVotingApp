@@ -16,10 +16,18 @@ export function useInput(defaultValue, onValueChanged = null, observeDefaultValu
         if (observeDefaultValueChanges) {
             setValue(getValueOrEmpty(defaultValue));
         }
-    }, [defaultValue])
+    }, [defaultValue]);
 
-    function resolveInputValue(e) {
-        let input = e.target;
+    useEffect(() => {
+        if (onValueChanged) {
+            onValueChanged(value);
+        }
+    }, [value]);
+
+    const resolveInputValue = (e) => {
+        let input = e?.target;
+
+        if (input == null) return e;
 
         switch(input.type) {
             case Checkbox_INPUT:
@@ -29,13 +37,9 @@ export function useInput(defaultValue, onValueChanged = null, observeDefaultValu
         }
     }
 
-    function onChange(e) {
+    const onChange = (e) => {
         let newValue = resolveInputValue(e);
         setValue(newValue);
-
-        if (onValueChanged) {
-            onValueChanged(newValue);
-        }
     }
 
     return {

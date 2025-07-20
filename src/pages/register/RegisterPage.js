@@ -15,14 +15,15 @@ import { DialogType } from '../../components/dialogs/DialogProvider';
 import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
 import { BaseDialogConfig } from '../../components/dialogs/baseDialog/baseDialogConfig';
 import { ErrorBoxConfig } from '../../components/boxes/errorBox/errorBoxConfig';
-import { Dropdown } from '../../components/inputs/dropdown/Dropdown';
+import { BaseSelector } from '../../components/inputs/selectors/baseSelector/BaseSelector';
+import { ListSelector } from '../../components/inputs/selectors/listSelector/ListSelector';
+import { TableSelector } from '../../components/inputs/selectors/tableSelector/TableSelector';
 
 export const RegisterPage = forwardRef((props, ref) => {
 
     return (
         <BasePage socketDependent={false} ref={ref}>
             <Main/>
-            <Dropdown list={[1,2]}/>
         </BasePage>
     );
 });
@@ -85,6 +86,7 @@ function Main() {
                         <div id="sign-up-container" tabIndex="1">
                             <TextInput caption="Name" helperCaption="Insert your name." {...nameInput}/>
                             <EmailInput caption="Email" helperCaption="Insert your email." {...emailInput}/>
+                            {/* <TableSelector caption={"Testing"} data={[{id : "10", code : "test", name : "name"}, {id : "20", code : "test2", name : "name21"}]} valueProperty={"id"} displayProperty={"code"}/> */}
                         </div>
                     </div>
     

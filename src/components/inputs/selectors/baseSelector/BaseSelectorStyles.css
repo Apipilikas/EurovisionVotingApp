@@ -1,0 +1,15 @@
+.selector-container .clear-icon,
+.selector-container .dropdown-icon {
+    top: 0.2em;
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.selector-options {
+    display: flex;
+    margin-top: 0.2em;
+    background-color: white;
+    cursor: pointer;
+    flex-direction: column;
+}

@@ -1,0 +1,17 @@
+.table-selector-options .table-header {
+    font-weight: 800;
+    background-color: gainsboro;
+    border-bottom: 2px solid black;
+}
+
+.table-selector-options .table-header .table-cell p {
+    margin: 0.4em;
+}
+
+.table-selector-options {
+    display: table;
+}
+
+.table-selector-options .table-header .table-cell {
+    width: 100%;
+}
