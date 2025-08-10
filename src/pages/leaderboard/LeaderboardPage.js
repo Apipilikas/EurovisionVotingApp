@@ -8,11 +8,12 @@ import { useSession } from '../../components/common/session/SessionProvider';
 import { useCountries } from '../../hooks/useCountries';
 import { useJudges } from '../../hooks/useJudges';
 import { useRunningOrder } from '../../hooks/useRunningOrder';
-import { DialogConfig } from '../../components/dialogs/dialogConfig';
+import { BaseDialogConfig } from '../../components/dialogs/baseDialog/baseDialogConfig';
 import { DialogResult, DialogType } from '../../components/dialogs/DialogProvider';
 import { Dropdown } from '../../components/inputs/dropdown/Dropdown';
 import { useDialog } from '../../components/dialogs/DialogProvider';
 import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
+import { ListSelector } from '../../components/inputs/selectors/listSelector/ListSelector';
 
 export const LeaderboardPage = forwardRef((props, ref) => {
 
@@ -119,10 +120,10 @@ function CountryRow({country, judges, style}) {
     const showVotingDialog = () => {
         let points;
         const title = `Vote for ${country.name}`;
-        const config = new DialogConfig(title, DialogType.INFO);
+        const config = new BaseDialogConfig(title, DialogType.INFO);
 
-        config.content = <Dropdown  initialValue={country.votes[judge.code]}
-                                    onChange={(e) => points = e.target.value} 
+        config.innerContent = <ListSelector  initialValue={country.votes[judge.code]}
+                                    onValueChanged={(value) => points = value} 
                                     caption={"Votes"} 
                                     list={[1,2,3,4,5,6,7,8,10,12]}/>
         

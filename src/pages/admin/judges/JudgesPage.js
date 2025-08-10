@@ -9,12 +9,14 @@ import { useInput } from "../../../hooks/useInput";
 import { CountryRequests, JudgeRequests } from "../../../utils/requestUtils";
 import { useSession } from "../../../components/common/session/SessionProvider";
 import { useJudges } from "../../../hooks/useJudges";
+import { useCountries } from "../../../hooks/useCountries";
 import { ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
 import { useDialog, DialogType } from "../../../components/dialogs/DialogProvider";
 import { getValueOrNull } from "../../../utils/react/propsUtils";
+import { TableSelector } from "../../../components/inputs/selectors/tableSelector/TableSelector";
 
-export const JudgesPage = forwardRef((props, ref) => {
+export function JudgesPage() {
 
     const {judge} = useSession();
     const {judges} = useJudges();
@@ -70,19 +72,21 @@ export const JudgesPage = forwardRef((props, ref) => {
     }
 
     return (
-    <BasePage {...props} ref={ref}>
+    <BasePage>
         <ListEditDashboard data={judges} 
-                           ItemContainer={Item} 
-                           valueMember={"code"}
+                           DisplayContainer={Item} 
+                           valueProperty={"code"}
                            MainContainer={JudgeForm}
                            onToolbarButtonClicked={handleOnToolbarButtonClicked}/>
     </BasePage>
 );
-});
+};
 
 
 
 function JudgeForm({data = null, onChange}) {
+
+    const {countries} = useCountries();
 
     const codeInput = useInput(data?.code, undefined, true);
     const nameInput = useInput(data?.name, undefined, true);
@@ -117,7 +121,7 @@ function JudgeForm({data = null, onChange}) {
         <div className="judge-form">
             <TextInput caption={"Name"} {...nameInput} className="name-input"/>
             <TextInput caption={"Code"} {...codeInput} className="code-input"/>
-            <TextInput caption={"Origin country"} {...originCountryInput} className="originCountry-input"/>
+            <TableSelector caption={"Origin country"} data={countries} valueProperty={"code"} displayProperty={"name"} visibleColumns={["code", "name"]} {...originCountryInput} className="originCountry-input"/>
             <Checkbox caption={"Admin"} {...adminInput} className="admin-input"/>
             <Checkbox caption={"Active"} {...activeInput} className="active-input"/>
             <TextInput caption={"Policy"} {...policyCodeInput} className="policyCode-input"/>

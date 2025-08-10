@@ -14,9 +14,10 @@ import { useDialog } from "../../../components/dialogs/DialogProvider";
 import { useCountries } from "../../../hooks/useCountries";
 import { useJudges } from "../../../hooks/useJudges";
 import { useRunningOrder } from "../../../hooks/useRunningOrder";
-import { Dropdown } from "../../../components/inputs/dropdown/Dropdown";
+import { ListSelector } from "../../../components/inputs/selectors/listSelector/ListSelector";
+import { BaseDialogConfig } from "../../../components/dialogs/baseDialog/baseDialogConfig";
 
-export const VotingPage = forwardRef((props, ref) => {
+export function VotingPage() {
 
     const [runningOrder, setRunningOrder] = useState(-1);
 
@@ -38,7 +39,7 @@ export const VotingPage = forwardRef((props, ref) => {
     }
 
     return (
-        <BasePage {...props} ref={ref}>
+        <BasePage>
             <div className="upper-container">
                 <RunningCountryDC runningCountry={runningCountry}/>
                 <JudgesVotedDC/>
@@ -51,7 +52,7 @@ export const VotingPage = forwardRef((props, ref) => {
             </div>
         </BasePage>
     )
-});
+};
 
 function DashboardContainer({title, className, children}) {
     
@@ -127,7 +128,7 @@ function AdminSettings({countries}) {
     const handleInformButton = () => {
         let value;
         let content = <textarea onChange={(e) => value = e.target.value}></textarea>;
-        let config = new DialogConfig("Inform", DialogType.INFO, content);
+        let config = new BaseDialogConfig("Inform", DialogType.INFO, content);
         config.addButton("Inform", DialogResult.CHOICE1);
         config.addButton("Warning", DialogResult.CHOICE2);
         showDialog(config).then(result => {
@@ -177,13 +178,13 @@ function AdminSettings({countries}) {
                              buttonCaption={"CLEAR"}
                             promise={() => CountryRequests.clearCountryTotalVotes(judgeCode, clearListInput.value)}
                              >
-                <Dropdown list={countries.map(item => item.code)} {...clearListInput}/>
+                <ListSelector list={countries.map(item => item.code)} {...clearListInput}/>
             </ButtonContainer>
             <ButtonContainer caption={"Recalculate total votes"}
                              buttonCaption={"RECALCULATE"}
                             promise={() => CountryRequests.recalculateCountryTotalVotes(judgeCode, recalculateListInput.value)}
                              >
-                <Dropdown list={countries.map(item => item.code)} {...recalculateListInput}/>
+                <ListSelector list={countries.map(item => item.code)} {...recalculateListInput}/>
             </ButtonContainer>
         </SimpleDetailsContainer>
     )

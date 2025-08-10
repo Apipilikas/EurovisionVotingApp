@@ -3,12 +3,13 @@ import { CountryRequests } from "../utils/requestUtils";
 import { EventID, useSession } from "../components/common/session/SessionProvider";
 import { ReactListUtils } from "../utils/react/listUtils";
 import { useRunningOrder } from "./useRunningOrder";
+import { useIsInitialized } from "./useIsInitialized";
 
 export function useCountries() {
 
     const [countries, setCountries] = useState([]);
     const [runningCountry, setRunningCountry] = useState(null);
-    const [initialized, setInitialized] = useState(false);
+    const {isInitialized} = useIsInitialized(countries);
     
     const {runningOrder} = useRunningOrder();
     const {addListener, removeListener} = useSession();
@@ -31,7 +32,6 @@ export function useCountries() {
 
         if (response.success) {
             setCountries(response.jsonData.countries?.sort((a, b) => a?.runningOrder - b?.runningOrder));
-            setInitialized(true);
         }
     }
 
@@ -79,6 +79,6 @@ export function useCountries() {
     return {
         countries,
         runningCountry,
-        initialized
+        initialized : isInitialized
     }
 }

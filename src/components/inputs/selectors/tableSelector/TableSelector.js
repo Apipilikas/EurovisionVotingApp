@@ -2,11 +2,22 @@ import { SimpleTableCell, TableBody, TableCell, TableContainer, TableHeader, Tab
 import { BaseSelector } from "../baseSelector/BaseSelector";
 import './TableSelectorStyles.css';
 
-export function TableSelector({caption, data, initialValue, valueProperty, displayProperty, onValueChanged, ...props}) {
+export function TableSelector({caption, 
+                               data, 
+                               initialValue, 
+                               valueProperty, 
+                               displayProperty, 
+                               onValueChanged, 
+                               visibleColumns = [],
+                               ...props}) {
 
+    // Functions
+    const shouldColumnBeVisible = (column) => visibleColumns.length == 0 || visibleColumns.includes(column);
+                                
     // Rendering
     const headerRow = () => {
-        var keys = Object.keys(data[0]);
+        if (data == null || data.length == 0) return;
+        var keys = Object.keys(data[0]).filter(key => shouldColumnBeVisible(key));
         return keys.map(key => <SimpleTableCell caption={key}/>)
     }
 
@@ -21,8 +32,8 @@ export function TableSelector({caption, data, initialValue, valueProperty, displ
     }
 
     const bodyRow = (rowData) => {
-        var values = Object.values(rowData);
-        return values.map(value => <SimpleTableCell caption={value}/>);
+        var values = Object.entries(rowData).filter(([key]) => shouldColumnBeVisible(key)).map(([key, value]) => value);
+        return values.map(value => <SimpleTableCell caption={String(value)}/>);
     }
 
     return (

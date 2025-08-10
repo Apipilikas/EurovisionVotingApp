@@ -1,0 +1,32 @@
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--eleventh-color);
+    border: 2px solid var(--forth-color);
+}
+
+.tabs-header {
+    display: flex;
+    margin: 0em;
+    /* margin-left: 2px; */
+    background-color: var(--forth-color);
+    
+}
+
+.tab-header input{
+    display: none;
+}
+
+.tab-header input + label {
+    display: inline-block;
+    color: var(--eleventh-color);
+    padding: 1em;
+    font-weight: 800;
+    transition: background-color 0.2s ease-in;
+}
+
+.tab-header input:checked + label {
+    color: var(--forth-color);
+    background-color: var(--eleventh-color);
+}

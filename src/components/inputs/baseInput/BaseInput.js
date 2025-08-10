@@ -1,23 +1,25 @@
 import { useId } from 'react';
 import './BaseInputStyles.css';
+import { useFallbackHookProps } from '../../../hooks/useFallbackHookProps';
+import { joinProps } from '../../../utils/react/propsUtils';
+import { InputErrorContainer } from '../containers/inputErrorContainer/InputErrorContainer';
 import { useInput } from '../../../hooks/useInput';
 
-export function BaseInput({caption, inputType = "text", ...inputProps}) {
+export function BaseInput({caption, inputType = "text", helpCaption = null, required = false, ...inputProps}) {
     
     const id = `bi-${useId()}`;
-    const input = useInput(); // This will be used as a fallback if inputProps do not provide value and onChange props.
-    const { value = input.value, onChange = input.onChange, ...restProps } = inputProps;
-    
+    const hookProps = useFallbackHookProps(useInput, undefined, inputProps);
+
     return (
         <div className="base-input">
             <input type={inputType} 
                 id={id}
                 name={id}
-                className={value ? "has-value" : ""}
-                value={value}
-                onChange={onChange}
-                {...restProps}/>
-            <label for={id}>{caption}</label>
+                className={joinProps(hookProps.value ? "has-value" : "", hookProps.error ? "has-error" : "", inputProps.className)}
+                required={required}
+                {...hookProps}/>
+            <label for={id}>{caption}{required ? <i className="material-icons input-required-icon">emergency</i> : ""}</label>
+            <InputErrorContainer caption={hookProps.error}/>
         </div>
     )
 }

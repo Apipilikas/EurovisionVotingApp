@@ -2,6 +2,7 @@
     font-weight: 800;
     background-color: gainsboro;
     border-bottom: 2px solid black;
+    position: sticky;
 }
 
 .table-selector-options .table-header .table-cell p {

@@ -19,3 +19,13 @@ export function clearObjectProps(obj) {
 
     return obj;
 }
+
+export function cloneObjectProps(obj) {
+    return Object.fromEntries(
+        Object.keys(obj).map(key => [key, null])
+    );
+}
+
+export const mergeHandlers = (...handlers) => (e) => {
+    handlers.forEach(handler => handler && handler(e));
+}

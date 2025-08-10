@@ -1,31 +1,21 @@
-import { Children, cloneElement, useEffect, useId, useRef, useState } from "react"
+import { Children, useEffect, useRef, useState } from "react"
 import './BaseSelectorStyles.css';
-import { useTransition, animated, useSpring, a } from "react-spring";
+import { animated, useSpring } from "react-spring";
 import { BaseInput } from "../../baseInput/BaseInput";
 import { useInput } from "../../../../hooks/useInput";
 import { useClickOutside } from "../../../../hooks/useClickOutside";
+import { joinProps } from "../../../../utils/react/propsUtils";
+import { useBoundData } from "../../../../hooks/useBoundData";
+import { cloneNestedElements } from "../../../../utils/react/elementUtils";
 
 export function BaseSelector({caption, data, initialValue, valueProperty, displayProperty, onValueChanged, children, ...props}) {
 
     const {value : inputValue, onChange, ...restProps} = props;
 
-    // Functions
-    const resolveCurrentDataByInitialValue = () => {
-        let val = initialValue ?? inputValue;
-
-        if (!valueProperty)
-            return val;
-        else {
-            return data?.find(item => item[valueProperty] == val);
-        }
-    };
-
     // Initialization
     const [showDropdown, setShowDropdown] = useState(false);
     const [showClearIcon, setShowClearIcon] = useState(false);
-    const [currentData, setCurrentData] = useState(resolveCurrentDataByInitialValue());
-    const [value, setValue] = useState(null);
-    const [displayValue, setDisplayValue] = useState(null);
+    const {value, displayValue, setSelectedData} = useBoundData(data, valueProperty, displayProperty, initialValue ?? inputValue, onChange);
     const input = useInput(displayValue, onValueChanged, true);
     const ref = useRef(null);
 
@@ -33,24 +23,6 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
     useEffect(() => {
         if (onChange) onChange(value);
     }, [value]);
-
-    useEffect(() => {
-        if (currentData) {
-            if (!valueProperty)
-                setValue(currentData);
-            else
-                setValue(currentData[valueProperty]);
-
-            if (!displayProperty)
-                setDisplayValue(currentData);
-            else
-                setDisplayValue(currentData[displayProperty]);
-        }
-        else {
-            setValue(null);
-            setDisplayValue(null);
-        }
-    }, [currentData]);
 
     useEffect(() => {
         setShowClearIcon(input.value);
@@ -80,38 +52,26 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
 
     // Listeners
     const handleOnClick = (data) => {
-        setCurrentData(data);
+        setSelectedData(data);
     }
 
     const handleOnClearClick = () => {
-        setCurrentData(null);
+        setSelectedData(null);
     };
 
     // Rendering
-    const cloneElements = (element) => {
+    const modifier = (element) => {
+        const isSelectorOption = element.type.name === "SelectorOption";
 
-        const { data, children } = element.props;
+        return {...(isSelectorOption && {
+            onClick: () => handleOnClick(element.props.data)
+            })};
+    }
 
-        const isSelectorOption = element.type.name == "SelectorOption";
-
-        const props = {
-            ...(isSelectorOption && {
-            onClick: () => handleOnClick(data)
-            }),
-            ...(children && {
-            children: Children.map(children, child => cloneElements(child))
-            })
-        };
-
-        return cloneElement(element, props);
-    };
-
-    const elements = Children.map(children, (child, index) => {
-        return cloneElements(child);
-    });
+    const elements = Children.map(children, child => cloneNestedElements(child, modifier));
 
     return (
-        <div className="selector-container" {...restProps}>
+        <div {...restProps} className={joinProps("selector-container", restProps.className)}>
             <BaseInput
             caption={caption}
             onFocus={() => setShowDropdown(true)} 

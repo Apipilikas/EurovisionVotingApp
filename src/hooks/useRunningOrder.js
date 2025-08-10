@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { CountryRequests } from "../utils/requestUtils";
 import { EventID, useSession } from "../components/common/session/SessionProvider";
+import { useIsInitialized } from "./useIsInitialized";
 
 export function useRunningOrder() {
 
     const [runningOrder, setRunningOrder] = useState(-1);
-    const [initialized, setInitialized] = useState(false);
+    const {isInitialized} = useIsInitialized(runningOrder, -1);
+    // const [initialized, setInitialized] = useState(false);
 
     const {addListener} = useSession();
 
@@ -20,7 +22,6 @@ export function useRunningOrder() {
 
         if (response.success) {
             setRunningOrder(response.jsonData.currentRunningOrder);
-            setInitialized(true);
         }
     }
 
@@ -35,6 +36,6 @@ export function useRunningOrder() {
 
     return {
         runningOrder,
-        initialized
+        initialized : isInitialized
     }
 }

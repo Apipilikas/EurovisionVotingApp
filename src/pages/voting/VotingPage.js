@@ -27,19 +27,15 @@ import { useRunningOrder } from "../../hooks/useRunningOrder";
 import { useCountries } from "../../hooks/useCountries";
 import Heart from "../../components/common/heart/Heart";
 
-export const VotingPage = forwardRef((props, ref) => {
-  const pageLoaded = () => {
-    ref.current.pageLoaded();
-  };
-
+export function VotingPage() {
   return (
-    <BasePage {...props} ref={ref}>
-      <Main pageLoaded={pageLoaded} />
+    <BasePage>
+      <Main/>
     </BasePage>
   );
-});
+};
 
-function Main(props) {
+function Main() {
   return <Carousel />;
 }
 

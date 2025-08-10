@@ -12,8 +12,9 @@ import { useCountries } from "../../../hooks/useCountries";
 import { ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
 import { useDialog, DialogType } from "../../../components/dialogs/DialogProvider";
+import { GridTemplateContainer } from "../../../components/containers/gridContainer/GridContainer";
 
-export const CountriesPage = forwardRef((props, ref) => {
+export function CountriesPage() {
 
     const {judge} = useSession();
     const {countries} = useCountries();
@@ -26,10 +27,6 @@ export const CountriesPage = forwardRef((props, ref) => {
             setJudgeCode(judge.code)
         }
     }, [judge])
-  
-    const pageLoaded = () => {
-    ref.current.pageLoaded();
-  };
 
     function Item({item}) {
     return (
@@ -73,15 +70,15 @@ export const CountriesPage = forwardRef((props, ref) => {
     }
 
     return (
-    <BasePage {...props} ref={ref}>
+    <BasePage>
         <ListEditDashboard data={countries} 
-                           ItemContainer={Item} 
-                           valueMember={"code"}
+                           DisplayContainer={Item} 
+                           valueProperty={"code"}
                            MainContainer={CountryForm}
                            onToolbarButtonClicked={handleOnToolbarButtonClicked}/>
     </BasePage>
 );
-});
+};
 
 
 
@@ -126,16 +123,23 @@ function CountryForm({data = null, onChange}) {
     ])
 
     return (
-        <div className="country-form">
-            <TextInput caption={"Name"} {...nameInput} className="name-input"/>
-            <TextInput caption={"Code"} {...codeInput} className="code-input"/>
-            <NumberInput caption={"Running order"} {...runningOrderInput} className="runningOrder-input"/>
-            <Checkbox caption={"Qualified"} {...qualifiedInput} className="qualified-input"/>
-            <TextInput caption={"Artist"} {...artistInput} className="artist-input"/>
-            <TextInput caption={"Song"} {...songInput} className="song-input"/>
-            <ColorInput caption={"Flag Color 1"} {...flagColor1Input} className="flagColor1-input"/>
-            <ColorInput caption={"Flag Color 2"} {...flagColor2Input} className="flagColor2-input"/>
-            <ColorInput caption={"Flag Color 3"} {...flagColor3Input} className="flagColor3-input"/>
-        </div>
+        <GridTemplateContainer className="country-form"
+                               templateRows={"repeat(3, 1fr)"}
+                               templateColumns={"repeat(6, 1fr)"}
+                               templateAreas={[
+                                ["code", "code", "name", "name"  , "runningOrder", "qualified"],
+                                ["fc1" , "fc1" , "fc2" , "fc2"   , "fc3"      , "fc3"],
+                                ["song", "song", "song", "artist", "artist"   , "artist"]
+                                ]}>
+            <TextInput caption={"Name"} {...nameInput} required={true} className="name-input" gridTemplateArea="name"/>
+            <TextInput caption={"Code"} {...codeInput} required={true} className="code-input" gridTemplateArea="code"/>
+            <NumberInput caption={"Running order"} {...runningOrderInput} className="runningOrder-input" gridTemplateArea="qualified"/>
+            <Checkbox caption={"Qualified"} {...qualifiedInput} className="qualified-input" gridTemplateArea="runningOrder"/>
+            <TextInput caption={"Artist"} {...artistInput} className="artist-input" gridTemplateArea="artist"/>
+            <TextInput caption={"Song"} {...songInput} className="song-input" gridTemplateArea="song"/>
+            <ColorInput caption={"Flag Color 1"} {...flagColor1Input} className="flagColor1-input" gridTemplateArea="fc1"/>
+            <ColorInput caption={"Flag Color 2"} {...flagColor2Input} className="flagColor2-input" gridTemplateArea="fc2"/>
+            <ColorInput caption={"Flag Color 3"} {...flagColor3Input} className="flagColor3-input" gridTemplateArea="fc3"/>
+        </GridTemplateContainer>
     )
 }

@@ -44,7 +44,7 @@
 .base-dialog.close-dialog  {
     display: flex;
     animation: dialog-close-animation 0.4s ease-in-out;
-    animation-fill-mode: forwards; 
+    animation-fill-mode: forwards;
 }
 
 /* Confirm / Message dialogs main containers */
@@ -58,6 +58,7 @@
 .base-dialog .top-container .close-btn {
     font-size: 1.5em;
     margin: auto 0em;
+    cursor: pointer;
 }
 
 .base-dialog.success .top-container {
@@ -138,6 +139,7 @@
     font-family: 'Onest', sans-serif;
     font-weight: 800;
     transition: all 0.4s;
+    cursor: pointer;
 }
 
 .base-dialog.success .buttons-area button {

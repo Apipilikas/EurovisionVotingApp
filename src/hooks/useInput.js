@@ -8,7 +8,7 @@ const Checkbox_INPUT = "checkbox";
  * @param {*} defaultValue 
  * @returns 
  */
-export function useInput(defaultValue, onValueChanged = null, observeDefaultValueChanges = false) {
+export function useInput(defaultValue, onValueChanged = null, observeDefaultValueChanges = false, onValueChanging = null) {
 
     const [value, setValue] = useState(defaultValue);
 
@@ -39,6 +39,9 @@ export function useInput(defaultValue, onValueChanged = null, observeDefaultValu
 
     const onChange = (e) => {
         let newValue = resolveInputValue(e);
+
+        if (onValueChanging) onValueChanging(newValue);
+
         setValue(newValue);
     }
 
