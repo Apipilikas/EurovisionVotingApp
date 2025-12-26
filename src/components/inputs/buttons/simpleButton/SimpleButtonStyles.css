@@ -7,12 +7,12 @@
     border: 3px solid var(--forth-color);
     /* border: none; */
     background-color: transparent;
-    position: relative;
+    /* position: relative; */
     font-family: 'Onest', sans-serif;
     /* display: flex; */
 }
 
-.simple-button span {
+/* .simple-button span {
     width: 100%;
     height: 0%;
     position: absolute;
@@ -21,7 +21,7 @@
     background: linear-gradient(90deg, var(--eleventh-color), var(--tenth-color) 100%);
     z-index: -1;
     transition: 0.25s;
-}
+} */
 
 .simple-button:hover span {
     height: 100%;

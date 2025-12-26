@@ -458,65 +458,6 @@ flex-direction: column;
 
 /* #region Linear progress bar */
 
-.linear-progress-bar {
-    width: 80%;
-}
-
-.linear-progress-bar-container {
-    display: flex;
-    justify-content: space-between;
-    height: 20px;
-    background-color: #ededed;
-}
-
-.linear-progress-bar .bar {
-    width: 0%;
-    height: 20px;
-    background-color: var(--info-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.linear-progress-bar.completed .bar {
-    background-color: var(--green-color);
-}
-
-.linear-progress-bar.warning .bar {
-    background-color: var(--warning-color);
-}
-
-.linear-progress-bar.canceled .bar {
-    background-color: var(--error-color);
-}
-
-.linear-progress-bar .bar-details {
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    font-weight: 900;
-}
-
-.linear-progress-bar .bar-details .percentage {
-    display: none;
-}
-
-.linear-progress-bar i {
-    font-size: 1.3em;
-}
-
-.linear-progress-bar.completed i {
-    color: var(--green-color);
-}
-
-.linear-progress-bar.warning i {
-    color: var(--warning-color);
-}
-
-.linear-progress-bar.canceled i {
-    color: var(--error-color);
-}
-
 /* #endregion */
 
 /* TABLET-BASED LAYOUT */

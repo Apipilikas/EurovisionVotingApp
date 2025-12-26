@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import './RegisterPageStyles.css';
 import {TextInput, EmailInput} from '../../components/inputs/textInput/TextInput';
 import { DocumentUtils } from '../../utils/document/documentUtils';
@@ -20,6 +20,8 @@ import { ListSelector } from '../../components/inputs/selectors/listSelector/Lis
 import { TableSelector } from '../../components/inputs/selectors/tableSelector/TableSelector';
 import { useInputValidation } from '../../hooks/useInputValidation';
 import { TabContainer, TabsContainer } from '../../components/containers/tabsContainer/TabsContainer';
+import { useCountries } from '../../hooks/useCountries';
+import { FormContainer } from '../../components/containers/formContainer/FormContainer';
 
 export function RegisterPage() {
 
@@ -34,13 +36,35 @@ function Main() {
 
     const {showDialog} = useDialog();
     const {connect, getURLParam} = useSession();
+    const {countries} = useCountries();
+
     const navigate = useNavigate();
     const judgeCode = getURLParam("judgeCode");
 
     const [selectedJudgeCode, setSelectedJudgeCode] = useState(judgeCode);
+    
+    const isEmpty = (value) => value == null || value == "";
 
-    const nameInput = useInput();
-    const emailInput = useInput();
+    const validateName = (value) => {
+        if (isEmpty(value)) return "Name cannot be empty";
+        return null;
+    }
+
+    const validateEmail = (value) => {
+        if (isEmpty(value)) return "Email cannot be empty";
+        return null;
+    }
+
+    const validateOriginCountry = (value) => {
+        if (isEmpty(value)) return "Origin country cannot be empty";
+        return null;
+    }
+
+    const nameInput = useInputValidation(undefined, undefined, undefined, undefined, validateName, true);
+    const emailInput = useInputValidation(undefined, undefined, undefined, undefined, validateEmail, true);
+    const originCountryInput = useInputValidation(undefined, undefined, undefined, undefined, validateOriginCountry, true);
+
+    const formRef = useRef();
 
     const handleConnectClick = () => {
         navigate(`/voting?judgeCode=${selectedJudgeCode}`);
@@ -51,15 +75,20 @@ function Main() {
         let data = {
             name : nameInput.value,
             email : emailInput.value,
-            originCountry : "GRE"
+            originCountry : originCountryInput.value
         }
-        JudgeRequests.registerJudge(data).then(response => {
-            if (response.success) {
-                const message = `Please visit your email [${data.email}] to activate your account.`;
-                const config = DialogUtils.getInformDialogConfig("Activation email", message);
-                showDialog(config);
-            }
-        })
+
+        if (!formRef.current.validate()) return;
+        
+        alert("Sign in");
+
+        // JudgeRequests.registerJudge(data).then(response => {
+        //     if (response.success) {
+        //         const message = `Please visit your email [${data.email}] to activate your account.`;
+        //         const config = DialogUtils.getInformDialogConfig("Activation email", message);
+        //         showDialog(config);
+        //     }
+        // })
     }
     
     return (
@@ -74,9 +103,11 @@ function Main() {
                     <SimpleTabContainer caption={"Sign up"} tabIndex={1} 
                                         button={<SimpleButton id="sign-up-btn" caption="Sign Up" onButtonClicked={handleSignInClick}/>}
                                         description={'Sign up to be able to connect'}>
-                        <TextInput caption="Name" helperCaption="Insert your name." required={true} {...nameInput}/>
-                        <EmailInput caption="Email" helperCaption="Insert your email." required={true} {...emailInput}/>
-                        <TableSelector caption={"Testing"} data={[{id : "10", code : "test", name : "name"}, {id : "20", code : "test2", name : "name21"}]} valueProperty={"id"} displayProperty={"code"} initialValue={"20"}/>
+                        <FormContainer ref={formRef}>
+                            <TextInput caption="Name" helperCaption="Insert your name." required={true} {...nameInput}/>
+                            <EmailInput caption="Email" helperCaption="Insert your email." required={true} {...emailInput}/>
+                            <TableSelector caption={"Origin country"} required={true} data={countries} valueProperty={"code"} displayProperty={"name"} {...originCountryInput} initialValue={"GRE"} visibleColumns={["code", "name"]}/>
+                        </FormContainer>
                     </SimpleTabContainer>
                 </TabsContainer>
             </div>            

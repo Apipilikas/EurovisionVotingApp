@@ -10,7 +10,7 @@ import { cloneNestedElements } from "../../../../utils/react/elementUtils";
 
 export function BaseSelector({caption, data, initialValue, valueProperty, displayProperty, onValueChanged, children, ...props}) {
 
-    const {value : inputValue, onChange, ...restProps} = props;
+    const {value : inputValue, onChange, required, className, ...restProps} = props;
 
     // Initialization
     const [showDropdown, setShowDropdown] = useState(false);
@@ -71,13 +71,17 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
     const elements = Children.map(children, child => cloneNestedElements(child, modifier));
 
     return (
-        <div {...restProps} className={joinProps("selector-container", restProps.className)}>
+        <div className={joinProps("selector-container", className)}>
             <BaseInput
             caption={caption}
-            onFocus={() => setShowDropdown(true)} 
+            onClick={() => setShowDropdown(value => !value)}
+            // onFocus={() => setShowDropdown(true)} 
             autoComplete={"off"}
             readOnly={true}
+            required={required}
+            error = {props.error}
             {...input}
+            {...restProps}
             />
             <animated.i class="material-icons dropdown-icon" style={dropdownIconStyles}>keyboard_arrow_down</animated.i>
             <animated.i class="material-icons clear-icon" style={clearIconStyles} onClick={handleOnClearClick}>clear_all</animated.i>
