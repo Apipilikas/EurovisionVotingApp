@@ -20,9 +20,9 @@ ReactListUtils.shiftItem = function(list, callbackFn) {
     return removedItem;
 }
 
-ReactListUtils.updateProperties = function(propertyID, updatedItem, setterFn, ...properties) {
+ReactListUtils.updateProperties = function(valueProperty, updatedItem, setterFn, ...properties) {
     setterFn((list) => list.map((item) => {
-        if (item[propertyID] == updatedItem[propertyID]) {
+        if (item[valueProperty] == updatedItem[valueProperty]) {
             properties.forEach(property => item[property] = updatedItem[property]);
         }
 
@@ -30,11 +30,11 @@ ReactListUtils.updateProperties = function(propertyID, updatedItem, setterFn, ..
     }))
 }
 
-ReactListUtils.updateChangedProperties = function(propertyID, updatedItem, setterFn) {
+ReactListUtils.updateChangedProperties = function(valueProperty, originalItem, updatedItem, setterFn) {
     setterFn((list) => list?.map((item) => {
         const properties = Object.keys(item);
 
-        if (item[propertyID] == updatedItem[propertyID]) {
+        if (item[valueProperty] == originalItem[valueProperty]) {
             properties.forEach(property => {
                 if (item[property] != updatedItem[property]) {
                     item[property] = updatedItem[property];

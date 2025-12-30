@@ -1,6 +1,5 @@
 import { BaseInput } from "../baseInput/BaseInput";
 import './ColorInputStyles.css';
-import { InputHelpContainer } from "../containers/inputHelpContainer/InputHelpContainer";
 import { joinProps } from "../../../utils/react/propsUtils";
 import { useInputValidation } from "../../../hooks/useInputValidation";
 import { useFallbackHookProps } from "../../../hooks/useFallbackHookProps";
@@ -25,9 +24,8 @@ export function ColorInput({caption, value, onChange, error, ...props}) {
     
     return (
         <div {...props} className={joinProps("color-input-container", props?.className)}>
-            <BaseInput caption={caption} value={input.value} onChange={input.onChange} error={input.error}/>
+            <BaseInput caption={caption} {...input}/>
             <input type="color" value={input.value} onChange={input.onChange}/>
-            <InputHelpContainer/>
         </div>
     )
 }

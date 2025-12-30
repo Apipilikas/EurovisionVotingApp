@@ -11,8 +11,8 @@ export function ListContainer({data, initialValue, valueProperty, DisplayContain
 
     // Effects
     useEffect(() => {
-        if (binder.selectedData && onSelectedItemChanged) onSelectedItemChanged(binder.selectedData);
-    }, [binder.selectedData])
+        if (binder.selectedItem && onSelectedItemChanged) onSelectedItemChanged(binder.selectedItem);
+    }, [binder.selectedItem])
 
     // Functions
     const getItemValue = (item) => {
@@ -22,7 +22,7 @@ export function ListContainer({data, initialValue, valueProperty, DisplayContain
 
     // Events
     const handleOnChange = (data) => {
-        binder.setSelectedData(data);
+        binder.setSelectedItem(data);
     }
 
     return (

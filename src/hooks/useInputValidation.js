@@ -18,13 +18,10 @@ export function useInputValidation(defaultValue,
             isFirstRender.current = false;
             return;
         }
+        
+        setError(null);
 
-        if (suppressValidationOnValueChange) {
-            setError(null);
-            return;
-        }
-
-        validateValue();
+        if (!suppressValidationOnValueChange) validateValue();
     }, [input.value])
 
     const validateValue = () => {
@@ -41,6 +38,7 @@ export function useInputValidation(defaultValue,
         ...input,
         error,
         hasError : error != null,
-        validateValue
+        validateValue,
+        setError
     };
 }

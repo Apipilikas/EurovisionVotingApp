@@ -42,27 +42,10 @@ function Main() {
     const judgeCode = getURLParam("judgeCode");
 
     const [selectedJudgeCode, setSelectedJudgeCode] = useState(judgeCode);
-    
-    const isEmpty = (value) => value == null || value == "";
 
-    const validateName = (value) => {
-        if (isEmpty(value)) return "Name cannot be empty";
-        return null;
-    }
-
-    const validateEmail = (value) => {
-        if (isEmpty(value)) return "Email cannot be empty";
-        return null;
-    }
-
-    const validateOriginCountry = (value) => {
-        if (isEmpty(value)) return "Origin country cannot be empty";
-        return null;
-    }
-
-    const nameInput = useInputValidation(undefined, undefined, undefined, undefined, validateName, true);
-    const emailInput = useInputValidation(undefined, undefined, undefined, undefined, validateEmail, true);
-    const originCountryInput = useInputValidation(undefined, undefined, undefined, undefined, validateOriginCountry, true);
+    const nameInput = useInputValidation();
+    const emailInput = useInputValidation();
+    const originCountryInput = useInputValidation();
 
     const formRef = useRef();
 
@@ -104,9 +87,9 @@ function Main() {
                                         button={<SimpleButton id="sign-up-btn" caption="Sign Up" onButtonClicked={handleSignInClick}/>}
                                         description={'Sign up to be able to connect'}>
                         <FormContainer ref={formRef}>
-                            <TextInput caption="Name" helperCaption="Insert your name." required={true} {...nameInput}/>
-                            <EmailInput caption="Email" helperCaption="Insert your email." required={true} {...emailInput}/>
-                            <TableSelector caption={"Origin country"} required={true} data={countries} valueProperty={"code"} displayProperty={"name"} {...originCountryInput} initialValue={"GRE"} visibleColumns={["code", "name"]}/>
+                            <TextInput caption="Name" helpCaption="Insert your name." required={true} {...nameInput}/>
+                            <EmailInput caption="Email" helpCaption="Insert your email." required={true} {...emailInput}/>
+                            <TableSelector caption="Origin country" required={true} data={countries} valueProperty={"code"} displayProperty={"name"} {...originCountryInput} initialValue={"GRE"} visibleColumns={["code", "name"]}/>
                         </FormContainer>
                     </SimpleTabContainer>
                 </TabsContainer>

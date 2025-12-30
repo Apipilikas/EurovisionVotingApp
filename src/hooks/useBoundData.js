@@ -8,6 +8,12 @@ const BoundDataType = {
     ARRAY : "Array"
 }
 
+export const BoundItemState = {
+    UNMODIFIED : "Unmodified",
+    MODIFIED : "Modified",
+    NEW : "New"
+}
+
 /**
  * Provides a way to bound data.
  * @param {*} data 
@@ -20,7 +26,7 @@ const BoundDataType = {
 export function useBoundData(data, valueProperty, displayProperty, initialValue, onChange) {
 
     const [boundData, setBoundData] = useState(null);
-    const [selectedData, setSelectedData] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
     const [value, setValue] = useState(null);
     const [displayValue, setDisplayValue] = useState(null);
     const {isInitialized} = useIsInitialized(data);
@@ -37,26 +43,26 @@ export function useBoundData(data, valueProperty, displayProperty, initialValue,
     }, [isInitialized]);
 
     useEffect(() => {
-        setSelectedData(resolveSelectedDataByInitialValue(initialValue));
+        setSelectedItem(resolveSelectedDataByInitialValue(initialValue));
     }, [initialValue, isInitialized]);
 
     useEffect(() => {
-        if (selectedData) {
+        if (selectedItem) {
             if (!valueProperty)
-                setValue(selectedData);
+                setValue(selectedItem);
             else
-                setValue(selectedData[valueProperty]);
+                setValue(selectedItem[valueProperty]);
 
             if (!displayProperty)
-                setDisplayValue(selectedData);
+                setDisplayValue(selectedItem);
             else
-                setDisplayValue(selectedData[displayProperty]);
+                setDisplayValue(selectedItem[displayProperty]);
         }
         else {
             setValue(null);
             setDisplayValue(null);
         }
-    }, [selectedData]);
+    }, [selectedItem]);
 
     // Functions
     const resolveSelectedDataByInitialValue = () => {
@@ -74,35 +80,42 @@ export function useBoundData(data, valueProperty, displayProperty, initialValue,
             type = BoundDataType.OBJECT;
     }
 
-    const addData = (data) => {
-        ReactListUtils.pushItem(data, setBoundData);
-        // switch (type) {
-        //     case BoundDataType.ARRAY:
-        //         break;
-        // }
+    const resolveItemState = (item) => {
+        const existsInDatabase = data.some(
+            original => original[valueProperty] == item[valueProperty]
+        );
+
+        return existsInDatabase ? BoundItemState.MODIFIED : BoundItemState.NEW;
+    };
+
+    const addItem = (item) => {
+        ReactListUtils.pushItem(item, setBoundData);
+        return item;
     }
 
-    const updateData = (data) => {
-        ReactListUtils.updateChangedProperties(valueProperty, data, setBoundData);
+    const updateItem = (originalItem, updatedItem) => {
+        if (!originalItem) return;
+
+        updatedItem.__State__ = resolveItemState(updatedItem);
+        ReactListUtils.updateChangedProperties(valueProperty, originalItem, updatedItem, setBoundData);
     }
 
-    const removeData = (data) => {
-        ReactListUtils.removeSpecificItem(data, setBoundData);
-        setSelectedData(null);
-        // switch (type) {
-        //     case BoundDataType.ARRAY:
-        //         break;
-        // }
+    const removeItem = (item) => {
+        ReactListUtils.removeSpecificItem(item, setBoundData);
     }
     
     const isDataArrayOfObjects = () => Array.isArray(data) && data.every(item => typeof item === 'object' && item !== null);
 
+    const prepareBoundData = (data) => {
+        return data.map((item, index) => ({...item, __State__ : BoundItemState.UNMODIFIED}));
+    }
+
     const handleBoundData = () => {
         if (valueProperty) {
-            setBoundData(data);
+            setBoundData(prepareBoundData(data));
         }
         else {
-            setBoundData(data.map((item, index) => ({...item, _id_ : index})));
+            setBoundData(data.map((item, index) => ({...item, __id__ : index})));
             useId = true;
         }
     }
@@ -112,10 +125,10 @@ export function useBoundData(data, valueProperty, displayProperty, initialValue,
         value,
         displayValue,
         initialized : isInitialized,
-        selectedData,
-        setSelectedData,
-        addData,
-        updateData,
-        removeData
+        selectedItem,
+        setSelectedItem,
+        addItem,
+        updateItem,
+        removeItem
     }
 }

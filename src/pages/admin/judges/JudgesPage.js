@@ -10,11 +10,14 @@ import { CountryRequests, JudgeRequests } from "../../../utils/requestUtils";
 import { useSession } from "../../../components/common/session/SessionProvider";
 import { useJudges } from "../../../hooks/useJudges";
 import { useCountries } from "../../../hooks/useCountries";
-import { ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
+import { ButtonIDs, ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
 import { useDialog, DialogType } from "../../../components/dialogs/DialogProvider";
 import { getValueOrNull } from "../../../utils/react/propsUtils";
 import { TableSelector } from "../../../components/inputs/selectors/tableSelector/TableSelector";
+import { BoundItemState } from "../../../hooks/useBoundData";
+import { GridTemplateContainer } from "../../../components/containers/gridContainer/GridContainer";
+import { FormContainer } from "../../../components/containers/formContainer/FormContainer";
 
 export function JudgesPage() {
 
@@ -23,6 +26,8 @@ export function JudgesPage() {
     const {showDialog} = useDialog();
 
     const [judgeCode, setJudgeCode] = useState("");
+
+    const formRef = useRef();
 
     useEffect(() => {
         if (judge != null) {
@@ -38,15 +43,12 @@ export function JudgesPage() {
         )
     }
 
-    const handleOnToolbarButtonClicked = (buttonID, item) => {
+    const handleOnToolbarButtonClicked = async (buttonID, item) => {
         let promise = null;
 
         switch(buttonID) {
-            case "save":
-                const isNew = item.isNew;
-                delete item.isNew;
-
-                if (isNew) {
+            case ButtonIDs.SAVE:
+                if (item.__State__ == BoundItemState.NEW) {
                     promise = JudgeRequests.createJudge(judgeCode, item);
                 }
                 else {
@@ -55,7 +57,7 @@ export function JudgesPage() {
 
                 break;
 
-            case "delete":
+            case ButtonIDs.DELETE:
                 promise = JudgeRequests.deleteJudge(judgeCode, item.code);
                 break;
         }
@@ -77,6 +79,7 @@ export function JudgesPage() {
                            DisplayContainer={Item} 
                            valueProperty={"code"}
                            MainContainer={JudgeForm}
+                           mainContainerProps={{formRef}}
                            onToolbarButtonClicked={handleOnToolbarButtonClicked}/>
     </BasePage>
 );
@@ -84,7 +87,7 @@ export function JudgesPage() {
 
 
 
-function JudgeForm({data = null, onChange}) {
+function JudgeForm({data = null, onChange, formRef}) {
 
     const {countries} = useCountries();
 
@@ -107,7 +110,7 @@ function JudgeForm({data = null, onChange}) {
     }
 
     useEffect(() => {
-        if (onChange) onChange(getData());
+        if (onChange) onChange(data, getData());
     }, [
         nameInput.value,
         codeInput.value,
@@ -118,13 +121,24 @@ function JudgeForm({data = null, onChange}) {
     ])
 
     return (
-        <div className="judge-form">
-            <TextInput caption={"Name"} {...nameInput} className="name-input"/>
-            <TextInput caption={"Code"} {...codeInput} className="code-input"/>
-            <TableSelector caption={"Origin country"} data={countries} valueProperty={"code"} displayProperty={"name"} visibleColumns={["code", "name"]} {...originCountryInput} className="originCountry-input"/>
-            <Checkbox caption={"Admin"} {...adminInput} className="admin-input"/>
-            <Checkbox caption={"Active"} {...activeInput} className="active-input"/>
-            <TextInput caption={"Policy"} {...policyCodeInput} className="policyCode-input"/>
-        </div>
+        <FormContainer style={{display:"flex"}} ref={formRef}>
+        <GridTemplateContainer className="judge-form"
+                            templateRows={"repeat(3, 1fr)"}
+                            templateColumns={"repeat(4, 1fr)"}
+                            templateAreas={[
+                                ["code" , "code", "name"    , "name"],
+                                ["oc"   , "oc"  , "admin"   , "active"],
+                                ["pc"   , "pc"  , "pc"      , "pc"]
+                            ]}>
+            <TextInput caption={"Code"} {...codeInput} required={true} gridTemplateArea="code"/>
+            <TextInput caption={"Name"} {...nameInput} required={true} gridTemplateArea="name"/>
+            <TableSelector caption={"Origin country"} data={countries} 
+                        valueProperty={"code"} displayProperty={"name"} 
+                        visibleColumns={["code", "name"]} {...originCountryInput} gridTemplateArea="oc"/>
+            <Checkbox caption={"Admin"} {...adminInput} gridTemplateArea="admin"/>
+            <Checkbox caption={"Active"} {...activeInput} gridTemplateArea="active"/>
+            <TextInput caption={"Policy"} {...policyCodeInput} gridTemplateArea="pc"/>
+        </GridTemplateContainer>
+        </FormContainer>
     )
 }

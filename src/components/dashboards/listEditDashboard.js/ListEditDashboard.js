@@ -1,21 +1,26 @@
-import { useEffect, useRef, useState } from "react";
 import { ListContainer } from "../../containers/listContainer/ListContainer";
 import { ToolbarConfig } from "../../containers/toolbarContainer/toolbarConfig";
 import { ToolbarContainer } from "../../containers/toolbarContainer/ToolbarContainer";
 import "./ListEditDashboardStyles.css"
-import { ReactListUtils } from "../../../utils/react/listUtils";
-import { clearObjectProps, cloneObjectProps } from "../../../utils/react/propsUtils";
+import { cloneObjectProps } from "../../../utils/react/propsUtils";
 import { useBoundData } from "../../../hooks/useBoundData";
 
-const ButtonIDs = {
+export const ButtonIDs = {
     NEW : "new",
     SAVE : "save",
     DELETE : "delete"
 }
 
-export function ListEditDashboard({data, valueProperty, DisplayContainer, MainContainer, onDataChanged, onToolbarButtonClicked}) {
+export function ListEditDashboard({data, 
+                                valueProperty,
+                                initialValue,
+                                DisplayContainer, 
+                                MainContainer, 
+                                mainContainerProps, 
+                                onDataChanged, 
+                                onToolbarButtonClicked}) {
 
-    const binder = useBoundData(data, valueProperty, undefined, "agg", undefined);
+    const binder = useBoundData(data, valueProperty, undefined, initialValue, undefined);
 
     const config = new ToolbarConfig();
     config.addToolbarItem(ButtonIDs.NEW, "New", "add");
@@ -28,45 +33,44 @@ export function ListEditDashboard({data, valueProperty, DisplayContainer, MainCo
         let item = binder.boundData[binder.boundData.length - 1];
         item = cloneObjectProps(item);
 
-        // Unique ID
-        // item._id_ = binder.boundData.length;
-        item[valueProperty] = "new_item" + binder.boundData.length;
-        binder.addData(item);
+        item[valueProperty] = "new_item_" + binder.boundData.length;
+        binder.addItem(item);
     }
 
     const removeSelectedItem = () => {
-        binder.removeData(binder.selectedData);
+        binder.removeItem(binder.selectedItem);
+        binder.setSelectedItem(null);
     }
 
     // Events
     const handleOnSelectedItemChanged = (selectedItem) => {
-        binder.setSelectedData(selectedItem);
+        binder.setSelectedItem(selectedItem);
     }
 
-    const handleOnDataChanged = (item) => {
+    const handleOnDataChanged = (originalItem, updatedItem) => {
         if (!binder.initialized) return;
-        binder.updateData(item);
+        binder.updateItem(originalItem, updatedItem);
     }
 
-    const handeOnToolbarButtonClicked = (buttonID) => {
-        // let item = selectedItem;
+    const handeOnToolbarButtonClicked = async (buttonID) => {
+        let handled = true;
+
+        if (onToolbarButtonClicked) handled = await onToolbarButtonClicked(buttonID, binder.selectedItem);
         
+        if (!handled) return;
+
         switch(buttonID) {
             case ButtonIDs.NEW:
                 createNewItem();
                 break;
 
             case ButtonIDs.SAVE:
-                // const isNew = data.find(item => item[valueProperty] == selectedItem[valueProperty]) == null;
-                // item.isNew = isNew;
                 break;
             
-                case ButtonIDs.DELETE:
+            case ButtonIDs.DELETE:
                 removeSelectedItem();
                 break;
         }
-
-        // if (onToolbarButtonClicked) onToolbarButtonClicked(buttonID, item)
     }
 
     return (
@@ -78,7 +82,7 @@ export function ListEditDashboard({data, valueProperty, DisplayContainer, MainCo
             onSelectedItemChanged={handleOnSelectedItemChanged}
             />
             <div className="list-edit-dashboard-content">
-                <MainContainer data={binder.selectedData} onChange={handleOnDataChanged}/>
+                <MainContainer data={binder.selectedItem} onChange={handleOnDataChanged} {...mainContainerProps}/>
                 <ToolbarContainer config={config} onButtonClicked={handeOnToolbarButtonClicked}/>
             </div>
         </div>

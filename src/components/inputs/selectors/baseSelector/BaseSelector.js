@@ -15,7 +15,7 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
     // Initialization
     const [showDropdown, setShowDropdown] = useState(false);
     const [showClearIcon, setShowClearIcon] = useState(false);
-    const {value, displayValue, setSelectedData} = useBoundData(data, valueProperty, displayProperty, initialValue ?? inputValue, onChange);
+    const {value, displayValue, setSelectedItem} = useBoundData(data, valueProperty, displayProperty, initialValue ?? inputValue, onChange);
     const input = useInput(displayValue, onValueChanged, true);
     const ref = useRef(null);
 
@@ -52,11 +52,11 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
 
     // Listeners
     const handleOnClick = (data) => {
-        setSelectedData(data);
+        setSelectedItem(data);
     }
 
     const handleOnClearClick = () => {
-        setSelectedData(null);
+        setSelectedItem(null);
     };
 
     // Rendering
@@ -71,7 +71,7 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
     const elements = Children.map(children, child => cloneNestedElements(child, modifier));
 
     return (
-        <div className={joinProps("selector-container", className)}>
+        <div className={joinProps("selector-container", className)} {...restProps}>
             <BaseInput
             caption={caption}
             onClick={() => setShowDropdown(value => !value)}
@@ -81,7 +81,6 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
             required={required}
             error = {props.error}
             {...input}
-            {...restProps}
             />
             <animated.i class="material-icons dropdown-icon" style={dropdownIconStyles}>keyboard_arrow_down</animated.i>
             <animated.i class="material-icons clear-icon" style={clearIconStyles} onClick={handleOnClearClick}>clear_all</animated.i>

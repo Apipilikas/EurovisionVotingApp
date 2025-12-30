@@ -13,6 +13,8 @@ export const FormContainer = forwardRef(({children, onSubmit, ...props}, ref) =>
     }; 
 
     // Functions
+    const isEmpty = (value) => value == null || value == "";
+
     const registerInput = (input) => {
         inputs.current.push(input);
         return () => inputs.current = inputs.current.filter(i => i !== input);
@@ -21,6 +23,10 @@ export const FormContainer = forwardRef(({children, onSubmit, ...props}, ref) =>
     const validate = () => {
         for (let input of inputs.current) {
             if (!input.validateValue()) return false;
+            if (input.required && isEmpty(input.value)) {
+                input.setError("This field is mandatory!");
+                return false;
+            }
         }
 
         return true;
