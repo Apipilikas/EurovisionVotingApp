@@ -64,16 +64,17 @@ function Main() {
         if (!formRef.current.validate()) return;
         
         JudgeRequests.registerJudge(data).then(response => {
-            if (response.success) {
-                const message = `Please visit your email [${data.email}] to activate your account.`;
-                const config = DialogUtils.getInformDialogConfig("Activation email", message);
-                showDialog(config);
-            }
-            else {
-                const error = response.jsonData.error;
-                const config = new ErrorBoxConfig(error.description, "Contact Aggelos for further clarifications.", JSON.stringify(error.details), "ACTIVATION_ERROR");
-                showDialog(config);
-            }
+            const config = DialogUtils.getInformDialogConfig("Activation email", JSON.stringify(response));
+            showDialog(config);
+            // if (response.success) {
+            //     const message = `Please visit your email [${data.email}] to activate your account.`;
+                
+            // }
+            // else {
+            //     const error = response.jsonData.error;
+            //     const config = new ErrorBoxConfig(error.description, "Contact Aggelos for further clarifications.", JSON.stringify(error.details), "ACTIVATION_ERROR");
+            //     showDialog(config);
+            // }
         })
     }
     
