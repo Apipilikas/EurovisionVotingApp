@@ -14,13 +14,13 @@
 .list-container-item > label {
     width: 100%;
     transition-duration: 0.5s;
-    border: 2px solid transparent;
+    border-left: 2px solid transparent;
 }
 
 .list-container-item > input[type="radio"] + label:hover {
-    border: 2px solid var(--forth-color);
+    border-left: 2px solid var(--forth-color);
 }
 
 .list-container-item > input[type="radio"]:checked + label {
-    border: 2px solid black;
+    border-left: 2px solid black;
 }

@@ -1,5 +1,5 @@
 import { DialogResult, DialogType } from "./DialogProvider";
-import { DialogConfig } from "./dialogConfig";
+import { BaseDialogConfig } from "./baseDialog/baseDialogConfig";
 
 var DialogUtils = {}
 
@@ -24,8 +24,8 @@ DialogUtils.getDialogClassName = function(type) {
 }
 
 DialogUtils.getConfirmDialogConfig = function(message, okTitle = "OK", cancelTitle = "Cancel") {
-    const config = new DialogConfig("Confirm message", DialogType.INFO);
-    config.content = <p>{message}</p>;
+    const config = new BaseDialogConfig("Confirm message", DialogType.INFO);
+    config.innerContent = <p>{message}</p>;
     config.addButton(okTitle, DialogResult.OK, true);
     config.addButton(cancelTitle, DialogResult.CANCEL, false);
 
@@ -33,24 +33,24 @@ DialogUtils.getConfirmDialogConfig = function(message, okTitle = "OK", cancelTit
 }
 
 DialogUtils.getInformDialogConfig = function(title, message) {
-    const config = new DialogConfig(title, DialogType.INFO);
-    config.content = <p>{message}</p>
+    const config = new BaseDialogConfig(title, DialogType.INFO);
+    config.innerContent = <p>{message}</p>
     config.addButton("OK", DialogResult.OK, true);
 
     return config;
 }
 
 DialogUtils.getWarningDialogConfig = function(message) {
-    const config = new DialogConfig("Warning message", DialogType.WARNING);
-    config.content = <p>{message}</p>;
+    const config = new BaseDialogConfig("Warning message", DialogType.WARNING);
+    config.innerContent = <p>{message}</p>;
     config.addButton("OK", DialogResult.OK, true);
 
     return config;
 }
 
 DialogUtils.getErrorDialogConfig = function(message) {
-    const config = new DialogConfig("Error message", DialogType.ERROR);
-    config.content = <p>{message}</p>;
+    const config = new BaseDialogConfig("Error message", DialogType.ERROR);
+    config.innerContent = <p>{message}</p>;
     config.addButton("Close", DialogResult.CLOSE, true);
 
     return config;

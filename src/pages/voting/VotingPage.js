@@ -570,8 +570,7 @@ function DisplayContainer({country, ...props }) {
         {text}
       </FadeOutSpan>
       <style>{backgroundStyle}</style>
-      <span className="country-name" 
-            >{country.name}</span>
+      <span className="country-name">{country.name}</span>
       <div className="details-container">
         <FadeOutSpan className="artist-text" show={showSinger}>{country.artist}</FadeOutSpan>
         <FadeOutSpan className="song-text" show={showSong}>{country.song}</FadeOutSpan>
@@ -591,7 +590,7 @@ function FadeOutSpan({ children, show, ...props }) {
     to: {
       opacity: show ? 1 : 0,
     },
-    config: { tension: 300, friction: 24 },
+    config: { tension: 700, friction: 50 },
   });
 
   return (

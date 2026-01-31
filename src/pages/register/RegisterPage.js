@@ -63,15 +63,13 @@ function Main() {
 
         if (!formRef.current.validate()) return;
         
-        alert("Sign in");
-
-        // JudgeRequests.registerJudge(data).then(response => {
-        //     if (response.success) {
-        //         const message = `Please visit your email [${data.email}] to activate your account.`;
-        //         const config = DialogUtils.getInformDialogConfig("Activation email", message);
-        //         showDialog(config);
-        //     }
-        // })
+        JudgeRequests.registerJudge(data).then(response => {
+            if (response.success) {
+                const message = `Please visit your email [${data.email}] to activate your account.`;
+                const config = DialogUtils.getInformDialogConfig("Activation email", message);
+                showDialog(config);
+            }
+        })
     }
     
     return (

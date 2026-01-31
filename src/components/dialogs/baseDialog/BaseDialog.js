@@ -75,7 +75,7 @@ export function BaseDialog() {
                 {innerContent}
             </div>
             <div className="buttons-area">
-                {buttons.map(btn => {
+                {buttons?.map(btn => {
                     const title = btn.title;
                     const result = btn.result;
                     const selected = btn.selected;

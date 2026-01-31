@@ -7,10 +7,15 @@ import { useInputValidation } from '../../../hooks/useInputValidation';
 import { useFormRegistration } from '../../../hooks/useFormRegistration';
 import { InputHelpContainer } from '../containers/inputHelpContainer/InputHelpContainer';
 
-export function BaseInput({caption, inputType = "text", helpCaption = null, required = false, className, ...inputProps}) {
+export function BaseInput({caption, 
+                        inputType = "text", 
+                        helpCaption = null, 
+                        required = false, 
+                        className, 
+                        ...props}) {
     
     const id = `bi-${useId()}`;
-    const hookProps = useFallbackHookProps(useInputValidation, [inputProps.value, undefined, true], {required : required, ...inputProps});
+    const hookProps = useFallbackHookProps(useInputValidation, [props.value, undefined, true], {required, ...props});
 
     useFormRegistration(hookProps);
 

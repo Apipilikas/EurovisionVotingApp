@@ -8,9 +8,20 @@ import { joinProps } from "../../../../utils/react/propsUtils";
 import { useBoundData } from "../../../../hooks/useBoundData";
 import { cloneNestedElements } from "../../../../utils/react/elementUtils";
 
-export function BaseSelector({caption, data, initialValue, valueProperty, displayProperty, onValueChanged, children, ...props}) {
+export function BaseSelector({caption, 
+                        data, 
+                        initialValue, 
+                        valueProperty, 
+                        displayProperty, 
+                        onValueChanged, 
+                        children, 
+                        value : inputValue, 
+                        onChange, 
+                        required, 
+                        className,
+                        style,
+                        ...props}) {
 
-    const {value : inputValue, onChange, required, className, ...restProps} = props;
 
     // Initialization
     const [showDropdown, setShowDropdown] = useState(false);
@@ -71,7 +82,7 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
     const elements = Children.map(children, child => cloneNestedElements(child, modifier));
 
     return (
-        <div className={joinProps("selector-container", className)} {...restProps}>
+        <div className={joinProps("selector-container", className)} style={style}>
             <BaseInput
             caption={caption}
             onClick={() => setShowDropdown(value => !value)}
@@ -79,9 +90,8 @@ export function BaseSelector({caption, data, initialValue, valueProperty, displa
             autoComplete={"off"}
             readOnly={true}
             required={required}
-            error = {props.error}
             {...input}
-            />
+            {...props}/>
             <animated.i class="material-icons dropdown-icon" style={dropdownIconStyles}>keyboard_arrow_down</animated.i>
             <animated.i class="material-icons clear-icon" style={clearIconStyles} onClick={handleOnClearClick}>clear_all</animated.i>
             <animated.div className="selector-options" style={dropdownStyles} ref={ref}>

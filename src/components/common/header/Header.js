@@ -18,7 +18,7 @@ export default function Header({hideNavigation}) {
                 <div id="main-logo-container">
                     <div id="logo-container">
                         <img src={"/images/eurovision-logo-white-cropped.svg"}/>
-                        <p>2025</p>
+                        <p>2026</p>
                     </div>
                 </div>
                 <Menu isOpen={isMenuOpen}

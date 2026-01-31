@@ -46,7 +46,10 @@ export function JudgesPage() {
     const handleOnToolbarButtonClicked = async (buttonID, item) => {
         let promise = null;
 
+        if (!formRef.current.validate()) return false;
+
         switch(buttonID) {
+            case ButtonIDs.NEW: return true;
             case ButtonIDs.SAVE:
                 if (item.__State__ == BoundItemState.NEW) {
                     promise = JudgeRequests.createJudge(judgeCode, item);
@@ -63,14 +66,19 @@ export function JudgesPage() {
         }
 
         if (promise != null) {
-            promise.then(response => {
-                let message = response.success ? "Success!" : "Something went wrong...";
-                let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
-                let description = response.success ? "Operation completed successfully." : response.jsonData.error.description;
-                const config = new NotificationBoxConfig(message, type, description);
-                showDialog(config);
-            })
+            const response = await promise;
+            showDialog(createConfig(response));
+            return response.success;
         }
+
+        return true;
+    }
+
+    const createConfig = (response) => {
+        let message = response.success ? "Success!" : "Something went wrong...";
+        let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
+        let description = response.success ? "Operation completed successfully." : response.jsonData.error.description;
+        return new NotificationBoxConfig(message, type, description);
     }
 
     return (
@@ -134,7 +142,7 @@ function JudgeForm({data = null, onChange, formRef}) {
             <TextInput caption={"Name"} {...nameInput} required={true} gridTemplateArea="name"/>
             <TableSelector caption={"Origin country"} data={countries} 
                         valueProperty={"code"} displayProperty={"name"} 
-                        visibleColumns={["code", "name"]} {...originCountryInput} gridTemplateArea="oc"/>
+                        visibleColumns={["code", "name"]} {...originCountryInput} required={true} gridTemplateArea="oc"/>
             <Checkbox caption={"Admin"} {...adminInput} gridTemplateArea="admin"/>
             <Checkbox caption={"Active"} {...activeInput} gridTemplateArea="active"/>
             <TextInput caption={"Policy"} {...policyCodeInput} gridTemplateArea="pc"/>

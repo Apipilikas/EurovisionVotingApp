@@ -34,8 +34,9 @@ export function CountriesPage() {
 
     function Item({item}) {
     return (
-        <div>
-            <h2>{item.code} - {item.name}</h2>
+        <div className="country-item-container">
+            <h2>{item.runningOrder}</h2>
+            <h3>{item.name}</h3>
         </div>
         )
     }

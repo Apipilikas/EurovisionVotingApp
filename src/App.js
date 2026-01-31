@@ -64,8 +64,8 @@ function App() {
   }
 
   const getActivateJudgeDialogConfig = () => {
-    const config = new DialogConfig("Activation success!", DialogType.SUCCESS);
-    config.content = <p>Account activated successfully!</p>
+    const config = new BaseDialogConfig("Activation success!", DialogType.SUCCESS);
+    config.innerContent = <p>Account activated successfully!</p>
     
     config.addButton("OK", DialogResult.OK, true);
 
