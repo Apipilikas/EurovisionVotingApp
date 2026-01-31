@@ -15,7 +15,6 @@ import { VotingPage as AdminVotingPage } from './pages/admin/voting/VotingPage';
 import NotificationCollectionProvider from './components/common/notificationBanner/NotificationProvider';
 import { useSession } from './components/common/session/SessionProvider';
 import { LeaderboardPage } from './pages/leaderboard/LeaderboardPage';
-import { DialogConfig } from './components/dialogs/dialogConfig';
 import { JudgeRequests } from './utils/requestUtils';
 import { DialogUtils } from './components/dialogs/dialogUtils';
 import { DocumentUtils } from './utils/document/documentUtils';

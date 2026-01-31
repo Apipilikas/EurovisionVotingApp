@@ -69,6 +69,11 @@ function Main() {
                 const config = DialogUtils.getInformDialogConfig("Activation email", message);
                 showDialog(config);
             }
+            else {
+                const error = response.jsonData.error;
+                const config = new ErrorBoxConfig(error.description, "Contact Aggelos for further clarifications.", JSON.stringify(error.details), "ACTIVATION_ERROR");
+                showDialog(config);
+            }
         })
     }
     
