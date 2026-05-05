@@ -7,6 +7,7 @@ import { DialogConfig } from "../../dialogs/dialogConfig";
 import { useDialog } from "../../dialogs/DialogProvider";
 import { ErrorBoxConfig } from "../../boxes/errorBox/errorBoxConfig";
 import { DocumentUtils } from "../../../utils/document/documentUtils";
+import { BaseDialogConfig } from "../../dialogs/baseDialog/baseDialogConfig";
 
 const SessionContext = createContext();
 
@@ -131,7 +132,7 @@ export default function SessionProvider({children}) {
             }
 
             let content = <p>{message}</p>;
-            let config = new DialogConfig("Inform", type, content, closeAfterMs);
+            let config = new BaseDialogConfig("Inform", type, content, closeAfterMs);
             config.addButton("Close", DialogResult.CLOSE, true);
             showDialog(config).then(result => {
                 DocumentUtils.reloadPage();

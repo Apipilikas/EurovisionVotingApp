@@ -79,11 +79,11 @@ async function sendRequest(method, urlEnding, data = null, token = null) {
 // #region Judge requests
 
 JudgeRequests.getAllJudges = async function() {
-    return sendRequest(Method.GET, "judges/all");
+    return sendRequest(Method.GET, "judges");
 }
 
 JudgeRequests.getSpecificJudge = async function(code) {
-    return sendRequest(Method.GET, "judges/specific/" + code);
+    return sendRequest(Method.GET, "judges/" + code);
 }
 
 JudgeRequests.createJudge = async function(adminCode, data) {

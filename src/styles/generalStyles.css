@@ -468,7 +468,7 @@ flex-direction: column;
         background-repeat: no-repeat;
         background-attachment: fixed;
         /* background-size: cover;  */
-        background-size: 200% 200%;
+        /* background-size: 50% 50%; */
     }
 
     /* menu button */

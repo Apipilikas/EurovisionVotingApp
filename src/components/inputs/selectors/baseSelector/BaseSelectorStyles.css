@@ -14,4 +14,7 @@
     flex-direction: column;
     max-height: 200px;
     overflow-x: auto;
+    position:relative; 
+    z-index: 3;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
 }

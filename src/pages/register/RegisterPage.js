@@ -131,7 +131,7 @@ function JudgeList({selectedJudgeCode, onSelectedJudgeChanged}) {
 
     return (
         <div id="judges-list-container" tabIndex="0">
-            {judges.map(judge => {
+            {judges?.map(judge => {
                 const judgeID = `judge-name-${judge.code}`;
                 const onlineClassName = judge.online ? "online" : "offline";
                 

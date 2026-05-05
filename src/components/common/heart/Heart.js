@@ -2,7 +2,7 @@ import React from 'react';
 import './HeartStyles.css';
 
 export default function Heart({color1 = "var(--tenth-color)", 
-                               color2 = "var(--secondary-color)", 
+                               color2 = "var(--third-color)", 
                                color3 = "var(--forth-color)", 
                                color4 = "var(--seventh-color)"}) {
     return (
