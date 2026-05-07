@@ -135,7 +135,7 @@ export default function SessionProvider({children}) {
             let config = new BaseDialogConfig("Inform", type, content, closeAfterMs);
             config.addButton("Close", DialogResult.CLOSE, true);
             showDialog(config).then(result => {
-                DocumentUtils.reloadPage();
+                if (closeAfterMs > 0) DocumentUtils.reloadPage();
             })
         });
     }

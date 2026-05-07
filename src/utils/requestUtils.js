@@ -197,6 +197,10 @@ AdminRequests.clearWinnerCountry = async function(adminCode) {
     return sendRequest(Method.POST, "admin/winnerCountry/clear", null, adminCode);
 }
 
+AdminRequests.getEurovisionEventData = async function(adminCode, eventName) {
+    return sendRequest(Method.GET, "admin/eurovision/" + eventName, null, adminCode);
+}
+
 //#endregion
 
 export {

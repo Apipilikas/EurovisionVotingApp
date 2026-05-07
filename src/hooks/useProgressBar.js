@@ -60,7 +60,10 @@ export function useProgressBar(steps, initialStep) {
                 if (previousValue === nextValue) {
                     clearInterval(progress);
 
-                    if (previousValue == 100) setBarState(BarState.COMPLETED);
+                    if (previousValue == 100) {
+                        setBarState(BarState.COMPLETED);
+                        setDescription("Completed");
+                    }
 
                     return previousValue;
                 }
@@ -91,9 +94,15 @@ export function useProgressBar(steps, initialStep) {
         setDescription(desc);
     }
 
-    const nextStep = () => setCurrentStep(value => value + 1);
-    
-    const previousStep = () => setCurrentStep(value => value - 1);
+    const nextStep = (desc = "") => {
+        setCurrentStep(value => value + 1);
+        if (desc != "") setDescription(desc)
+    }
+
+    const previousStep = (desc = "") => {
+        setCurrentStep(value => value - 1);
+        if (desc != "") setDescription(desc)
+    }
 
     return {
         barState,
