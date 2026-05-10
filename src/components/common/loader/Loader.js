@@ -4,6 +4,7 @@ import './LoaderStyles.css';
 import { useCountries } from '../../../hooks/useCountries';
 import { useRunningOrder } from '../../../hooks/useRunningOrder';
 import { useJudges } from '../../../hooks/useJudges';
+import { CountdownContainer } from '../../containers/countdownContainer/CountdownContainer';
 
 export const Loader = forwardRef((props, ref) => {
     
@@ -12,9 +13,14 @@ export const Loader = forwardRef((props, ref) => {
     const {initialized : countriesInitialized} = useCountries();
     const {initialized : judgesInitialized} = useJudges();
     const {initialized : runningOrderInitialized} = useRunningOrder();
+    
+    const endDate = process.env.REACT_APP_COUNTDOWN_EVENT_DATE;
+    const currentTime = new Date().getTime();
+    const eventTime = new Date(endDate).getTime();
+    const isCountdownFinished = (eventTime - currentTime) <= 0;
 
     useEffect(() => {
-        if (countriesInitialized && judgesInitialized && runningOrderInitialized) {
+        if (isCountdownFinished && countriesInitialized && judgesInitialized && runningOrderInitialized) {
             revealScreen();
         }
     }, [countriesInitialized, judgesInitialized, runningOrderInitialized]);
@@ -32,7 +38,11 @@ export const Loader = forwardRef((props, ref) => {
             <div className="content">
                 <Heart/>
                 <h2>Eurovision Voting App</h2>
-                <p>Please wait . . . </p>
+                {isCountdownFinished ? 
+                    <p>Please wait . . . </p>
+                    :
+                    <CountdownContainer endDate={endDate}/>
+                }
             </div>
         </div>
     );

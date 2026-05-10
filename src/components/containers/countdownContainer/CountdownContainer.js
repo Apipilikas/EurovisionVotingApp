@@ -1,0 +1,105 @@
+import { useEffect, useState } from "react";
+import { useTransition, animated } from "@react-spring/web";
+import "./CountdownContainerStyles.css";
+
+export function CountdownContainer({endDate}) {
+    const [remainingTime, setRemainingTime] = useState(0);
+
+    const eventName = process.env.REACT_APP_COUNTDOWN_EVENT_NAME;
+
+    useEffect(() => {
+        const countdownInterval = setInterval(() => {
+            const currentTime = new Date().getTime();
+            const eventTime = new Date(endDate).getTime();
+            let timeToFinish = eventTime - currentTime;
+
+            if (timeToFinish <= 0) {
+                timeToFinish = 0;
+                clearInterval(countdownInterval);
+            }
+
+            setRemainingTime(timeToFinish);
+        }, 1000);
+
+        return () => clearInterval(countdownInterval);
+    }, [])
+
+    return (
+        <div className="countdown-container">
+            <p id="top-caption">The <span>{eventName}</span> starts in</p>
+            <CountdownTimer currentTime={remainingTime}/>
+            <p id="bottom-caption">{(remainingTime <= 0) ? "Its tiiiiimee!" : "Are you ready?"}</p>
+            {(remainingTime <= 0) ? <p>Please refresh the page...</p> : ""}
+        </div>
+    )
+}
+
+function CountdownTimer({currentTime}) {
+    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+    const [hours, setHours] = useState(0);
+    const [days, setDays] = useState(0);
+
+    useEffect(() => {
+        const secs = Math.floor((currentTime / 1000) % 60);
+        const mins = Math.floor((currentTime / (1000 * 60)) % 60);
+        const hs = Math.floor((currentTime / (1000 * 60 * 60)) % 24);
+        const ds = Math.floor(currentTime / (1000 * 60 * 60 * 24));
+
+        setSeconds(secs);
+        setMinutes(mins);
+        setHours(hs);
+        setDays(ds);
+    }, [currentTime])
+
+    const getTitle = (name, value) => {
+        if (value > 1) return name + "s";
+        else return name;
+    }
+
+    return (
+        <div className="countdown-timer">
+            <div className="countdown-value-container days-timer">
+                <AnimatedNumber value={days}/>
+                <p className="countdown-caption">{getTitle("Day", days)}</p>
+            </div>
+            <div className="countdown-value-container hours-timer">
+                <AnimatedNumber value={hours}/>
+                <p className="countdown-caption">{getTitle("Hour", hours)}</p>
+            </div>
+            <div className="countdown-value-container minutes-timer">
+                <AnimatedNumber value={minutes}/>
+                <p className="countdown-caption">{getTitle("Minute", minutes)}</p>
+            </div>
+            <div className="countdown-value-container seconds-timer">
+                <AnimatedNumber value={seconds}/>
+                <p className="countdown-caption">{getTitle("Second", seconds)}</p>
+            </div>
+        </div>
+    )
+}
+
+function AnimatedNumber({ value }) {
+    const transitions = useTransition(value, {
+        from: { opacity: 0, transform: "translateY(-20px)" },
+        enter: { opacity: 1, transform: "translateY(0px)" },
+        leave: { opacity: 0, transform: "translateY(20px)" },
+        config: { tension: 300, friction: 20 },
+    });
+
+    const formattedValue = String(value).padStart(2, "0");
+
+    return (
+        <div style={{ position: "relative", display: "inline-flex", justifyContent: "center" }}>
+            {transitions((style, item) => (
+                <animated.span className="number-timer" style={{ ...style, position: "absolute" }}>
+                    {String(item).padStart(2, "0")}
+                </animated.span>
+            ))}
+            
+            <span style={{ visibility: "hidden" }}>
+                {formattedValue}
+            </span>
+        </div>
+    );
+}

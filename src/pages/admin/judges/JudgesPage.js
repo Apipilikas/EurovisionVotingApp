@@ -129,7 +129,7 @@ function JudgeForm({data = null, onChange, formRef}) {
     ])
 
     return (
-        <FormContainer style={{display:"flex"}} ref={formRef}>
+        <FormContainer style={{display: "flex", width: "100%"}} ref={formRef}>
         <GridTemplateContainer className="judge-form"
                             templateRows={"repeat(3, 1fr)"}
                             templateColumns={"repeat(4, 1fr)"}
