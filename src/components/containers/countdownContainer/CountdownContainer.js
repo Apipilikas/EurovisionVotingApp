@@ -3,15 +3,21 @@ import { useTransition, animated } from "@react-spring/web";
 import "./CountdownContainerStyles.css";
 
 export function CountdownContainer({endDate}) {
-    const [remainingTime, setRemainingTime] = useState(0);
+    const getRemainingTime = () => {
+        const currentTime = new Date().getTime();
+        const eventTime = new Date(endDate).getTime();
+        return Math.max(0, eventTime - currentTime);
+    };
+
+    const [remainingTime, setRemainingTime] = useState(() => {
+        return getRemainingTime();
+    });
 
     const eventName = process.env.REACT_APP_COUNTDOWN_EVENT_NAME;
 
     useEffect(() => {
         const countdownInterval = setInterval(() => {
-            const currentTime = new Date().getTime();
-            const eventTime = new Date(endDate).getTime();
-            let timeToFinish = eventTime - currentTime;
+            let timeToFinish = getRemainingTime();
 
             if (timeToFinish <= 0) {
                 timeToFinish = 0;
