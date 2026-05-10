@@ -72,7 +72,7 @@ export function BaseSelector({caption,
 
     // Rendering
     const modifier = (element) => {
-        const isSelectorOption = element.type.name === "SelectorOption";
+        const isSelectorOption = element.props.className && element.props.className.split(/\s+/).includes("selector-option");
 
         return {...(isSelectorOption && {
             onClick: () => handleOnClick(element.props.data)
@@ -92,8 +92,8 @@ export function BaseSelector({caption,
             required={required}
             {...input}
             {...props}/>
-            <animated.i class="material-icons dropdown-icon" style={dropdownIconStyles}>keyboard_arrow_down</animated.i>
-            <animated.i class="material-icons clear-icon" style={clearIconStyles} onClick={handleOnClearClick}>clear_all</animated.i>
+            <animated.i className="material-icons dropdown-icon" style={dropdownIconStyles}>keyboard_arrow_down</animated.i>
+            <animated.i className="material-icons clear-icon" style={clearIconStyles} onClick={handleOnClearClick}>clear_all</animated.i>
             <animated.div className="selector-options" style={dropdownStyles} ref={ref}>
                 {elements}
             </animated.div>

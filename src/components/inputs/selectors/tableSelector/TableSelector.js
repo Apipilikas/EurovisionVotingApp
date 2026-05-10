@@ -21,14 +21,14 @@ export function TableSelector({caption,
         return keys.map(key => <SimpleTableCell caption={key}/>)
     }
 
-    function SelectorOption({data, ...props}) {
+    function SelectorOption({data, className, ...props}) {
         return (
-            <TableRow className="selector-option" {...props}>{bodyRow(data)}</TableRow>
+            <TableRow className={className} {...props}>{bodyRow(data)}</TableRow>
         )
     }
 
     const bodyRows = () => {
-        return data?.map(row => <SelectorOption data={row}/>);
+        return data?.map(row => <SelectorOption data={row} className={"selector-option"}/>);
     }
 
     const bodyRow = (rowData) => {
