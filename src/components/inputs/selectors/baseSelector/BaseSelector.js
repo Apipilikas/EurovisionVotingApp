@@ -1,5 +1,5 @@
 import { Children, useEffect, useRef, useState } from "react"
-import { createPortal } from "react-dom"; // <-- Added import
+import { createPortal } from "react-dom";
 import './BaseSelectorStyles.css';
 import { animated, useSpring } from "react-spring";
 import { BaseInput } from "../../baseInput/BaseInput";
