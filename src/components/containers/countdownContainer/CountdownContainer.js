@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useTransition, animated } from "@react-spring/web";
+import { useTransition, animated, useSpring, easings } from "@react-spring/web";
 import "./CountdownContainerStyles.css";
 
 export function CountdownContainer({endDate}) {
@@ -30,12 +30,19 @@ export function CountdownContainer({endDate}) {
         return () => clearInterval(countdownInterval);
     }, [])
 
+    const bottomCaptionstyles = useSpring({
+        from: {transform: 'scale(1)'},
+        to: {transform: 'scale(1.3)'},
+        loop: {reverse: true},
+        config: {duration: 1500, easing: easings.easeInOutSine}
+    });
+
     return (
         <div className="countdown-container">
-            <p id="top-caption">The <span><span>{eventName}</span></span> starts in</p>
+            <p className="top-caption">The <span><span>{eventName}</span></span> starts in</p>
             <CountdownTimer currentTime={remainingTime}/>
-            <p id="bottom-caption">{(remainingTime <= 0) ? "Its tiiiiimee!" : "Are you ready?"}</p>
-            {(remainingTime <= 0) ? <p>Please refresh the page...</p> : ""}
+            <animated.p style={bottomCaptionstyles} className="bottom-caption">{(remainingTime <= 3 * 60000) ? "Its almost tiiiiimee!" : "Are you ready?"}</animated.p>
+            {(remainingTime <= 0) ? <p>Please refresh the page...</p> : null}
         </div>
     )
 }

@@ -1,9 +1,9 @@
-.countdown-container #top-caption {
+.countdown-container .top-caption {
     font-size: 1.2em;
     font-weight: 500;
 }
 
-.countdown-container #top-caption > span {
+.countdown-container .top-caption > span {
     background: linear-gradient(
         to right,
         var(--eleventh-color) 20%,
@@ -17,7 +17,7 @@
     animation: announcement-text-animation 5s ease-in-out infinite alternate;
 }
 
-.countdown-container #top-caption span > span {
+.countdown-container .top-caption span > span {
     background: linear-gradient(
         to right,
         var(--third-color) 20%,
@@ -37,7 +37,7 @@
     animation: announcement-text-animation 5s ease-in-out infinite alternate;
 }
 
-.countdown-container #bottom-caption {
+.countdown-container .bottom-caption {
     font-size: 1.5em;
     font-weight: 700;
     font-style: italic;
@@ -48,8 +48,11 @@
         var(--forth-color),
         var(--third-color)
     );
-    padding: 0.2em;
-    color: var(--third-color);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 500% auto;
+    animation: announcement-text-animation 5s ease-in-out infinite alternate;
 }
 
 .countdown-timer {
