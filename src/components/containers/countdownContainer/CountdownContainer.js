@@ -32,7 +32,7 @@ export function CountdownContainer({endDate}) {
 
     return (
         <div className="countdown-container">
-            <p id="top-caption">The <span>{eventName}</span> starts in</p>
+            <p id="top-caption">The <span><span>{eventName}</span></span> starts in</p>
             <CountdownTimer currentTime={remainingTime}/>
             <p id="bottom-caption">{(remainingTime <= 0) ? "Its tiiiiimee!" : "Are you ready?"}</p>
             {(remainingTime <= 0) ? <p>Please refresh the page...</p> : ""}
@@ -58,34 +58,31 @@ function CountdownTimer({currentTime}) {
         setDays(ds);
     }, [currentTime])
 
-    const getTitle = (name, value) => {
+    const getCaption = (name, value) => {
         if (value > 1) return name + "s";
         else return name;
     }
 
     return (
         <div className="countdown-timer">
-            <div className="countdown-value-container days-timer">
-                <AnimatedNumber value={days}/>
-                <p className="countdown-caption">{getTitle("Day", days)}</p>
-            </div>
-            <div className="countdown-value-container hours-timer">
-                <AnimatedNumber value={hours}/>
-                <p className="countdown-caption">{getTitle("Hour", hours)}</p>
-            </div>
-            <div className="countdown-value-container minutes-timer">
-                <AnimatedNumber value={minutes}/>
-                <p className="countdown-caption">{getTitle("Minute", minutes)}</p>
-            </div>
-            <div className="countdown-value-container seconds-timer">
-                <AnimatedNumber value={seconds}/>
-                <p className="countdown-caption">{getTitle("Second", seconds)}</p>
-            </div>
+            <CountdownValueContainer value={days} caption={getCaption("Day", days)}/>
+            <CountdownValueContainer value={hours} caption={getCaption("Hour", hours)}/>
+            <CountdownValueContainer value={minutes} caption={getCaption("Minute", minutes)}/>
+            <CountdownValueContainer value={seconds} caption={getCaption("Second", seconds)}/>
         </div>
     )
 }
 
-function AnimatedNumber({ value }) {
+function CountdownValueContainer({value, caption}) {
+    return (
+        <div className="countdown-value-container">
+            <AnimatedNumber value={value}/>
+            <p className="countdown-caption">{caption}</p>
+        </div>
+    )
+}
+
+function AnimatedNumber({value}) {
     const transitions = useTransition(value, {
         from: { opacity: 0, transform: "translateY(-20px)" },
         enter: { opacity: 1, transform: "translateY(0px)" },
