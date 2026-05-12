@@ -1,6 +1,7 @@
 
 #leaderboard-table {
     width: 100vw;
+    height: 100dvh;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }

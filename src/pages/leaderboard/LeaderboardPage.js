@@ -65,8 +65,9 @@ function LeaderboardTable({countries, judges}) {
     }, [countries, sortCellID, sortValue]);
 
     let height = 0;
+    const gap = 25;
     const transition = useTransition(
-        rows?.map(row => ({ ...row, y: (height += 25) - 25})),
+        rows?.map(row => ({ ...row, y: (height += gap) - gap})),
         {
             key : (item) => item.code,
             from: { height: 0, opacity: 0 },
@@ -98,6 +99,8 @@ function LeaderboardTable({countries, judges}) {
                     <CountryRow country={country} judges={judges} style={style}/>
              ))}
             </TableBody>
+            {/* This is a temporary solution for the browser-hidden-row issue. */}
+            <TableRow style={{ height: gap * rows?.length, visibility: 'hidden' }} />
         </TableContainer>
     )
 }

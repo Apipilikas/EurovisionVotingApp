@@ -50,8 +50,15 @@ function Main() {
     const formRef = useRef();
 
     const handleConnectClick = () => {
-        navigate(`/voting?judgeCode=${selectedJudgeCode}`);
-        connect(selectedJudgeCode);
+        if (selectedJudgeCode == null) {
+            const message = "Select a judge or sign in.";
+            const config = DialogUtils.getWarningDialogConfig(message);
+            showDialog(config);
+        }
+        else {
+            navigate(`/voting?judgeCode=${selectedJudgeCode}`);
+            connect(selectedJudgeCode);
+        }
     }
 
     const handleSignInClick = () => {
@@ -65,7 +72,7 @@ function Main() {
         
         JudgeRequests.registerJudge(data).then(response => {
             if (response.success) {
-                const message = `Please visit your email [${data.email}] to activate your account.`;
+                const message = `Please visit your email [${data.email}] to activate your account. Check your spam folder.`;
                 const config = DialogUtils.getInformDialogConfig("Activation email", message);
                 showDialog(config);
             }
