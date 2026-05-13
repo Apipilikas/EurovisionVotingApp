@@ -218,3 +218,10 @@ table.voting-country-table tbody button {
     right: 0;
     width: 140px;
 }
+
+#previous-country-btn {
+    position: fixed;
+    top: 70%;
+    right: 0;
+    width: 140px;
+}

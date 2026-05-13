@@ -97,7 +97,8 @@ body {
     background-image: url("/public/images/eu_simple.png");
     background-position: center; 
     background-size: cover; 
-    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family: 'Onest', 'Geologica';
     margin: 0em;
     display: grid;
@@ -461,7 +462,7 @@ flex-direction: column;
 /* #endregion */
 
 /* TABLET-BASED LAYOUT */
-@media only screen and (min-width: 425px) {
+@media only screen and (min-width: 600px) {
     body {
         background-image: url("/public/images/eu_no_logo.png");
         background-position: center; 

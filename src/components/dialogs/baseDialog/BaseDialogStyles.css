@@ -295,7 +295,7 @@
     } 
 }
 
-@media only screen and (min-width: 425px) {
+@media only screen and (min-width: 600px) {
     /* #region Base dialog */
 
     .base-dialog.simple-animation {

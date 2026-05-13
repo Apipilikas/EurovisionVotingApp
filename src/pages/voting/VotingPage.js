@@ -254,9 +254,9 @@ function MainContainer({
     {
       ref: transRef,
       trail: 400 / votes.length,
-      from: { opacity: 0, scale: 0, width: "0px", height: "0px", background : country.flagColor1, color : country.flagColor2 },
+      from: { opacity: 0, scale: 0, width: "0px", height: "0px", background : country.flagColor1, color : country.flagColor2, position : "initial" },
       enter: { opacity: 1, scale: 1, width: "50px", height: "50px", background : country.flagColor1, color : country.flagColor2 },
-      leave: { opacity: 0, scale: 0, width: "0px", height: "0px" },
+      leave: { opacity: 0, scale: 0, width: "0px", height: "0px", position : (f) ? "absolute" : "initial" },
     }
   );
 

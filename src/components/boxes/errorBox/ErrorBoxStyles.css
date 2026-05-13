@@ -215,7 +215,7 @@
     }
 }
 
-@media only screen and (min-width: 425px) {
+@media only screen and (min-width: 600px) {
     .error-box {
     width: 120px;
     height: 100px;

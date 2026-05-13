@@ -33,12 +33,33 @@ export function VotingPage() {
         setRunningOrder(currentRunningOrder);
     },[currentRunningOrder])
 
-    // Listeners
-    const handleNextCountryClick = () => {
-        let value = runningOrder % (countries.length + 1) + 1;
-        let arg = {runningCountry : value, votingStatus : "CLOSED"};
+    // Functions
+    const changeRunningOrder = (value) => {
+        let country = countries.find(item => item.runningOrder == value);
+        let votingStatus = "CLOSED";
+
+        if (country != null) {
+            votingStatus = country.votingStatus;
+        }
+
+        let arg = {
+            runningCountry : value, 
+            votingStatus : votingStatus
+        };
+
         setRunningOrder(value);
         emitMessage(EventID.NEXTCOUNTRY, arg);
+    }
+
+    // Listeners
+    const handlePreviousCountryClick = () => {
+        let value = (runningOrder == 1) ? countries.length : runningOrder - 1;
+        changeRunningOrder(value);
+    }
+
+    const handleNextCountryClick = () => {
+        let value = (runningOrder % countries.length) + 1;
+        changeRunningOrder(value);
     }
 
     return (
@@ -51,6 +72,7 @@ export function VotingPage() {
             <div className="lower-container">
                 <AdminSettings countries={countries}/>
                 <CountriesList countries={countries} judges={judges}/>
+                <SimpleButton caption={"Previous"} id={"previous-country-btn"} onButtonClicked={handlePreviousCountryClick}/>
                 <SimpleButton caption={"Next"} id={"next-country-btn"} onButtonClicked={handleNextCountryClick}/>
             </div>
         </BasePage>
@@ -163,7 +185,7 @@ function AdminSettings({countries}) {
         
         let content = <LinearProgressBar steps={codes.length} ref={barRef}/>;
         let config = new BaseDialogConfig("Inform", DialogType.INFO, content);
-        config.addButton("Begin", DialogResult.CHOICE1);
+        config.addButton("OK", DialogResult.CHOICE1);
         showDialog(config);
         setTimeout(() => {
             barRef.current.begin();

@@ -216,7 +216,7 @@
 }
 
 /* TABLET-BASED LAYOUT */
-@media only screen and (min-width: 425px) {
+@media only screen and (min-width: 600px) {
 
     .notification-box {
         width: 150px;
