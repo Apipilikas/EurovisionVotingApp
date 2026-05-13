@@ -155,7 +155,7 @@ function Country({ country, isCurrent, ...props }) {
       let points = vote == null ? (isCurrent ? VOTE_TEXT : 0) : vote;
       setSelectedVote(points);
     }
-  }, [judge]);
+  }, [judge, isCurrent]);
 
   // Country container
   const { height, width } = useSpring({

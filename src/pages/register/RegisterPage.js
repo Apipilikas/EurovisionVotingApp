@@ -51,7 +51,7 @@ function Main() {
 
     const handleConnectClick = () => {
         if (selectedJudgeCode == null) {
-            const message = "Select a judge or sign in.";
+            const message = "Please select a judge or sign up to connect.";
             const config = DialogUtils.getWarningDialogConfig(message);
             showDialog(config);
         }
