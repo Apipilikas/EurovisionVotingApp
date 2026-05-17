@@ -27,19 +27,15 @@ import { useRunningOrder } from "../../hooks/useRunningOrder";
 import { useCountries } from "../../hooks/useCountries";
 import Heart from "../../components/common/heart/Heart";
 
-export const VotingPage = forwardRef((props, ref) => {
-  const pageLoaded = () => {
-    ref.current.pageLoaded();
-  };
-
+export function VotingPage() {
   return (
-    <BasePage {...props} ref={ref}>
-      <Main pageLoaded={pageLoaded} />
+    <BasePage>
+      <Main/>
     </BasePage>
   );
-});
+};
 
-function Main(props) {
+function Main() {
   return <Carousel />;
 }
 
@@ -159,7 +155,7 @@ function Country({ country, isCurrent, ...props }) {
       let points = vote == null ? (isCurrent ? VOTE_TEXT : 0) : vote;
       setSelectedVote(points);
     }
-  }, [judge]);
+  }, [judge, isCurrent]);
 
   // Country container
   const { height, width } = useSpring({
@@ -258,9 +254,9 @@ function MainContainer({
     {
       ref: transRef,
       trail: 400 / votes.length,
-      from: { opacity: 0, scale: 0, width: "0px", height: "0px", background : country.flagColor1, color : country.flagColor2 },
+      from: { opacity: 0, scale: 0, width: "0px", height: "0px", background : country.flagColor1, color : country.flagColor2, position : "initial" },
       enter: { opacity: 1, scale: 1, width: "50px", height: "50px", background : country.flagColor1, color : country.flagColor2 },
-      leave: { opacity: 0, scale: 0, width: "0px", height: "0px" },
+      leave: { opacity: 0, scale: 0, width: "0px", height: "0px", position : (f) ? "absolute" : "initial" },
     }
   );
 
@@ -574,8 +570,7 @@ function DisplayContainer({country, ...props }) {
         {text}
       </FadeOutSpan>
       <style>{backgroundStyle}</style>
-      <span className="country-name" 
-            >{country.name}</span>
+      <span className="country-name">{country.name}</span>
       <div className="details-container">
         <FadeOutSpan className="artist-text" show={showSinger}>{country.artist}</FadeOutSpan>
         <FadeOutSpan className="song-text" show={showSong}>{country.song}</FadeOutSpan>
@@ -595,7 +590,7 @@ function FadeOutSpan({ children, show, ...props }) {
     to: {
       opacity: show ? 1 : 0,
     },
-    config: { tension: 300, friction: 24 },
+    config: { tension: 700, friction: 50 },
   });
 
   return (

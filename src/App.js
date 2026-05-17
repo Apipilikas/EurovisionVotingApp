@@ -6,35 +6,27 @@ import Header from './components/common/header/Header';
 import { useEffect, useRef, useState } from 'react';
 import { Loader } from './components/common/loader/Loader';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
-import { ErrorBox } from './components/boxes/errorBox/ErrorBox';
 import { MyError } from './utils/errorUtils';
-import { BaseDialog, DialogOrigin, DialogType } from './components/dialogs/baseDialog/BaseDialog';
-import { useDialog } from './components/dialogs/baseDialog/DialogProvider';
-import { NotificationBox } from './components/boxes/notificationBox/NotificationBox';
+import { DialogType, DialogResult } from './components/dialogs/DialogProvider';
+import { useDialog } from './components/dialogs/DialogProvider';
 import { ErrorBoxConfig } from './components/boxes/errorBox/errorBoxConfig';
 import { VotingPage } from './pages/voting/VotingPage';
 import { VotingPage as AdminVotingPage } from './pages/admin/voting/VotingPage';
 import NotificationCollectionProvider from './components/common/notificationBanner/NotificationProvider';
 import { useSession } from './components/common/session/SessionProvider';
 import { LeaderboardPage } from './pages/leaderboard/LeaderboardPage';
-import { DialogConfig } from './components/dialogs/baseDialog/dialogConfig';
-import { DialogResult } from './components/dialogs/baseDialog/BaseDialog';
 import { JudgeRequests } from './utils/requestUtils';
 import { DialogUtils } from './components/dialogs/dialogUtils';
 import { DocumentUtils } from './utils/document/documentUtils';
 import { CountriesPage as AdminCountriesPage } from './pages/admin/countries/CountriesPage';
 import { JudgesPage as AdminJudgesPage } from './pages/admin/judges/JudgesPage';
+import { BaseDialogConfig } from './components/dialogs/baseDialog/baseDialogConfig';
 
 function App() {
 
-  const {dialogOrigin, showDialog} = useDialog();
+  const {showDialog} = useDialog();
   const [title, setTitle] = useState("Eurovision");
   const [hideNavigation, setHideNavigation] = useState(false);
-
-  const loaderRef = useRef(null);
-  const registerRef = useRef(null);
-  const votingRef = useRef(null);
-  const adminVotingRef = useRef(null);
 
   const {connect, getURLParam} = useSession();
 
@@ -71,8 +63,8 @@ function App() {
   }
 
   const getActivateJudgeDialogConfig = () => {
-    const config = new DialogConfig("Activation success!", DialogType.SUCCESS);
-    config.content = <p>Account activated successfully!</p>
+    const config = new BaseDialogConfig("Activation success!", DialogType.SUCCESS);
+    config.innerContent = <p>Account activated successfully!</p>
     
     config.addButton("OK", DialogResult.OK, true);
 
@@ -80,8 +72,8 @@ function App() {
   }
 
   const getJudgeConnectionErrorDialogConfig = () => {
-    const config = new DialogConfig("Connection problem", DialogType.ERROR);
-    config.content = <p>Judge was not connected properly. Please redirect to the register page to connect!</p>;
+    const config = new BaseDialogConfig("Connection problem", DialogType.ERROR);
+    config.innerContent = <p>Judge was not connected properly. Please redirect to the register page to connect!</p>;
 
     config.addButton("Register Page", DialogResult.CHOICE1, true);
     config.addButton("Close", DialogResult.CANCEL);
@@ -123,22 +115,19 @@ function App() {
 
   return (
     <Router>
-        <Loader ref={loaderRef}/>
+        <Loader/>
         <Head title={title}/>
         <NotificationCollectionProvider>
           <Header hideNavigation={hideNavigation}/>
           <Routes>
-            <Route path='/' element={<RegisterPage ref={registerRef}/>}/>
-            <Route path='/voting' element={<VotingPage ref={votingRef}/>}/>
-            <Route path='/leaderboard' element={<LeaderboardPage ref={votingRef}/>}/>
-            <Route path='/admin/voting' element={<AdminVotingPage ref={adminVotingRef}/>}/>
+            <Route path='/' element={<RegisterPage/>}/>
+            <Route path='/voting' element={<VotingPage/>}/>
+            <Route path='/leaderboard' element={<LeaderboardPage/>}/>
+            <Route path='/admin/voting' element={<AdminVotingPage/>}/>
             <Route path='/admin/countries' element={<AdminCountriesPage/>}/>
             <Route path='/admin/judges' element={<AdminJudgesPage/>}/>
           </Routes>
         </NotificationCollectionProvider>
-          {dialogOrigin === DialogOrigin.BASEDIALOG && <BaseDialog/>}
-          {dialogOrigin === DialogOrigin.NOTIFICATIONBOX && <NotificationBox/>}
-          {dialogOrigin === DialogOrigin.ERRORBOX && <ErrorBox/>}
         <Footer/>
     </Router>
   );

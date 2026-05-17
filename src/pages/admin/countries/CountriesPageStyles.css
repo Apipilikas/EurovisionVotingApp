@@ -1,49 +1,16 @@
-.country-form {
-    display: grid;
-    border-top: 0px;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-areas: "code    code    name    name    qualified   runningOrder"
-                         "fc1     fc1     fc2     fc2     fc3         fc3"
-                         "song    song    song    artist  artist      artist";
+.country-item-container {
+    display: flex;
 }
 
-.country-form .code-input {
-    grid-area: code;
+.country-item-container h2 {
+    margin: auto 0em;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 0.4em;
+    background-color: var(--forth-color);
 }
 
-.country-form .name-input {
-    grid-area: name;
-}
-
-.country-form .qualified-input {
-    grid-area: qualified;
-}
-
-.country-form .runningOrder-input {
-    grid-area: runningOrder;
-}
-
-.country-form .artist-input {
-    grid-area: artist;
-}
-
-.country-form .song-input {
-    grid-area: song;
-}
-
-.country-form .flagColor1-input {
-    grid-area: fc1;
-}
-
-.country-form .flagColor2-input {
-    grid-area: fc2;
-}
-
-.country-form .flagColor3-input {
-    grid-area: fc3;
-}
-
-#create-country-button {
-    margin: 1em auto;
+.country-item-container h3 {
+    margin-left: 0.2em;
 }

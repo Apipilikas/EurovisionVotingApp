@@ -8,11 +8,12 @@ import { useSession } from '../../components/common/session/SessionProvider';
 import { useCountries } from '../../hooks/useCountries';
 import { useJudges } from '../../hooks/useJudges';
 import { useRunningOrder } from '../../hooks/useRunningOrder';
-import { DialogConfig } from '../../components/dialogs/baseDialog/dialogConfig';
-import { DialogResult, DialogType } from '../../components/dialogs/baseDialog/BaseDialog';
+import { BaseDialogConfig } from '../../components/dialogs/baseDialog/baseDialogConfig';
+import { DialogResult, DialogType } from '../../components/dialogs/DialogProvider';
 import { Dropdown } from '../../components/inputs/dropdown/Dropdown';
-import { useDialog } from '../../components/dialogs/baseDialog/DialogProvider';
+import { useDialog } from '../../components/dialogs/DialogProvider';
 import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
+import { ListSelector } from '../../components/inputs/selectors/listSelector/ListSelector';
 
 export const LeaderboardPage = forwardRef((props, ref) => {
 
@@ -64,8 +65,9 @@ function LeaderboardTable({countries, judges}) {
     }, [countries, sortCellID, sortValue]);
 
     let height = 0;
+    const gap = 25;
     const transition = useTransition(
-        rows?.map(row => ({ ...row, y: (height += 25) - 25})),
+        rows?.map(row => ({ ...row, y: (height += gap) - gap})),
         {
             key : (item) => item.code,
             from: { height: 0, opacity: 0 },
@@ -97,6 +99,8 @@ function LeaderboardTable({countries, judges}) {
                     <CountryRow country={country} judges={judges} style={style}/>
              ))}
             </TableBody>
+            {/* This is a temporary solution for the browser-hidden-row issue. */}
+            <TableRow style={{ height: gap * rows?.length, visibility: 'hidden' }} />
         </TableContainer>
     )
 }
@@ -119,10 +123,10 @@ function CountryRow({country, judges, style}) {
     const showVotingDialog = () => {
         let points;
         const title = `Vote for ${country.name}`;
-        const config = new DialogConfig(title, DialogType.INFO);
+        const config = new BaseDialogConfig(title, DialogType.INFO);
 
-        config.content = <Dropdown  initialValue={country.votes[judge.code]}
-                                    onChange={(e) => points = e.target.value} 
+        config.innerContent = <ListSelector  initialValue={country.votes[judge.code]}
+                                    onValueChanged={(value) => points = value} 
                                     caption={"Votes"} 
                                     list={[1,2,3,4,5,6,7,8,10,12]}/>
         

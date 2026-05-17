@@ -1,6 +1,6 @@
 .input-error-container {
     opacity: 0;
-    z-index: 2;
+    /* z-index: 2; */
     transform: translateY(-2.1em);
     background-color: var(--error-color);
     display: flex;

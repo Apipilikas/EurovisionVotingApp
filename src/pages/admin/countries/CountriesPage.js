@@ -9,12 +9,14 @@ import { useInput } from "../../../hooks/useInput";
 import { CountryRequests } from "../../../utils/requestUtils";
 import { useSession } from "../../../components/common/session/SessionProvider";
 import { useCountries } from "../../../hooks/useCountries";
-import { ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
+import { ButtonIDs, ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
-import { DialogType } from "../../../components/dialogs/baseDialog/BaseDialog";
-import { useDialog } from "../../../components/dialogs/baseDialog/DialogProvider";
+import { useDialog, DialogType } from "../../../components/dialogs/DialogProvider";
+import { GridTemplateContainer } from "../../../components/containers/gridContainer/GridContainer";
+import { BoundItemState } from "../../../hooks/useBoundData";
+import { FormContainer } from "../../../components/containers/formContainer/FormContainer";
 
-export const CountriesPage = forwardRef((props, ref) => {
+export function CountriesPage() {
 
     const {judge} = useSession();
     const {countries} = useCountries();
@@ -22,33 +24,31 @@ export const CountriesPage = forwardRef((props, ref) => {
 
     const [judgeCode, setJudgeCode] = useState("");
 
+    const formRef = useRef();
+
     useEffect(() => {
         if (judge != null) {
             setJudgeCode(judge.code)
         }
     }, [judge])
-  
-    const pageLoaded = () => {
-    ref.current.pageLoaded();
-  };
 
     function Item({item}) {
     return (
-        <div>
-            <h2>{item.code} - {item.name}</h2>
+        <div className="country-item-container">
+            <h2>{item.runningOrder}</h2>
+            <h3>{item.name}</h3>
         </div>
         )
     }
 
-    const handleOnToolbarButtonClicked = (buttonID, item) => {
+    const handleOnToolbarButtonClicked = async (buttonID, item) => {
         let promise = null;
 
-        switch(buttonID) {
-            case "save":
-                const isNew = item.isNew;
-                delete item.isNew;
+        if (!formRef.current.validate()) return false;
 
-                if (isNew) {
+        switch(buttonID) {
+            case ButtonIDs.SAVE:
+                if (item.__State__ == BoundItemState.NEW) {
                     promise = CountryRequests.createCountry(judgeCode, item);
                 }
                 else {
@@ -57,36 +57,42 @@ export const CountriesPage = forwardRef((props, ref) => {
 
                 break;
 
-            case "delete":
+            case ButtonIDs.DELETE:
                 promise = CountryRequests.deleteCountry(judgeCode, item.code);
                 break;
         }
 
         if (promise != null) {
-            promise.then(response => {
-                let message = response.success ? "Success!" : "Something went wrong...";
-                let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
-                let description = response.success ? "Operation completed successfully." : response.jsonData.error.description;
-                const config = new NotificationBoxConfig(message, type, description);
-                showDialog(config);
-            })
+            const response = await promise;
+            showDialog(createConfig(response));
+            return response.success;
         }
+
+        return true;
+    }
+
+    const createConfig = (response) => {
+        let message = response.success ? "Success!" : "Something went wrong...";
+        let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
+        let description = response.success ? "Operation completed successfully." : response.jsonData.error.description;
+        return new NotificationBoxConfig(message, type, description);
     }
 
     return (
-    <BasePage {...props} ref={ref}>
+    <BasePage>
         <ListEditDashboard data={countries} 
-                           ItemContainer={Item} 
-                           valueMember={"code"}
+                           DisplayContainer={Item} 
+                           valueProperty={"code"}
                            MainContainer={CountryForm}
+                           mainContainerProps={{formRef}}
                            onToolbarButtonClicked={handleOnToolbarButtonClicked}/>
     </BasePage>
 );
-});
+};
 
 
 
-function CountryForm({data = null, onChange}) {
+function CountryForm({data = null, onChange, formRef}) {
 
     const nameInput = useInput(data?.name, undefined, true);
     const codeInput = useInput(data?.code, undefined, true);
@@ -110,10 +116,10 @@ function CountryForm({data = null, onChange}) {
             flagColor2 : flagColor2Input.value,
             flagColor3 : flagColor3Input.value
         }
-    }
+    };
 
     useEffect(() => {
-        if (onChange) onChange(getData());
+        if (onChange) onChange(data, getData());
     }, [
         nameInput.value,
         codeInput.value,
@@ -124,19 +130,28 @@ function CountryForm({data = null, onChange}) {
         flagColor1Input.value,
         flagColor2Input.value,
         flagColor3Input.value
-    ])
+    ]);
 
     return (
-        <div className="country-form">
-            <TextInput caption={"Name"} {...nameInput} className="name-input"/>
-            <TextInput caption={"Code"} {...codeInput} className="code-input"/>
-            <NumberInput caption={"Running order"} {...runningOrderInput} className="runningOrder-input"/>
-            <Checkbox caption={"Qualified"} {...qualifiedInput} className="qualified-input"/>
-            <TextInput caption={"Artist"} {...artistInput} className="artist-input"/>
-            <TextInput caption={"Song"} {...songInput} className="song-input"/>
-            <ColorInput caption={"Flag Color 1"} {...flagColor1Input} className="flagColor1-input"/>
-            <ColorInput caption={"Flag Color 2"} {...flagColor2Input} className="flagColor2-input"/>
-            <ColorInput caption={"Flag Color 3"} {...flagColor3Input} className="flagColor3-input"/>
-        </div>
+        <FormContainer style={{display:"flex"}} ref={formRef}>
+            <GridTemplateContainer className="country-form"
+                                templateRows={"repeat(3, 1fr)"}
+                                templateColumns={"repeat(6, 1fr)"}
+                                templateAreas={[
+                                    ["code", "code", "name", "name"  , "runningOrder", "qualified"],
+                                    ["fc1" , "fc1" , "fc2" , "fc2"   , "fc3"      , "fc3"],
+                                    ["song", "song", "song", "artist", "artist"   , "artist"]
+                                    ]}>
+                <TextInput caption={"Code"} {...codeInput} required={true} className="code-input" gridTemplateArea="code"/>
+                <TextInput caption={"Name"} {...nameInput} required={true} className="name-input" gridTemplateArea="name"/>
+                <NumberInput caption={"Running order"} {...runningOrderInput} className="runningOrder-input" gridTemplateArea="qualified"/>
+                <Checkbox caption={"Qualified"} {...qualifiedInput} className="qualified-input" gridTemplateArea="runningOrder"/>
+                <TextInput caption={"Artist"} {...artistInput} className="artist-input" gridTemplateArea="artist"/>
+                <TextInput caption={"Song"} {...songInput} className="song-input" gridTemplateArea="song"/>
+                <ColorInput caption={"Flag Color 1"} {...flagColor1Input} className="flagColor1-input" gridTemplateArea="fc1"/>
+                <ColorInput caption={"Flag Color 2"} {...flagColor2Input} className="flagColor2-input" gridTemplateArea="fc2"/>
+                <ColorInput caption={"Flag Color 3"} {...flagColor3Input} className="flagColor3-input" gridTemplateArea="fc3"/>
+            </GridTemplateContainer>
+        </FormContainer>
     )
 }

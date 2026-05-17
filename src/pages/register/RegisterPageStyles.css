@@ -28,41 +28,16 @@
     /* animation: color-animation 7s ease infinite; */
 }
 
-fieldset {
-    position: relative;
-    z-index: 2;
-    margin: 0em;
-    height: 410px;
+.registration-tabs-container {
+    height: 440px;
+    z-index: 3;
+}
+
+.registration-tabs-container .buttons-area {
     display: flex;
+    margin-top: auto;
+    margin-bottom: 1em;
     flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--eleventh-color);
-    border: 0px;
-}
-
-#registration-fs-tab-area {
-    margin: 0em;
-    /* margin-left: 2px; */
-    background-color: var(--forth-color);
-    
-}
-
-/* Tab group */
-input[name="registration-fs-tab-group"] {
-    display: none;
-}
-
-input[name="registration-fs-tab-group"] + label {
-    display: inline-block;
-    color: var(--eleventh-color);
-    padding: 1em;
-    font-weight: 800;
-    transition: background-color 0.2s ease-in;
-}
-
-input[name="registration-fs-tab-group"]:checked + label {
-    color: var(--forth-color);
-    background-color: var(--eleventh-color);
 }
 
 /* Registration form */
@@ -82,10 +57,6 @@ input[name="registration-fs-tab-group"]:checked + label {
     font-weight: 600;
 }
 
-#sign-up-description {
-    display: none;
-}
-
 legend {
     font-weight: 700;
     color: var(--eleventh-color);
@@ -100,7 +71,7 @@ legend {
 
 /* Judge list container */
 #judges-list-container {
-    margin: 2em 0em;
+    margin: 0em;
     height: 220px;
     display: flex;
     flex-direction: column;
@@ -172,10 +143,10 @@ legend {
     margin-bottom: 1em;
     flex-direction: column;
 }
-
+/* 
 #sign-up-btn {
     display: none;
-}
+} */
 
 #main {
     position: relative;
@@ -190,7 +161,7 @@ legend {
 
 
 /* TABLET-BASED LAYOUT */
-@media only screen and (min-width: 425px) {
+@media only screen and (min-width: 600px) {
     #connect-page-content {
         width: 45%;
     }

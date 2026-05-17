@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { JudgeRequests } from "../utils/requestUtils";
+import { useIsInitialized } from "./useIsInitialized";
 
 export function useJudges() {
 
     const [judges, setJudges] = useState([]);
-    const [initialized, setInitialized] = useState(false);
+    const {isInitialized} = useIsInitialized(judges);
 
     // Initialize
     useEffect(() => {
@@ -16,12 +17,11 @@ export function useJudges() {
 
         if (response.success) {
             setJudges(response.jsonData.judges);
-            setInitialized(true);
         }
     }
 
     return {
         judges,
-        initialized
+        initialized : isInitialized
     }
 }

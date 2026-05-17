@@ -11,10 +11,10 @@ footer > #credits-caption {
     margin: auto;
     background: linear-gradient(
         to right,
-        var(--forth-color) 20%,
+        var(--eleventh-color) 20%,
         var(--third-color) 30%,
         var(--forth-color) 70%,
-        var(--third-color) 80%
+        var(--eleventh-color) 80%
     );
     -webkit-background-clip: text;
     background-clip: text;

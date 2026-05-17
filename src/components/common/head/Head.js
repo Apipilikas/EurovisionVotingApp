@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 export default function Head({title}) {
     return (
         <Helmet>
-            <title translation-id="head_title" >{title} | ESCV 2025</title>
+            <title translation-id="head_title" >{title} | ESCV 2026</title>
             <link rel="icon" href={'/images/eurovision-icon.png'}/>
             <meta name="description" content="Eurovision Voting App"/>
             <meta name="keywords" content="Eurovision, Voting App, ESC, Eurovision Song Contest"/>

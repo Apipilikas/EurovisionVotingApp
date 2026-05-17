@@ -1,41 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import './BaseDialogStyles.css';
-import { useDialog } from "./DialogProvider";
+import { DialogResult, useDialog } from "../DialogProvider";
 import { DialogUtils } from "../dialogUtils";
 import { DocumentUtils } from "../../../utils/document/documentUtils";
-
-export const DialogResult = {
-    OK : "OK",
-    CANCEL : "CANCEL",
-    CLOSE : "CLOSE",
-    AUTOCLOSE : "AUTOCLOSE",
-    ABORT : "ABORT",
-    CHOICE1 : "CHOICE1",
-    CHOICE2 : "CHOICE2"
-
-}
-
-export const DialogType = {
-    SUCCESS : "SUCCESS",
-    INFO : "INFO",
-    WARNING : "WARNING",
-    ERROR : "ERROR" 
-}
-
-export const DialogOrigin = {
-    BASEDIALOG : "BASEDIALOG",
-    NOTIFICATIONBOX : "NOTIFICATIONBOX",
-    ERRORBOX : "ERRORBOX"
-}
 
 const closeBaseDialogclassNameName = "close-dialog";
 
 export function BaseDialog() {
-
     const [time, setTime] = useState(0);
     const {isDialogOpen, showDialog, closeDialog, registerEvent, dialogConfig} = useDialog();
     const [display, setDisplay] = useState("flex");
-    const [show, setShow] = useState(true);
 
     useEffect(() => {
         setDisplay("flex");
@@ -52,7 +26,7 @@ export function BaseDialog() {
     }, []); 
 
     if (!dialogConfig) return;    
-    const {title, type, content, closeAfterMs, buttons} = dialogConfig;
+    const {title, type, innerContent, closeAfterMs, buttons} = dialogConfig;
 
     const closeDialogAfterMs = (ms) => {
         ms += 3000; // animation delay
@@ -98,10 +72,10 @@ export function BaseDialog() {
                 </div>
             </div>
             <div className="bottom-container">
-                {content}
+                {innerContent}
             </div>
             <div className="buttons-area">
-                {buttons.map(btn => {
+                {buttons?.map(btn => {
                     const title = btn.title;
                     const result = btn.result;
                     const selected = btn.selected;

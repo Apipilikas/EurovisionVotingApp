@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import './RegisterPageStyles.css';
 import {TextInput, EmailInput} from '../../components/inputs/textInput/TextInput';
 import { DocumentUtils } from '../../utils/document/documentUtils';
@@ -10,44 +10,75 @@ import { useInput } from '../../hooks/useInput';
 import { useSession } from '../../components/common/session/SessionProvider';
 import { useNavigate } from 'react-router-dom';
 import { DialogUtils } from '../../components/dialogs/dialogUtils';
-import { useDialog } from '../../components/dialogs/baseDialog/DialogProvider';
+import { useDialog } from '../../components/dialogs/DialogProvider';
+import { DialogType } from '../../components/dialogs/DialogProvider';
+import { NotificationBoxConfig } from '../../components/boxes/notificationBox/notificationBoxConfig';
+import { BaseDialogConfig } from '../../components/dialogs/baseDialog/baseDialogConfig';
+import { ErrorBoxConfig } from '../../components/boxes/errorBox/errorBoxConfig';
+import { BaseSelector } from '../../components/inputs/selectors/baseSelector/BaseSelector';
+import { ListSelector } from '../../components/inputs/selectors/listSelector/ListSelector';
+import { TableSelector } from '../../components/inputs/selectors/tableSelector/TableSelector';
+import { useInputValidation } from '../../hooks/useInputValidation';
+import { TabContainer, TabsContainer } from '../../components/containers/tabsContainer/TabsContainer';
+import { useCountries } from '../../hooks/useCountries';
+import { FormContainer } from '../../components/containers/formContainer/FormContainer';
 
-export const RegisterPage = forwardRef((props, ref) => {
+export function RegisterPage() {
 
     return (
-        <BasePage socketDependent={false} ref={ref}>
+        <BasePage socketDependent={false}>
             <Main/>
         </BasePage>
     );
-});
+};
 
 function Main() {
 
     const {showDialog} = useDialog();
     const {connect, getURLParam} = useSession();
+    const {countries} = useCountries();
+
     const navigate = useNavigate();
     const judgeCode = getURLParam("judgeCode");
 
     const [selectedJudgeCode, setSelectedJudgeCode] = useState(judgeCode);
 
-    const nameInput = useInput();
-    const emailInput = useInput();
+    const nameInput = useInputValidation();
+    const emailInput = useInputValidation();
+    const originCountryInput = useInputValidation();
+
+    const formRef = useRef();
 
     const handleConnectClick = () => {
-        navigate(`/voting?judgeCode=${selectedJudgeCode}`);
-        connect(selectedJudgeCode);
+        if (selectedJudgeCode == null) {
+            const message = "Please select a judge or sign up to connect.";
+            const config = DialogUtils.getWarningDialogConfig(message);
+            showDialog(config);
+        }
+        else {
+            navigate(`/voting?judgeCode=${selectedJudgeCode}`);
+            connect(selectedJudgeCode);
+        }
     }
 
     const handleSignInClick = () => {
         let data = {
             name : nameInput.value,
             email : emailInput.value,
-            originCountry : "GRE"
+            originCountry : originCountryInput.value
         }
+
+        if (!formRef.current.validate()) return;
+        
         JudgeRequests.registerJudge(data).then(response => {
             if (response.success) {
-                const message = `Please visit your email [${data.email}] to activate your account.`;
+                const message = `Please visit your email [${data.email}] to activate your account. Check your spam folder.`;
                 const config = DialogUtils.getInformDialogConfig("Activation email", message);
+                showDialog(config);
+            }
+            else {
+                const error = response.jsonData.error;
+                const config = new ErrorBoxConfig(error.description, "Contact Aggelos for further clarifications.", JSON.stringify(error.details), "ACTIVATION_ERROR");
                 showDialog(config);
             }
         })
@@ -55,44 +86,44 @@ function Main() {
     
     return (
         <main id="connect-page">
-            {/* <!-- <div id="caption-container"></div> --> */}
             <div id="connect-page-content">
-                <div id="registration-fs-tab-area">
-                    <input type="radio" id="register-tab" name="registration-fs-tab-group" className="registration-fs-tab" onChange={(e) => tabListener(e)} defaultChecked/>
-                    <label for="register-tab">Register</label>
-                
-                    <input type="radio" id="sign-up-tab" name="registration-fs-tab-group" className="registration-fs-tab" onChange={(e) => tabListener(e)}/>
-                    <label for="sign-up-tab">Sign Up</label>
-                </div>
-                <fieldset id="registration-fs">
-                    {/* <!-- <legend>Register</legend> --> */}
-                    
-                    <div id="registration-fs-header">
-                        <h2>Welcome back!</h2>
-                        <p id="register-description" tabIndex="0">Connect as a judge</p>
-                        <p id="sign-up-description" tabIndex="1">Sign up to be able to connect</p>
-                    </div>
-    
-                    <div id="registration-fs-content">
+                <TabsContainer className="registration-tabs-container" initialSelectedTabIndex={0}>
+                    <SimpleTabContainer caption={"Register"} tabIndex={0} 
+                                        button={<SimpleButton id="connect-btn" caption="Connect" onButtonClicked={handleConnectClick}/>}
+                                        description={'Connect as a judge'}>
                         <JudgeList selectedJudgeCode={selectedJudgeCode} onSelectedJudgeChanged={setSelectedJudgeCode}/>
-    
-                        <div id="sign-up-container" tabIndex="1">
-                            <TextInput caption="Name" helperCaption="Insert your name." {...nameInput}/>
-                            <EmailInput caption="Email" helperCaption="Insert your email." {...emailInput}/>
-                        </div>
-                    </div>
-    
-                    <div id="buttons-area">
-                        <SimpleButton id="connect-btn" caption="Connect" tabindex="0" onButtonClicked={handleConnectClick}/>
-                        <SimpleButton id="sign-up-btn" caption="Sign Up" tabindex="1" onButtonClicked={handleSignInClick}/>
-                    </div>
-                </fieldset>
-            </div>
-            
-            <div id="display-box-container"></div>
+                    </SimpleTabContainer>
+                    <SimpleTabContainer caption={"Sign up"} tabIndex={1} 
+                                        button={<SimpleButton id="sign-up-btn" caption="Sign Up" onButtonClicked={handleSignInClick}/>}
+                                        description={'Sign up to be able to connect'}>
+                        <FormContainer ref={formRef}>
+                            <TextInput caption="Name" helpCaption="Insert your name." required={true} {...nameInput}/>
+                            <EmailInput caption="Email" helpCaption="Insert your email." required={true} {...emailInput}/>
+                            <TableSelector caption="Origin country" required={true} data={countries} valueProperty={"code"} displayProperty={"name"} {...originCountryInput} initialValue={"GRE"} visibleColumns={["code", "name"]}/>
+                        </FormContainer>
+                    </SimpleTabContainer>
+                </TabsContainer>
+            </div>            
         </main>
     );
 };
+
+function SimpleTabContainer({caption, tabIndex, button, children, description, ...props}) {
+    return (
+        <TabContainer caption={caption} tabIndex={tabIndex} {...props}>
+            <div id="registration-fs-header">
+                <h2>Welcome back!</h2>
+                <p>{description}</p>
+            </div>
+            <div className='tab-content'>
+                {children}
+            </div>
+            <div className='buttons-area'>
+                {button}
+            </div>
+        </TabContainer>
+    );
+}
 
 function JudgeList({selectedJudgeCode, onSelectedJudgeChanged}) {
 
@@ -107,7 +138,7 @@ function JudgeList({selectedJudgeCode, onSelectedJudgeChanged}) {
 
     return (
         <div id="judges-list-container" tabIndex="0">
-            {judges.map(judge => {
+            {judges?.map(judge => {
                 const judgeID = `judge-name-${judge.code}`;
                 const onlineClassName = judge.online ? "online" : "offline";
                 
@@ -123,28 +154,3 @@ function JudgeList({selectedJudgeCode, onSelectedJudgeChanged}) {
         </div>
 );
 }
-
-//#region Event Listener functions
-
-function tabListener(e) {
-    const isRegisterTabChecked = e.target.id === "register-tab";
-
-    if (isRegisterTabChecked) {
-        DocumentUtils.setStyle("[tabindex='0'] ALL", "display", "initial");
-        DocumentUtils.setStyle("[tabindex='1'] ALL", "display", "none");
-    }
-    else {
-        DocumentUtils.setStyle("[tabindex='0'] ALL", "display", "none");
-        DocumentUtils.setStyle("[tabindex='1'] ALL", "display", "initial");
-    }
-}
-
-function connectBtnListener() {
-    
-}
-
-function signUpBtnListener() {
-    
-}
-
-//#endregion

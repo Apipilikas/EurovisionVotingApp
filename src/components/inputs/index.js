@@ -1,0 +1,1 @@
+export { default as BaseInput } from '../inputs/baseInput/BaseInput';

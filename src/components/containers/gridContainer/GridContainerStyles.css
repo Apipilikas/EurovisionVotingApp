@@ -1,0 +1,4 @@
+.grid-container, .grid-template-container {
+    display: grid;
+    width: 100%;
+}

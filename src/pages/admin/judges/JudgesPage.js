@@ -9,19 +9,25 @@ import { useInput } from "../../../hooks/useInput";
 import { CountryRequests, JudgeRequests } from "../../../utils/requestUtils";
 import { useSession } from "../../../components/common/session/SessionProvider";
 import { useJudges } from "../../../hooks/useJudges";
-import { ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
+import { useCountries } from "../../../hooks/useCountries";
+import { ButtonIDs, ListEditDashboard } from "../../../components/dashboards/listEditDashboard.js/ListEditDashboard";
 import { NotificationBoxConfig } from "../../../components/boxes/notificationBox/notificationBoxConfig";
-import { DialogType } from "../../../components/dialogs/baseDialog/BaseDialog";
-import { useDialog } from "../../../components/dialogs/baseDialog/DialogProvider";
+import { useDialog, DialogType } from "../../../components/dialogs/DialogProvider";
 import { getValueOrNull } from "../../../utils/react/propsUtils";
+import { TableSelector } from "../../../components/inputs/selectors/tableSelector/TableSelector";
+import { BoundItemState } from "../../../hooks/useBoundData";
+import { GridTemplateContainer } from "../../../components/containers/gridContainer/GridContainer";
+import { FormContainer } from "../../../components/containers/formContainer/FormContainer";
 
-export const JudgesPage = forwardRef((props, ref) => {
+export function JudgesPage() {
 
     const {judge} = useSession();
     const {judges} = useJudges();
     const {showDialog} = useDialog();
 
     const [judgeCode, setJudgeCode] = useState("");
+
+    const formRef = useRef();
 
     useEffect(() => {
         if (judge != null) {
@@ -37,15 +43,15 @@ export const JudgesPage = forwardRef((props, ref) => {
         )
     }
 
-    const handleOnToolbarButtonClicked = (buttonID, item) => {
+    const handleOnToolbarButtonClicked = async (buttonID, item) => {
         let promise = null;
 
-        switch(buttonID) {
-            case "save":
-                const isNew = item.isNew;
-                delete item.isNew;
+        if (!formRef.current.validate()) return false;
 
-                if (isNew) {
+        switch(buttonID) {
+            case ButtonIDs.NEW: return true;
+            case ButtonIDs.SAVE:
+                if (item.__State__ == BoundItemState.NEW) {
                     promise = JudgeRequests.createJudge(judgeCode, item);
                 }
                 else {
@@ -54,36 +60,44 @@ export const JudgesPage = forwardRef((props, ref) => {
 
                 break;
 
-            case "delete":
+            case ButtonIDs.DELETE:
                 promise = JudgeRequests.deleteJudge(judgeCode, item.code);
                 break;
         }
 
         if (promise != null) {
-            promise.then(response => {
-                let message = response.success ? "Success!" : "Something went wrong...";
-                let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
-                let description = response.success ? "Operation completed successfully." : response.jsonData.error.description;
-                const config = new NotificationBoxConfig(message, type, description);
-                showDialog(config);
-            })
+            const response = await promise;
+            showDialog(createConfig(response));
+            return response.success;
         }
+
+        return true;
+    }
+
+    const createConfig = (response) => {
+        let message = response.success ? "Success!" : "Something went wrong...";
+        let type = response.success ? DialogType.SUCCESS : DialogType.ERROR;
+        let description = response.success ? "Operation completed successfully." : response.jsonData.error.description;
+        return new NotificationBoxConfig(message, type, description);
     }
 
     return (
-    <BasePage {...props} ref={ref}>
+    <BasePage>
         <ListEditDashboard data={judges} 
-                           ItemContainer={Item} 
-                           valueMember={"code"}
+                           DisplayContainer={Item} 
+                           valueProperty={"code"}
                            MainContainer={JudgeForm}
+                           mainContainerProps={{formRef}}
                            onToolbarButtonClicked={handleOnToolbarButtonClicked}/>
     </BasePage>
 );
-});
+};
 
 
 
-function JudgeForm({data = null, onChange}) {
+function JudgeForm({data = null, onChange, formRef}) {
+
+    const {countries} = useCountries();
 
     const codeInput = useInput(data?.code, undefined, true);
     const nameInput = useInput(data?.name, undefined, true);
@@ -104,7 +118,7 @@ function JudgeForm({data = null, onChange}) {
     }
 
     useEffect(() => {
-        if (onChange) onChange(getData());
+        if (onChange) onChange(data, getData());
     }, [
         nameInput.value,
         codeInput.value,
@@ -115,13 +129,24 @@ function JudgeForm({data = null, onChange}) {
     ])
 
     return (
-        <div className="judge-form">
-            <TextInput caption={"Name"} {...nameInput} className="name-input"/>
-            <TextInput caption={"Code"} {...codeInput} className="code-input"/>
-            <TextInput caption={"Origin country"} {...originCountryInput} className="originCountry-input"/>
-            <Checkbox caption={"Admin"} {...adminInput} className="admin-input"/>
-            <Checkbox caption={"Active"} {...activeInput} className="active-input"/>
-            <TextInput caption={"Policy"} {...policyCodeInput} className="policyCode-input"/>
-        </div>
+        <FormContainer style={{display: "flex", width: "100%"}} ref={formRef}>
+        <GridTemplateContainer className="judge-form"
+                            templateRows={"repeat(3, 1fr)"}
+                            templateColumns={"repeat(4, 1fr)"}
+                            templateAreas={[
+                                ["code" , "code", "name"    , "name"],
+                                ["oc"   , "oc"  , "admin"   , "active"],
+                                ["pc"   , "pc"  , "pc"      , "pc"]
+                            ]}>
+            <TextInput caption={"Code"} {...codeInput} required={true} gridTemplateArea="code"/>
+            <TextInput caption={"Name"} {...nameInput} required={true} gridTemplateArea="name"/>
+            <TableSelector caption={"Origin country"} data={countries} 
+                        valueProperty={"code"} displayProperty={"name"} 
+                        visibleColumns={["code", "name"]} {...originCountryInput} required={true} gridTemplateArea="oc"/>
+            <Checkbox caption={"Admin"} {...adminInput} gridTemplateArea="admin"/>
+            <Checkbox caption={"Active"} {...activeInput} gridTemplateArea="active"/>
+            <TextInput caption={"Policy"} {...policyCodeInput} gridTemplateArea="pc"/>
+        </GridTemplateContainer>
+        </FormContainer>
     )
 }

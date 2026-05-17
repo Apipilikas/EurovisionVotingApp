@@ -1,19 +1,39 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { NotificationBoxConfig } from "../../boxes/notificationBox/notificationBoxConfig";
-import { ErrorBoxConfig } from "../../boxes/errorBox/errorBoxConfig";
-import { DialogOrigin } from "./BaseDialog";
-import { DocumentUtils } from "../../../utils/document/documentUtils";
+import { DocumentUtils } from "../../utils/document/documentUtils";
+import { DialogConfig } from "./dialogConfig";
 
 const DialogContext = createContext();
 
 export const useDialog = () => useContext(DialogContext);
 
+export const DialogResult = {
+    OK : "OK",
+    CANCEL : "CANCEL",
+    CLOSE : "CLOSE",
+    AUTOCLOSE : "AUTOCLOSE",
+    ABORT : "ABORT",
+    CHOICE1 : "CHOICE1",
+    CHOICE2 : "CHOICE2"
+
+}
+
+export const DialogType = {
+    SUCCESS : "SUCCESS",
+    INFO : "INFO",
+    WARNING : "WARNING",
+    ERROR : "ERROR" 
+}
+
 export default function DialogProvider({children}) {
 
-    const [dialogOrigin, setDialogOrigin] = useState(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [dialogConfig, setDialogConfig] = useState(null);
+    const [dialogContent, setDialogContent] = useState(null);
     const [resolve, setResolve] = useState(null);
+
+    useEffect(() => {
+        if (dialogConfig != null) resolveDialogConfig(dialogConfig);
+    }, [dialogConfig]);
 
     // Events
     const [onDialogClosing, setOnDialogClosing] = useState(null);
@@ -31,24 +51,13 @@ export default function DialogProvider({children}) {
         }
     }
 
-    const resolveDialogOrigin = (config) => {
-        if (config instanceof NotificationBoxConfig) {
-            setDialogOrigin(DialogOrigin.NOTIFICATIONBOX);
-        }
-        else if (config instanceof ErrorBoxConfig) {
-            setDialogOrigin(DialogOrigin.ERRORBOX);
-            DocumentUtils.blurScreen();
-        }
-        else {
-            setDialogOrigin(DialogOrigin.BASEDIALOG);
-            DocumentUtils.blurScreen();
-        }
+    const resolveDialogConfig = (config) => {
+        if (dialogConfig instanceof DialogConfig)
+            setDialogContent(config.content);
+        else throw new Error("Dialog config provided is not of type DialogConfig");
     }
 
     const showDialog = (config) => {
-
-        resolveDialogOrigin(config);
-
         return new Promise((resolve) => {
             setDialogConfig(config);
             setIsDialogOpen(true);
@@ -72,8 +81,9 @@ export default function DialogProvider({children}) {
     }
 
     return (
-        <DialogContext.Provider value={{dialogOrigin, isDialogOpen, showDialog, closeDialog, registerEvent, dialogConfig}}>
+        <DialogContext.Provider value={{isDialogOpen, showDialog, closeDialog, registerEvent, dialogConfig}}>
             {children}
+            {dialogContent}
         </DialogContext.Provider>
     );
 }

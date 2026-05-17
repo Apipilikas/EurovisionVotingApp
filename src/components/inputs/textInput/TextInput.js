@@ -4,24 +4,20 @@ import { InputHelpContainer } from '../containers/inputHelpContainer/InputHelpCo
 import { BaseInput } from '../baseInput/BaseInput';
 import { joinProps } from '../../../utils/react/propsUtils';
 
-export function TextInput({caption, helperCaption, value, onChange, ...props}) {
+export function TextInput({caption, helpCaption, value, onChange, error, required, className, style, ...props}) {
 
     return (
-    <div {...props} className={joinProps("text-input-container", props?.className)}>
-        <BaseInput caption={caption} value={value} onChange={onChange}/>
-        <InputHelpContainer caption={helperCaption}/>
-        <InputErrorContainer/>
+    <div className={joinProps("text-input-container", className)} style={style}>
+        <BaseInput {...props} caption={caption} helpCaption={helpCaption} value={value} onChange={onChange} error={error} required={required}/>
     </div>
     );
 }
 
-export function EmailInput({caption, helperCaption, value, onChange}) {
+export function EmailInput({caption, helpCaption, value, onChange, required, error, className, style, ...props}) {
 
     return (
-    <div className="email-input-container">
-        <BaseInput caption={caption} value={value} onChange={onChange} inputType="email"/>
-        <InputHelpContainer caption={helperCaption}/>
-        <InputErrorContainer/>
+    <div className={joinProps("email-input-container", className)} style={style}>
+        <BaseInput {...props} caption={caption} helpCaption={helpCaption} value={value} onChange={onChange} inputType="email" error={error} required={required}/>
     </div>
     );
 }

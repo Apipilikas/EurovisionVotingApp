@@ -17,9 +17,9 @@ export function InputErrorContainer({caption}) {
     });
 
     return (
-        <animated.div class="input-error-container" style={{opacity : opacity, transform : transform}}>
-            <i class="material-icons input-error-icon">error</i>
-            <span class="input-error-caption">{caption}</span>
+        <animated.div className="input-error-container" style={{opacity : opacity, transform : transform}}>
+            <i className="material-icons input-error-icon">error</i>
+            <span className="input-error-caption">{caption}</span>
         </animated.div>
     );
 }

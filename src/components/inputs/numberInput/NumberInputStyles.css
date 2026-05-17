@@ -5,3 +5,26 @@
 .number-input-container .input-help-caption::after {
     right: 3.3em;
 }
+
+.number-input-container .spin-up-icon {
+    top: 0em;
+}
+
+.number-input-container .spin-down-icon {
+    top: 0.6em;
+}
+
+.number-input-container .spin-up-icon,
+.number-input-container .spin-down-icon {
+    right: 0.8em;
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

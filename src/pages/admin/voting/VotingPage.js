@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { BasePage } from "../../BasePage";
 import { ResultButton } from "../../../components/inputs/buttons/resultButton/ResultButton";
 import "./VotingPageStyles.css";
@@ -8,15 +8,19 @@ import SimpleButton from "../../../components/inputs/buttons/simpleButton/Simple
 import { AdminRequests, CountryRequests, JudgeRequests } from "../../../utils/requestUtils";
 import { EventID, useSession } from "../../../components/common/session/SessionProvider";
 import { useInput } from "../../../hooks/useInput";
-import { DialogConfig } from "../../../components/dialogs/baseDialog/dialogConfig";
-import { DialogResult, DialogType } from "../../../components/dialogs/baseDialog/BaseDialog";
-import { useDialog } from "../../../components/dialogs/baseDialog/DialogProvider";
+import { DialogConfig } from "../../../components/dialogs/dialogConfig";
+import { DialogResult, DialogType } from "../../../components/dialogs/DialogProvider";
+import { useDialog } from "../../../components/dialogs/DialogProvider";
 import { useCountries } from "../../../hooks/useCountries";
 import { useJudges } from "../../../hooks/useJudges";
 import { useRunningOrder } from "../../../hooks/useRunningOrder";
-import { Dropdown } from "../../../components/inputs/dropdown/Dropdown";
+import { ListSelector } from "../../../components/inputs/selectors/listSelector/ListSelector";
+import { BaseDialogConfig } from "../../../components/dialogs/baseDialog/baseDialogConfig";
+import { LinearProgressBar } from "../../../components/indicators/progressBars/linearProgressBar/LinearProgressBar";
+import { DialogUtils } from "../../../components/dialogs/dialogUtils";
+import { FetchError } from "../../../utils/errorUtils";
 
-export const VotingPage = forwardRef((props, ref) => {
+export function VotingPage() {
 
     const [runningOrder, setRunningOrder] = useState(-1);
 
@@ -29,16 +33,37 @@ export const VotingPage = forwardRef((props, ref) => {
         setRunningOrder(currentRunningOrder);
     },[currentRunningOrder])
 
-    // Listeners
-    const handleNextCountryClick = () => {
-        let value = runningOrder % (countries.length + 1) + 1;
-        let arg = {runningCountry : value, votingStatus : "CLOSED"};
+    // Functions
+    const changeRunningOrder = (value) => {
+        let country = countries.find(item => item.runningOrder == value);
+        let votingStatus = "CLOSED";
+
+        if (country != null) {
+            votingStatus = country.votingStatus;
+        }
+
+        let arg = {
+            runningCountry : value, 
+            votingStatus : votingStatus
+        };
+
         setRunningOrder(value);
         emitMessage(EventID.NEXTCOUNTRY, arg);
     }
 
+    // Listeners
+    const handlePreviousCountryClick = () => {
+        let value = (runningOrder == 1) ? countries.length : runningOrder - 1;
+        changeRunningOrder(value);
+    }
+
+    const handleNextCountryClick = () => {
+        let value = (runningOrder % countries.length) + 1;
+        changeRunningOrder(value);
+    }
+
     return (
-        <BasePage {...props} ref={ref}>
+        <BasePage>
             <div className="upper-container">
                 <RunningCountryDC runningCountry={runningCountry}/>
                 <JudgesVotedDC/>
@@ -47,11 +72,12 @@ export const VotingPage = forwardRef((props, ref) => {
             <div className="lower-container">
                 <AdminSettings countries={countries}/>
                 <CountriesList countries={countries} judges={judges}/>
+                <SimpleButton caption={"Previous"} id={"previous-country-btn"} onButtonClicked={handlePreviousCountryClick}/>
                 <SimpleButton caption={"Next"} id={"next-country-btn"} onButtonClicked={handleNextCountryClick}/>
             </div>
         </BasePage>
     )
-});
+};
 
 function DashboardContainer({title, className, children}) {
     
@@ -117,8 +143,10 @@ function AdminSettings({countries}) {
     const {judge, emitMessage} = useSession();
     const {showDialog} = useDialog();
     
+    const eventListInput = useInput();
     const clearListInput = useInput();
     const recalculateListInput = useInput();
+    const barRef = useRef(null);
 
     useEffect(() => {
         setJudgeCode(judge?.code);
@@ -127,7 +155,7 @@ function AdminSettings({countries}) {
     const handleInformButton = () => {
         let value;
         let content = <textarea onChange={(e) => value = e.target.value}></textarea>;
-        let config = new DialogConfig("Inform", DialogType.INFO, content);
+        let config = new BaseDialogConfig("Inform", DialogType.INFO, content);
         config.addButton("Inform", DialogResult.CHOICE1);
         config.addButton("Warning", DialogResult.CHOICE2);
         showDialog(config).then(result => {
@@ -152,6 +180,88 @@ function AdminSettings({countries}) {
         emitInformMessage("RESET_CACHE", message);
     }
 
+    const clearAllCountriesTotalVotes = () => {
+        let codes = countries.map(country => country.code);
+        
+        let content = <LinearProgressBar steps={codes.length} ref={barRef}/>;
+        let config = new BaseDialogConfig("Inform", DialogType.INFO, content);
+        config.addButton("OK", DialogResult.CHOICE1);
+        showDialog(config);
+        setTimeout(() => {
+            barRef.current.begin();
+            for (let code of codes) {
+                CountryRequests.clearCountryTotalVotes(judgeCode, code);
+                barRef.current.nextStep(code);
+            }
+            barRef.current.complete();
+        }, 1000);
+    }
+
+    const deleteAllCountries = () => {
+        let confirmConfig = DialogUtils.getConfirmDialogConfig("Are you sure you want to delete all countries?");
+        showDialog(confirmConfig).then(result => {
+            if (result == DialogResult.OK) {
+                setTimeout(() => {
+                    showDeleteAllCountriesProgressDialog();
+                }, 1000)
+            }
+        })
+
+        
+    }
+
+    const showDeleteAllCountriesProgressDialog = () => {
+        let codes = countries.map(country => country.code);
+
+        let content = <LinearProgressBar steps={codes.length} ref={barRef}/>;
+        let config = new BaseDialogConfig("Inform", DialogType.INFO, content);
+        config.addButton("Cancel", DialogResult.CANCEL);
+
+        showDialog(config);
+        setTimeout(() => {
+            barRef.current.begin();
+            for (let code of codes) {
+                CountryRequests.deleteCountry(judgeCode, code).then(response => {
+                    if (!response.success) {
+                        barRef.current.warn(response.jsonData.error.description);
+                    }
+                })
+                barRef.current.nextStep(code);
+            }
+            barRef.current.complete();
+        }, 1000);
+    }
+
+    const createEventCountries = (eventName) => {
+        AdminRequests.getEurovisionEventData(judgeCode, eventName).then(response => {
+            if (response.success) {
+                countries = response.jsonData.countries;
+                let content = <LinearProgressBar steps={countries.length} ref={barRef}/>;
+                let config = new BaseDialogConfig("Inform", DialogType.INFO, content);
+                config.addButton("Cancel", DialogResult.CANCEL);
+
+                showDialog(config);
+                setTimeout(() => {
+                    barRef.current.begin();
+                    for (let country of countries) {
+                        CountryRequests.createCountry(judgeCode, country).then(response => {
+                            if (!response.success) {
+                                barRef.current.warn(response.jsonData.error.description);
+                            }
+
+                        })
+                        barRef.current.nextStep(country.name);
+                    }
+                    barRef.current.complete();
+                }, 1000);
+            }
+            else {
+                let error = response.jsonData.error;
+                throw new FetchError(error.code, error.description)
+            }
+        })
+    }
+
     return (
         <SimpleDetailsContainer summaryCaption={"Admin Settings"} id={"admin-settings-container"}>
             <ButtonContainer caption={"Reset running country order"} 
@@ -169,21 +279,29 @@ function AdminSettings({countries}) {
             <ButtonContainer caption={"Inform judge"}
                              buttonCaption={"INFROM"}
                              onButtonClicked={handleInformButton}/>
-            <ButtonContainer caption={"Reveal winner"}
-                             buttonCaption={"REVEAL"}>
-                <span>NONE</span>
+            <ButtonContainer caption={"Delete countries"}
+                             buttonCaption={"DELETE"}
+                             onButtonClicked={deleteAllCountries}/>
+            <ButtonContainer caption={"Create countries from event"}
+                             buttonCaption={"CREATE"}
+                             onButtonClicked={() => createEventCountries(eventListInput.value)}
+                             >
+                <ListSelector list={["first-semi-final", "second-semi-final", "grand-final"]} {...eventListInput}/>
             </ButtonContainer>
+            <ButtonContainer caption={"Clear all total votes"}
+                             buttonCaption={"CLEAR"}
+                             onButtonClicked={clearAllCountriesTotalVotes}/>
             <ButtonContainer caption={"Clear total votes"}
                              buttonCaption={"CLEAR"}
                             promise={() => CountryRequests.clearCountryTotalVotes(judgeCode, clearListInput.value)}
                              >
-                <Dropdown list={countries.map(item => item.code)} {...clearListInput}/>
+                <ListSelector list={countries.map(item => item.code)} {...clearListInput}/>
             </ButtonContainer>
             <ButtonContainer caption={"Recalculate total votes"}
                              buttonCaption={"RECALCULATE"}
                             promise={() => CountryRequests.recalculateCountryTotalVotes(judgeCode, recalculateListInput.value)}
                              >
-                <Dropdown list={countries.map(item => item.code)} {...recalculateListInput}/>
+                <ListSelector list={countries.map(item => item.code)} {...recalculateListInput}/>
             </ButtonContainer>
         </SimpleDetailsContainer>
     )
@@ -274,7 +392,7 @@ function JudgeRow({judge, country}) {
         }
     }, [judgePoints])
 
-    const handeOnChange = (e) => {
+    const handleOnChange = (e) => {
         const value = e.target.value;
         setSelectedVote(value);
     }
@@ -283,15 +401,16 @@ function JudgeRow({judge, country}) {
         <tr>
            <th className="judge-name-caption">{judge.name}</th>
            {points.map((point) => {
+                const key = `${judge.code}-${country.code}-${point}`;
                 return (
-                    <td>
+                    <td key={key}>
                         <input type="radio" 
-                               id={`${judge.code}-${country.code}-${point}`} 
+                               id={key} 
                                name={`${judge.code}-${country.code}-chosen-votes`}
                                value={point}
-                               checked={selectedVote === point}
-                               onChange={handeOnChange}/>
-                        <label for={`${judge.code}-${country.code}-${point}`}><i class="material-icons">check</i></label>
+                               checked={selectedVote == point}
+                               onChange={handleOnChange}/>
+                        <label htmlFor={key}><i class="material-icons">check</i></label>
                     </td>
                 );
            })}

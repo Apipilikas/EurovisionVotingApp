@@ -1,6 +1,9 @@
-/* .table-container {
-    display: table;
-  } */
+.table-container {
+    /* display: table; */
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
   
 .table-row, .sort-table-row {
     display: table-row;

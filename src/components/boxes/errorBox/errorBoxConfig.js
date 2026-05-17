@@ -1,9 +1,13 @@
-export class ErrorBoxConfig {
-    constructor(message, description, stackTrace, type, help) {
-        this.message = message;
+import { DialogType } from "../../dialogs/DialogProvider";
+import { DialogConfig } from "../../dialogs/dialogConfig";
+import { ErrorBox } from "./ErrorBox";
+
+export class ErrorBoxConfig extends DialogConfig {
+    constructor(title, description, stackTrace, errorType, help, closeAfterMs = 0) {
+        super(title, DialogType.ERROR, <ErrorBox/>, closeAfterMs)
         this.description = description;
+        this.errorType = errorType;
         this.stackTrace = stackTrace;
-        this.type = type;
         this.help = help;
     }
 

@@ -1,5 +1,6 @@
 .base-input > label {
     position: absolute;
+    display: flex;
     top: 0.2em;
     left: 0.5em;
     height: 30px;
@@ -22,6 +23,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    appearance: none;
 }
 
 .base-input input, .dropdown-container > select {
@@ -38,6 +40,18 @@
     z-index: 2;
 }
 
+.base-input .input-required-icon {
+    font-size: 0.8em;
+    margin: auto;
+    opacity: 0;
+}
+
+.base-input input:focus + label > .input-required-icon,
+.base-input input.has-value + label > .input-required-icon {
+    color: red;
+    opacity: 1;
+}
+
 .base-input input:focus {
     border: none;
     outline: none;
@@ -45,12 +59,24 @@
 }
 
 .base-input input:focus + label, 
-.base-input input:valid + label {
+.base-input input.has-value + label {
     /* color: var(--forth-color); */
     color: black;
     font-weight: 700;
     transform: translate(-0.5em, -1.8em);
-    cursor:default;
+    cursor: default;
+}
+
+.base-input input:read-only {
+    cursor: pointer;
+}
+
+.base-input input.has-error {
+    border: 3px solid var(--error-color);
+}
+
+.base-input input.has-error + label {
+    color: var(--error-color);
 }
 
 /* Base input styles */
@@ -65,8 +91,8 @@ input[type="color"]:focus {
 }
 
 .text-input-container, .email-input-container, .number-input-container, 
-.color-input-container, .checkbox-input-container, .dropdown-container {
-    margin: auto 0em;
+.color-input-container, .checkbox-input-container, .selector-container {
+    margin: auto 0em 1.5em 0em;
     height: 60px;
     /* display: flex;
     flex-direction: column; */

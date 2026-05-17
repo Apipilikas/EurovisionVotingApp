@@ -1,24 +1,40 @@
-import { useEffect, useId } from "react"
+import { useEffect, useId, useState } from "react"
 import "./ListContainerStyles.css"
+import { useBoundData } from "../../../hooks/useBoundData";
+import { useFallbackHookProps } from "../../../hooks/useFallbackHookProps";
 
-export function ListContainer({data, initialValue, valueMember, ItemContainer, onSelectedItemChanged}) {
+export function ListContainer({data, initialValue, valueProperty, DisplayContainer, onSelectedItemChanged}) {
 
     const id = `list-container-${useId()}`;
+    const props = {boundData : data};
+    const binder = useFallbackHookProps(useBoundData, [data, valueProperty, null, initialValue], props);
 
-    const handleOnChange = (e) => {
-        const value = e.target.value;
-        const selectedItem = data.find(item => item[valueMember] == value);
-        if (onSelectedItemChanged) onSelectedItemChanged(selectedItem);
+    // Effects
+    useEffect(() => {
+        if (binder.selectedItem && onSelectedItemChanged) onSelectedItemChanged(binder.selectedItem);
+    }, [binder.selectedItem])
+
+    // Functions
+    const getItemValue = (item) => {
+        if (valueProperty) return item[valueProperty];
+        return "";
+    }
+
+    // Events
+    const handleOnChange = (data) => {
+        binder.setSelectedItem(data);
     }
 
     return (
         <div className="list-container">
-            {data.map(item => {
+            {binder.boundData?.map(item => {
+                const itemValue = getItemValue(item);
+
                 return (
                     <div className="list-container-item">
-                        <input type="radio" id={item[valueMember]} name={id} value={item[valueMember]} defaultChecked={item[valueMember] == initialValue} onChange={handleOnChange} />
-                        <label for={item[valueMember]}>
-                        <ItemContainer item={item} className="list-container-item-content"/>
+                        <input type="radio" id={itemValue} name={id} value={itemValue} defaultChecked={itemValue == initialValue} onChange={() => handleOnChange(item)} />
+                        <label for={itemValue}>
+                        <DisplayContainer item={item} className="list-container-item-content"/>
                         </label>
                     </div>
                 )
